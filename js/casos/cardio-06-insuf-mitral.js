@@ -1,0 +1,87 @@
+// Cardiovascular 6: Até a axila. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// ictus (4.2), sopros e manobras (5.7, 6), insuficiência mitral e etiologias (7.2), questão 1 da monitoria.
+CASES.push({
+ id:'c-im',modulo:'Semiologia cardiovascular',n:'Caso 6',title:'Até a axila',look:'maria',pname:'Dona Cleide',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Cleide, 61 anos. Cansaço que vem piorando desde o infarto.',
+ briefing:'Doutor, leito 3: Dona Cleide, 61 anos. Cansaço e coração acelerado.',
+ vitals:'PA 128/78 mmHg · FC 92 bpm · FR 22 irpm · T 36,4 °C · SpO₂ 95% em ar ambiente',
+ answers:{
+  queixa:'Cansaço e o coração acelerado.',
+  tempo:'Desde o infarto, faz dois anos, vem piorando.',
+  inicio:'Aos poucos.',
+  dor:'Hoje não. A dor foi no infarto.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Canso pra fazer o serviço de casa.',
+  esforco:'Piora no esforço. Descansando melhora.',
+  palpitacao:'Sinto o coração bater forte, principalmente quando deito do lado esquerdo.',
+  sincope:'Não.',
+  posicao:'Deito com dois travesseiros.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Tomo os remédios do cardiologista, mas faltei às consultas.',
+  meds:'AAS, sinvastatina e metoprolol.',
+  doencas:'Infarto há dois anos. Pressão alta.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Parei de fumar depois do infarto.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Minha mãe tinha problema de coração.',
+  trabalho:'Dona de casa.',
+  moradia:'Moro com meu marido.',
+  sal:'Diminuí o sal.',
+  emocional:'Normal.',
+  estimulantes:'Café com leite de manhã.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['doencas'],l:'Infarto prévio'},{ids:['dispneia','esforco'],l:'Dispneia aos esforços'},{ids:['palpitacao'],l:'Palpitação'},{ids:['posicao'],l:'Ortopneia'},{ids:['infancia'],l:'Febre reumática (afastar)'}],
+ geral:'Senhora lúcida, respirando um pouco rápido, sem cianose.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{auscultar:'Estertores finos discretos no fim da inspiração.'}),{
+  'auscultar:focoM':'B1 abafada. Sopro holossistólico em platô, agudo, 3+/6, que segue até a axila esquerda. B3 presente.',
+  'auscultar:focoT':'Sopro sistólico mais fraco, transmitido.',
+  'palpar:coracao':'Ictus desviado para baixo e para a esquerda, amplo.',
+  'inspecionar:coracao':'Precórdio com movimentos amplos.',
+  'manobra:handgrip':'O sopro aumenta.',
+  'manobra:rivero':'O sopro não muda.',
+  'manobra:valsalva':'O sopro diminui.',
+  'manobra:cocoras':'O sopro aumenta.',
+  'manobra:pachon':'Em decúbito lateral esquerdo, B3 fica mais clara.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral'},
+  {ids:['palpar:coracao'],l:'Palpar o ictus'},{ids:['manobra:handgrip'],l:'Handgrip'},{ids:['manobra:rivero'],l:'Rivero-Carvallo (separar de IT)'},
+  {ids:['auscultar:focoT'],l:'Comparar com o foco tricúspide'}],
+ res:{
+  eco:'Refluxo mitral importante, com músculo papilar posterior que não contrai bem. AE e VE aumentados. FE 50%.',
+  ecg:'Ritmo sinusal, FC 92 bpm. Ondas Q em DII, DIII e aVF.',
+  bnp:'NT-proBNP 1.400 pg/mL'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['ecg','rx','bnp','hemo','renal','trop'],
+ rx:{cardio:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro holossistólico em platô no foco mitral, irradiando para a axila, com B1 abafada, B3 e ictus desviado: síndrome valvar.',
+ correctDx:'im',
+ dxWhy:'Holossistólico em platô no foco mitral que vai para a axila esquerda, aumenta com handgrip e não muda com Rivero-Carvallo (não é tricúspide). Depois de um infarto: causa isquêmica, por disfunção do músculo papilar.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma o refluxo e mostra o músculo papilar e o tamanho das câmaras.'},
+  // CONFERIR: retorno ao cardiologista não está escrito no material como conduta.
+  {id:'c2',t:'Retomar o acompanhamento com o cardiologista',ok:1,why:'Insuficiência mitral isquêmica com piora dos sintomas.'},
+  {id:'c3',t:'Insuficiência tricúspide',ok:0,why:'O sopro tricúspide aumenta com Rivero-Carvallo. Aqui não mudou.'},
+  {id:'c4',t:'Sopro inocente: alta',ok:0,why:'Sopro inocente nunca engole B1, tem 1 a 2+ e não tem foco específico nem irradiação.'},
+  {id:'c5',t:'Estenose aórtica',ok:0,why:'A estenose aórtica dá sopro ejetivo em diamante no 2º EIC direito, irradiando para as carótidas.'}
+ ],
+ teaching:[
+  {t:'Insuficiência mitral',p:'Holossistólico em platô, agudo, no foco mitral, irradiando para a axila esquerda. B1 abafada, B3 por sobrecarga de volume, ictus desviado.'},
+  {t:'Resumo das manobras',p:'Handgrip aumenta os sopros esquerdos de regurgitação. Rivero-Carvallo aumenta os do lado direito. Valsalva diminui quase tudo, menos miocardiopatia hipertrófica e prolapso mitral.'},
+  {t:'Causas da IM',p:'Febre reumática, prolapso da valva mitral, isquemia (músculo papilar no infarto) e endocardite.'},
+  {t:'Ejetivo × regurgitação',p:'Ejetivo: crescendo-decrescendo (estenose aórtica e pulmonar). Regurgitação: holossistólico em platô (insuficiência mitral e tricúspide).'}
+ ]
+});

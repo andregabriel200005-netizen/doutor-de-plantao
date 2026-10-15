@@ -1,0 +1,80 @@
+// Cardiovascular 10: Semana de provas. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// palpitação, estimulantes, TSH e T4 livre, taquicardiomiopatia (2.3).
+CASES.push({
+ id:'c-estim',modulo:'Semiologia cardiovascular',n:'Caso 10',title:'Semana de provas',look:'ana',pname:'Lívia',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Lívia, 22 anos. Coração disparado há três dias.',
+ briefing:'Doutor, leito 3: Lívia, 22 anos. Diz que o coração está disparado.',
+ vitals:'PA 132/80 mmHg · FC 122 bpm · FR 18 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
+ answers:{
+  queixa:'Meu coração tá disparado e não para.',
+  tempo:'Uns três dias. Piorou hoje.',
+  inicio:'Foi piorando nesses dias.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não tem a ver com esforço. Parada também tá acelerado.',
+  palpitacao:'Batendo rápido e forte, mas no ritmo, o dia todo. Não fica falhando.',
+  sincope:'Não. Às vezes uma tontura leve.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Emagreci uns 2 quilos, sem fome.',
+  tratou:'Nada.',
+  meds:'Anticoncepcional.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo. Bebo nas festas.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Estudo medicina. Tô em semana de prova.',
+  moradia:'Moro com duas amigas.',
+  sal:'Comendo mal, pulando refeição.',
+  emocional:'Estressada com as provas, dormindo pouco.',
+  estimulantes:'Tô tomando um Venvanse de uma colega pra estudar, sem receita. E uns três energéticos por dia, mais café.',
+  hiv:'Fiz, negativo.'
+ },
+ keyQ:[{ids:['estimulantes'],l:'Estimulantes e energéticos'},{ids:['palpitacao'],l:'Caracterizar a palpitação (ritmo)'},{ids:['sincope'],l:'Síncope ou pré-síncope'},{ids:['familia'],l:'Morte súbita na família (afastar)'},{ids:['emocional'],l:'Estresse e sono'}],
+ geral:'Jovem agitada, mãos trêmulas, sem esforço para respirar.',
+ effSides:[],
+ exam:{
+  'auscultar:focoM':'Bulhas rítmicas, normofonéticas, rápidas, sem sopros.',
+  'palpar:pulsoRad':'Pulso rápido, regular, amplitude normal.',
+  'inspecionar:maos':'Tremor fino nas mãos.',
+  'palpar:pescoco':'Tireoide de tamanho normal, sem nódulos.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['palpar:pulsoRad','palpar:pulsoCar'],l:'Palpar o pulso (ritmo)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},{ids:['palpar:pescoco'],l:'Palpar a tireoide'}],
+ res:{
+  ecg:'Taquicardia sinusal, FC 122 bpm. Sem outras alterações.',
+  tsh:'TSH 1,9 mUI/L · T4 livre 1,1 ng/dL',
+  hemo:'Hb 13,2 g/dL · Leucócitos 7.000/mm³ · Plaquetas 250.000/mm³'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'},{ids:['tsh'],l:'TSH e T4 livre'}],
+ neutral:['hemo','glic','eco'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'Coração sem sopros, ritmo regular, pulmões limpos: nenhuma síndrome ao exame. Só taquicardia.',
+ correctDx:'estimulantes',
+ dxWhy:'Taquicardia sinusal em jovem usando lisdexanfetamina sem receita, três energéticos e café por dia, em semana de prova. TSH e T4 livre normais afastam hipertireoidismo.',
+ conduta:[
+  {id:'c1',t:'Suspender o estimulante e os energéticos',ok:1,why:'São a causa. Taquicardia crônica por estimulantes pode causar taquicardiomiopatia.'},
+  {id:'c2',t:'Dosar TSH e T4 livre',ok:1,why:'São obrigatórios na investigação de palpitações e arritmias.'},
+  {id:'c3',t:'Só um ansiolítico: é estresse',ok:0,why:'Sem tirar os estimulantes a taquicardia continua.'},
+  {id:'c4',t:'Cateterismo',ok:0,why:'Não há dor anginosa nem sinal de isquemia.'},
+  {id:'c5',t:'Liberar sem orientação: palpitação nunca é grave',ok:0,why:'Taquicardia crônica por estimulante pode levar a remodelamento e falência do coração.'}
+ ],
+ teaching:[
+  {t:'Palpitação',p:'Queixa mais comum no consultório. Analise frequência, ritmo ("batuque na mesa"), horário, duração, padrão e sintomas associados. Sinal de ação irregular: ECG.'},
+  {t:'Pergunte ativamente',p:'Café, refrigerante, energéticos e estimulantes (Ritalina, Venvanse, termogênicos).'},
+  {t:'TSH e T4 livre',p:'Obrigatórios na investigação de palpitações.'},
+  {t:'Causas não cardíacas',p:'HAS não controlada, hipertireoidismo, exercício, ansiedade, estimulantes, anemia e febre.'}
+ ]
+});

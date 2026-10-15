@@ -12,7 +12,6 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 ## Próximos assuntos (PDFs já enviados)
 
-- Semiologia cardiovascular: precisa de ausculta por focos, pulsos, ictus e manobras.
 - Semiologia do aparelho digestório: precisa do abdome em 9 regiões e das manobras (Murphy, Blumberg, Rovsing, Giordano...).
 
 ## Próximas etapas da IA
@@ -32,6 +31,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Modo prova: sem a tela de explicação no final, só a nota.
 
 ## Feito
+
+- v5: Semiologia cardiovascular: 13 casos (infarto, pericardite, estenose aórtica, insuficiência aórtica, estenose mitral na gestante, insuficiência mitral, IC perfil B, HAS e técnica da PA, síncope ortostática, estimulantes, miocardiopatia hipertrófica, sopro inocente, estenose pulmonar na criança), focos de ausculta, pulsos e manobras especiais.
 
 - v4: Semiologia respiratória: 11 casos (pneumonia, pneumotórax, asma, atelectasia, congestão por IC, DPOC, bronquiectasia, dispneia suspirosa, Kussmaul, caverna por TB, pleurite), síndrome no prontuário, boca e mãos no exame, gasometria e ECG, novas radiografias.
 

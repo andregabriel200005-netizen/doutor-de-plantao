@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Lúcia, 30 anos. Dor no peito do lado esquerdo há dois dias.',
  vitals:'PA 118/76 mmHg · FC 96 bpm · FR 22 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  esforco:"Não tem a ver com esforço. É com a respiração.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Um café de manhã.",
   queixa:'Uma dor do lado esquerdo que me trava quando respiro.',
   tempo:'Dois dias.',
   inicio:'Começou de um dia pro outro, depois de uma gripe.',

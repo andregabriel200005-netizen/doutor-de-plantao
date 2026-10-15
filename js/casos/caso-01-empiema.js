@@ -13,6 +13,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: seu Carlos, 45 anos. Chegou com febre e dor no peito. Tá cansadinho.",
  "vitals": "PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 38,9 °C · SpO₂ 92% em ar ambiente",
  "answers": {
+  "esforco": "Não. Só cansa quando ando mais.",
+  "palpitacao": "Não.",
+  "sincope": "Não.",
+  "infancia": "Não, nada sério.",
+  "estimulantes": "Café de manhã, só.",
   "inicio": "Foi aos poucos. Primeiro a gripe, depois piorou.",
   "escarro": "Amarelado, meio esverdeado. Sangue não.",
   "chiado": "Não.",

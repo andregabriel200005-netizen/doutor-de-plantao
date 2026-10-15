@@ -1,0 +1,81 @@
+// Cardiovascular 8: Mandado da farmácia. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// hipertensão arterial: técnica, Korotkoff, classificação, avental branco, MAPA/MRPA, resistente e refratária (7.4).
+CASES.push({
+ id:'c-has',modulo:'Semiologia cardiovascular',n:'Caso 8',title:'Mandado da farmácia',look:'marcos',pname:'Seu Wellington',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Wellington, 49 anos. A farmácia mediu a pressão alta.',
+ briefing:'Doutor, leito 3: Seu Wellington, 49 anos. Mediram a pressão na farmácia e deu alta. Medi na triagem logo que ele chegou.',
+ vitals:'PA 168/102 mmHg (triagem, logo ao chegar) · FC 96 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 98% em ar ambiente',
+ answers:{
+  queixa:'Nada. Mediram minha pressão na farmácia, deu 17 por 10, e mandaram eu vir.',
+  tempo:'Foi hoje, faz uma hora.',
+  inicio:'Não sinto nada.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não sinto nada no esforço.',
+  palpitacao:'Não.',
+  sincope:'Não.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Engordei uns quilos esse ano.',
+  tratou:'Nada.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma. Nunca medi a pressão antes.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumo meio maço. Bebo no fim de semana.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Meu pai e minha mãe têm pressão alta.',
+  trabalho:'Motorista de aplicativo. Fico o dia todo sentado.',
+  moradia:'Moro com minha esposa e dois filhos.',
+  sal:'Como muita comida de rua.',
+  emocional:'Fiquei nervoso com essa pressão.',
+  estimulantes:'Tomei um café grande e fumei um cigarro na porta, antes de entrar. Vim andando rápido da farmácia.',
+  hiv:'Fiz no ano passado, negativo.'
+ },
+ keyQ:[{ids:['estimulantes'],l:'Café e cigarro antes da medida'},{ids:['familia'],l:'Pais hipertensos'},{ids:['meds'],l:'Medicações'},{ids:['doencas'],l:'Nunca mediu antes'},{ids:['queixa','dor'],l:'Sintomas (nenhum)'}],
+ geral:'Homem com sobrepeso, tranquilo, sem esforço para respirar.',
+ effSides:[],
+ exam:{
+  'manobra:pa3':'Depois de 5 minutos sentado, costas apoiadas, bexiga vazia, braço na altura do coração. Braço direito: 1ª 156/98, 2ª 146/92, 3ª 142/90 mmHg. Braço esquerdo: 144/90 mmHg.',
+  'auscultar:focoAo':'B2 mais forte que o habitual.',
+  'auscultar:focoM':'Bulhas rítmicas. Som grave logo antes de B1. Sem sopros.',
+  'palpar:coracao':'Ictus no 5º EIC, na linha hemiclavicular, um pouco propulsivo.'
+ },
+ keyExam:[{ids:['manobra:pa3'],l:'Medir a PA com técnica completa'},{ids:['palpar:pulsoRad'],l:'Palpar o radial (estima a PAS e evita o hiato)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},{ids:['palpar:pulsoFem','palpar:pulsoPed'],l:'Palpar os pulsos dos membros inferiores'},
+  {ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 78 bpm. Sem alterações.',
+  renal:'Ureia 30 mg/dL · Creatinina 0,9 mg/dL',
+  glic:'Glicemia 102 mg/dL'
+ },
+ keyEx:[],
+ neutral:['ecg','renal','glic','eas','hemo'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'has',
+ sindWhy:'Pressão elevada medida com técnica correta, sem sinais de congestão, isquemia ou valvopatia: síndrome hipertensiva.',
+ correctDx:'has',
+ dxWhy:'A medida da triagem não vale: café, cigarro e caminhada logo antes. Com a técnica certa, descarta-se a 1ª medida e faz-se a média das duas últimas: (146+142)/2 por (92+90)/2 = 144/91 mmHg, HAS estágio 1. Como ele não tem sintomas, é preciso confirmar fora do consultório (pode ser avental branco).',
+ conduta:[
+  {id:'c1',t:'Confirmar fora do consultório (MAPA ou MRPA)',ok:1,why:'MAPA 24 h ou MRPA com média ≥ 130/80 confirma. Separa a HAS do efeito do avental branco.'},
+  {id:'c2',t:'Orientar a medida: sem café e cigarro 30 min antes e repouso de 3 a 5 min',ok:1,why:'São os cuidados da técnica para não superestimar a PA.'},
+  {id:'c3',t:'Classificar pela PA da triagem (estágio 3)',ok:0,why:'A 1ª medida, sem técnica, não serve para classificar. A média correta é 144/91: estágio 1.'},
+  {id:'c4',t:'Internar em UTI por emergência hipertensiva',ok:0,why:'Está assintomático e a PA correta é de estágio 1.'},
+  {id:'c5',t:'Encaminhar por HAS refratária',ok:0,why:'Refratária é não controlada com 5 ou mais classes de remédio. Ele não usa nenhum.'}
+ ],
+ teaching:[
+  {t:'Técnica',p:'Repouso de 3 a 5 min, bexiga vazia, sem exercício em 60 min e sem café, álcool ou cigarro em 30 min. Sentado, braço na altura do coração. Na 1ª consulta, os dois braços. Três medidas, descarta a 1ª e faz a média das duas últimas.'},
+  {t:'Korotkoff',p:'Fase I = PAS. Fase V (desaparecimento) = PAD. O hiato auscultatório fica na fase II: palpe o radial antes de insuflar.'},
+  {t:'Classificação',p:'Ótima < 120/80; normal 120–129/80–84; pré-hipertensão 130–139/85–89; estágio 1 140–159/90–99; estágio 2 160–179/100–109; estágio 3 ≥ 180/110.'},
+  {t:'Avental branco e mascarada',p:'Avental branco: alta no consultório e normal fora. Mascarada: normal no consultório e alta fora. MAPA ou MRPA com média ≥ 130/80 confirma.'}
+ ]
+});

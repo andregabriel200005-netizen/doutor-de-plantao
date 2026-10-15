@@ -27,7 +27,7 @@ function iaValidar(bruto,fonte){
  const num=v=>{const n=typeof v==='string'?parseFloat(v.replace(',','.')):v;return typeof n==='number'&&isFinite(n)&&n>0?n:null;};
  const ids=lista=>new Set(lista.map(x=>x.id));
  const qIds=ids(QUESTIONS),exIds=ids(EXAMS),flIds=ids(FLUID_TESTS),dxIds=ids(DX);
- const manobra=id=>id==='vitals'||id==='inspecionar:geral'||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
+ const manobra=id=>id==='vitals'||id==='inspecionar:geral'||MANOBRAS.some(x=>'manobra:'+x.id===id)||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
  const grupos=(lista,valido,nome)=>{const out=(Array.isArray(lista)?lista:[]).map(g=>({ids:(Array.isArray(g&&g.ids)?g.ids:[]).map(String).filter(valido),l:txt(g&&g.l)?g.l:''})).filter(g=>g.ids.length&&g.l);
   if(!out.length)graves.push('nenhum item que vale ponto em '+nome);return out;};
  const so=(obj,valido)=>Object.fromEntries(Object.entries(obj&&typeof obj==='object'?obj:{}).filter(([k,v])=>valido(k)&&txt(v)));

@@ -1,0 +1,84 @@
+// Cardiovascular 1: O punho no peito. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// dor precordial e classificação A–D (2.1), cardiopatia isquêmica e SCA (7.1).
+CASES.push({
+ id:'c-iam',modulo:'Semiologia cardiovascular',n:'Caso 1',title:'O punho no peito',look:'carlos',pname:'Seu Gilberto',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas, caso clínico e monitoria)',
+ card:'Gilberto, 58 anos. Dor no peito há 40 minutos.',
+ briefing:'Doutor, leito 3: Seu Gilberto, 58 anos. Dor no peito que começou há uns 40 minutos. Tá suando muito.',
+ vitals:'PA 150/92 mmHg · FC 96 bpm · FR 20 irpm · T 36,4 °C · SpO₂ 96% em ar ambiente',
+ answers:{
+  queixa:'Uma dor no meio do peito, um aperto muito forte.',
+  tempo:'Uns 40 minutos. Não passa.',
+  inicio:'Do nada. Eu tava sentado no sofá vendo o jornal.',
+  dor:'É um aperto, um peso aqui no meio (fecha a mão sobre o peito). Vai pro braço esquerdo e pro queixo.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Um pouco de falta de ar junto com a dor.',
+  esforco:'Não. Começou parado e não melhora parado.',
+  palpitacao:'Não.',
+  sincope:'Não, mas fiquei tonto e enjoado.',
+  posicao:'Nenhuma posição melhora.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Tomei um remédio de estômago achando que era gastrite. Nada.',
+  meds:'Metformina e losartana. Às vezes esqueço.',
+  doencas:'Diabetes e pressão alta.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumo um maço por dia há 35 anos. Cerveja no fim de semana.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Meu pai infartou com 55 anos.',
+  trabalho:'Taxista.',
+  moradia:'Moro com minha esposa e meu filho.',
+  sal:'Como muita fritura, na rua.',
+  emocional:'Tô com medo de morrer, doutor.',
+  estimulantes:'Café o dia todo. Remédio estimulante não.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['dor'],l:'Caráter e irradiação da dor'},{ids:['esforco','inicio'],l:'Começou em repouso'},{ids:['tempo'],l:'Duração (contínua)'},{ids:['doencas'],l:'Diabetes e pressão alta'},{ids:['habitos'],l:'Tabagismo'},{ids:['familia'],l:'Infarto precoce na família'}],
+ geral:'Pálido, suado, ansioso. Mostra a dor com o punho fechado sobre o meio do peito.',
+ effSides:[],
+ exam:{
+  'auscultar:focoM':'Bulhas rítmicas, com um som grave logo antes de B1. Sem sopros.',
+  'palpar:coracao':'Dor não muda com a palpação do tórax.',
+  'inspecionar:maos':'Mãos frias e úmidas, sem cianose.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (sinal de Levine)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},
+  {ids:['palpar:pulsoRad','palpar:pulsoFem','palpar:pulsoCar'],l:'Palpar os pulsos (simetria, afastar dissecção)'},
+  {ids:['palpar:coracao'],l:'Ver se a dor muda com a palpação'}],
+ res:{
+  // CONFERIR: o material não descreve o ECG do infarto; o achado foi construído só como resultado cru.
+  ecg:'Ritmo sinusal, FC 96 bpm. Supradesnivelamento do segmento ST de 3 mm de V1 a V5.',
+  trop:'Troponina 12 vezes acima do limite de referência',
+  hemo:'Hb 14,6 g/dL · Leucócitos 9.800/mm³ · Plaquetas 230.000/mm³',
+  glic:'Glicemia 214 mg/dL'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'}],
+ neutral:['trop','hemo','renal','glic','rx'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'isquemica',
+ sindWhy:'Dor retroesternal em aperto, irradiada para o braço esquerdo e a mandíbula, contínua, com suor e náusea: síndrome isquêmica. O exame do coração pode ser quase normal.',
+ correctDx:'sca',
+ dxWhy:'Dor retroesternal em aperto, irradiada para braço esquerdo e mandíbula, intensa, contínua há mais de 30 minutos, com suor e náusea: é a "dor de IAM" da classificação (sugestiva pelo tipo, local, intensidade e duração). Homem diabético, hipertenso, fumante e com pai infartado cedo. Na SCA a placa rompe, forma trombo e a obstrução salta para 95–100%: por isso a dor vem em repouso.',
+ conduta:[
+  {id:'c1',t:'Agir já, sem esperar exames para confirmar',ok:1,why:'Tempo é músculo: a desobstrução ideal é em 1 a 3 horas do início dos sintomas. O ECG sai em minutos; não se espera mais nada.'},
+  {id:'c2',t:'UTI, antiagregação (AAS, clopidogrel) e anticoagulação (heparina)',ok:1,why:'É o que a SCA exige.'},
+  {id:'c3',t:'Revascularização',ok:1,why:'Desobstruir a coronária é o objetivo na SCA.'},
+  {id:'c4',t:'Esperar a troponina para decidir',ok:0,why:'Com dor de IAM e ECG alterado, a conduta é imediata. Esperar custa músculo.'},
+  {id:'c5',t:'Analgésico e alta: dor muscular',ok:0,why:'Dor muscular piora com movimento e palpação e o paciente aponta o local. Aqui nada disso.'},
+  {id:'c6',t:'Tratar como pericardite',ok:0,why:'A dor não muda com a respiração nem alivia ao inclinar o tronco para a frente.'}
+ ],
+ teaching:[
+  {t:'Classificação da dor torácica',p:'Três critérios da dor anginosa: retroesternal opressiva; desencadeada por esforço ou estresse; aliviada por repouso ou nitrato. Tipo A: 3 de 3 (dispensa exames). Tipo D: nenhum. Dor de IAM: típica pelo tipo, local, intensidade e duração (≥ 30 min).'},
+  {t:'Dor isquêmica',p:'Retroesternal, em aperto, irradiando para braço esquerdo, mandíbula, ombros ou epigástrio. Náusea, vômito e suor frio. No infarto pode ser contínua.'},
+  {t:'Angina estável × SCA',p:'Estável: placa íntegra, dor só no esforço. SCA: placa rompida com trombo, dor em repouso.'},
+  {t:'Dores que matam',p:'Diante de dor torácica, pense primeiro em angina instável, infarto, dissecção de aorta e embolia pulmonar.'}
+ ]
+});

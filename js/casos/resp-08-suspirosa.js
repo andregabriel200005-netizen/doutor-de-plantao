@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Carla, 24 anos. Diz que está com falta de ar desde a tarde.',
  vitals:'PA 116/74 mmHg · FC 92 bpm · FR 18 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  esforco:"Não tem a ver com esforço. Parada também.",
+  palpitacao:"Às vezes sinto o coração acelerar quando fico nervosa.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Muito café pra aguentar o trabalho.",
   queixa:'Sinto que o ar não entra direito. Tenho que puxar fundo toda hora.',
   tempo:'Umas duas semanas, mas hoje veio forte.',
   inicio:'Hoje veio de repente, depois de uma discussão no trabalho.',

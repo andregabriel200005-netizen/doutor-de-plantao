@@ -1,0 +1,88 @@
+// Cardiovascular 5: Sangue na gravidez. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// dispneia, ortopneia e DPN (2.2), estenose mitral e febre reumática (7.2), sopro inocente × orgânico (5.7).
+// Hemoptise + estenose mitral e IECA na gestação: Semiologia Respiratória (1, 2).
+CASES.push({
+ id:'c-em',modulo:'Semiologia cardiovascular',n:'Caso 5',title:'Sangue na gravidez',look:'lucia',pname:'Joana',
+ fonte:'Semiologia Cardiovascular e Respiratória: material de estudo do André (apostilas de Semiologia Especializada, aulas e monitoria)',
+ card:'Joana, 26 anos, grávida de 28 semanas. Falta de ar e tosse com sangue.',
+ briefing:'Doutor, leito 3: Joana, 26 anos, grávida de 28 semanas. Falta de ar e tossiu sangue hoje.',
+ vitals:'PA 112/70 mmHg · FC 112 bpm · FR 26 irpm · T 36,7 °C · SpO₂ 92% em ar ambiente',
+ answers:{
+  queixa:'Falta de ar que piorou muito, e hoje tossi sangue.',
+  tempo:'O cansaço começou com a gravidez. Piorou nas últimas duas semanas.',
+  inicio:'Aos poucos.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Tosse de noite.',
+  escarro:'Hoje veio sangue vivo, com espuma, misturado ao catarro.',
+  chiado:'Um chiadinho de noite.',
+  dispneia:'Antes da gravidez eu subia ladeira. Agora canso pra andar dentro de casa.',
+  esforco:'Qualquer esforço piora.',
+  palpitacao:'O coração dispara quando ando.',
+  sincope:'Não.',
+  posicao:'Deitada não consigo. Durmo com dois travesseiros e acordo de madrugada sem ar.',
+  edema:'Um pouco nos pés, de tarde.',
+  urina:'Não.',
+  peso:'Engordei o normal da gravidez.',
+  tratou:'Nada. A médica do pré-natal disse pra eu vir aqui.',
+  meds:'Sulfato ferroso e ácido fólico do pré-natal.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Com uns 10 anos tive uma dor de garganta forte e depois as juntas incharam, uma de cada vez. Tomei injeção por um tempo.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Manicure.',
+  moradia:'Moro com meu marido, na periferia.',
+  sal:'Normal.',
+  emocional:'Com medo pelo bebê.',
+  estimulantes:'Não. Parei até o café.',
+  hiv:'Fiz no pré-natal, negativo.'
+ },
+ keyQ:[{ids:['infancia'],l:'Febre reumática na infância'},{ids:['posicao'],l:'Ortopneia e dispneia paroxística noturna'},{ids:['escarro'],l:'Hemoptise'},{ids:['dispneia','esforco'],l:'Dispneia progressiva'},{ids:['tempo'],l:'Piora na gestação'}],
+ geral:'Gestante sentada, respirando rápido, sem cianose.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{auscultar:'Estertores finos no fim da inspiração. Murmúrio presente.'}),{
+  'auscultar:focoM':'B1 forte. Logo depois de B2, um estalido seco. Ruflar diastólico grave, discreto.',
+  'manobra:pachon':'Em decúbito lateral esquerdo, com a campânula: ruflar diastólico grave bem audível, que reforça logo antes de B1.',
+  'palpar:coracao':'Ictus no 5º EIC, na linha hemiclavicular, sem desvio, de tamanho normal.',
+  'manobra:valsalva':'O ruflar diminui.',
+  'manobra:rivero':'O ruflar não aumenta.',
+  'auscultar:focoP':'B2 forte.',
+  'inspecionar:pernas':'Edema discreto nos tornozelos.',
+  'palpar:pernas':'Edema mole nos tornozelos (+/4+), dos dois lados.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral'},
+  {ids:['manobra:pachon'],l:'Decúbito lateral esquerdo (Pachon)'},{ids:['palpar:coracao'],l:'Palpar o ictus (sem desvio)'},
+  {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases (congestão)'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
+ res:{
+  eco:'Valva mitral espessada, com abertura bem reduzida. Átrio esquerdo aumentado. VE de tamanho normal, FE 64%.',
+  ecg:'Ritmo sinusal, FC 112 bpm.',
+  gaso:'pH 7,45 · PaO₂ 64 mmHg · PaCO₂ 31 mmHg · HCO₃ 22 mEq/L · SatO₂ 92%',
+  hemo:'Hb 10,9 g/dL · Leucócitos 9.400/mm³ · Plaquetas 230.000/mm³'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['ecg','hemo','gaso','bnp','rx','escarro'],
+ rx:{congest:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:['valvar','congest'],
+ sindWhy:'B1 hiperfonética, estalido de abertura e ruflar diastólico com reforço pré-sistólico no foco mitral (melhor em Pachon): síndrome valvar. As bases com estertores mostram a congestão pulmonar que ela causa.',
+ correctDx:'em',
+ dxWhy:'Febre reumática na infância, dispneia que piorou na gestação, ortopneia, dispneia paroxística noturna e hemoptise: estenose mitral, a valvopatia mais comum da febre reumática no Nordeste, que descompensa com frequência em gestantes jovens. O ictus está normal: a estenose mitral isolada é a única valvopatia que não desvia o ictus.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma a estenose e mostra o átrio esquerdo aumentado com o VE protegido.'},
+  // CONFERIR: o acompanhamento conjunto não está escrito no material.
+  {id:'c2',t:'Acompanhamento conjunto com cardiologia e obstetrícia',ok:1,why:'Gestante jovem descompensada por estenose mitral.'},
+  {id:'c3',t:'Iniciar captopril ou enalapril',ok:0,why:'IECA é teratogênico: contraindicado na gestação.'},
+  {id:'c4',t:'Investigar só tuberculose pelo sangue no catarro',ok:0,why:'Diante de sangramento respiratório, afaste causa cardiovascular: na estenose mitral a pressão do átrio esquerdo rompe capilares pulmonares.'},
+  {id:'c5',t:'Sopro inocente da gravidez',ok:0,why:'A gestação dá sopro sistólico de hipercinese. Sopro diastólico jamais é inocente.'}
+ ],
+ teaching:[
+  {t:'Estenose mitral',p:'B1 hiperfonética, estalido de abertura logo após B2, ruflar diastólico grave (campânula) com reforço pré-sistólico, que some na fibrilação atrial. Melhor em decúbito lateral esquerdo e em expiração.'},
+  {t:'O ictus não muda',p:'Estenose mitral isolada é a única valvopatia que não desvia o ictus: o VE fica protegido. As repercussões são para trás: AE, pulmão, câmaras direitas.'},
+  {t:'Febre reumática',p:'Principal causa de valvopatia em jovens no Brasil. Ordem: mitral, aórtica, tricúspide, pulmonar.'},
+  {t:'Hemoptise',p:'Sempre afaste causa cardiovascular. Estenose mitral é a clássica.'}
+ ]
+});

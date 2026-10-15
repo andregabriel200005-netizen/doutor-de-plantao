@@ -39,9 +39,9 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
         .concat(pleural ? ['fluidColor', 'fluidLook', 'fluid', 'keyFluid', 'light', 'correctClass'] : []);
       obrig.forEach(k => { if (c[k] === undefined) prob.push('falta o campo ' + k); });
       if (CASES.some(o => o !== c && o.id === c.id)) prob.push('id repetido: ' + c.id);
-      if (!SINDROMES.some(d => d.id === c.correctSind)) prob.push('síndrome correta não está na lista SINDROMES');
+      sindLista(c).forEach(id => { if (!SINDROMES.some(d => d.id === id)) prob.push('síndrome inexistente: ' + id); });
       // ids que não existem viram itens impossíveis de pontuar
-      const manobra = id => id === 'vitals' || id === 'inspecionar:geral' || (() => { const [t, z] = String(id).split(':'); return TOOLS.some(x => x.id === t) && ZNAME[z] && z !== 'geral'; })();
+      const manobra = id => id === 'vitals' || id === 'inspecionar:geral' || (String(id).startsWith('manobra:') && MANOBRAS.some(x => 'manobra:' + x.id === id)) || (() => { const [t, z] = String(id).split(':'); return TOOLS.some(x => x.id === t) && ZNAME[z] && z !== 'geral'; })();
       const exame = id => EXAMS.some(e => e.id === id);
       (c.keyQ || []).forEach(g => g.ids.forEach(id => { if (!QUESTIONS.some(q => q.id === id)) prob.push('pergunta inexistente em keyQ: ' + id); }));
       (c.keyExam || []).forEach(g => g.ids.forEach(id => { if (!manobra(id)) prob.push('manobra inexistente em keyExam: ' + id); }));
@@ -72,12 +72,12 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
         doTap();
         c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
       }
-      G.final = { cls: c.correctClass, sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+      G.final = { cls: c.correctClass, sind: sindLista(c)[0], dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
       const perfeita = score().total;
 
       // jogada ruim
       newGame(i);
-      G.final = { cls: c.correctClass === 'exsudato' ? 'transudato' : 'exsudato', sind: SINDROMES.find(d => d.id !== c.correctSind).id, dx: DX.find(d => d.id !== c.correctDx).id, cond: c.conduta.filter(x => !x.ok).map(x => x.id) };
+      G.final = { cls: c.correctClass === 'exsudato' ? 'transudato' : 'exsudato', sind: SINDROMES.find(d => !sindLista(c).includes(d.id)).id, dx: DX.find(d => d.id !== c.correctDx).id, cond: c.conduta.filter(x => !x.ok).map(x => x.id) };
       const ruim = score().total;
       // puncionar quem não tem derrame custa ponto
       let seca = null;
@@ -85,7 +85,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
         newGame(i);
         G.asked = c.keyQ.map(g => g.ids[0]); G.examined = c.keyExam.map(g => g.ids[0]); c.keyEx.forEach(g => G.orders[g.ids[0]] = 0); G.clock = 300;
         G.tap = { space: { s: 'D', i: 7 }, pos: 'sup', vol: '60' }; doTap();
-        G.final = { sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+        G.final = { sind: sindLista(c)[0], dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
         seca = { nota: score().total, colheu: G.tapped };
       }
       return { nome: c.modulo + ' · ' + c.n + ' · ' + c.title, prob, perfeita, ruim, seca };
@@ -190,7 +190,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
     c.keyEx.forEach(g => G.orders[g.ids[0]] = 0); G.clock = 300;
     G.tap = { space: { s: c.tap.sides[0], i: c.tap.spaces[0] }, pos: 'sup', vol: '60' }; doTap();
     c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
-    G.final = { cls: c.correctClass, sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+    G.final = { cls: c.correctClass, sind: sindLista(c)[0], dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
     const nota = score().total; G = null;
     return { nota, guardado: JSON.parse(localStorage.getItem('plantao-pleural-ia') || '[]').length, prompt: window.__prompt.includes('ADA acima de 40') };
   });

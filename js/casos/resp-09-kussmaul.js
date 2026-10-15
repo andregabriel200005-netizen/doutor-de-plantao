@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Davi, 19 anos. A mãe trouxe porque ele está respirando estranho e vomitando.',
  vitals:'PA 104/62 mmHg · FC 118 bpm · FR 30 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  esforco:"Não.",
+  palpitacao:"Tá batendo rápido.",
+  sincope:"Fiquei tonto quando levantei, mas não desmaiei.",
+  infancia:"Não, só a diabetes.",
+  estimulantes:"Refrigerante normal, não diet.",
   queixa:'Tô respirando esquisito, cansado e vomitando.',
   tempo:'Dois dias.',
   inicio:'Foi piorando.',

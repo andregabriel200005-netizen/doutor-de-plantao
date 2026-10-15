@@ -84,7 +84,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .chip:hover{border-color:var(--accent)}
 .chip.done{opacity:.5}
 .chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);opacity:1}
-.examgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.examgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px}
 .fig{background:var(--panel2);border-radius:10px;padding:8px;text-align:center}
 .fig h4{margin:0 0 4px;font:500 .72rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .fig svg{width:100%;max-width:260px;height:auto}
@@ -158,6 +158,9 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 @keyframes pulse{50%{opacity:.5}}
 .modh{font-size:1.25rem;margin-top:24px;color:var(--warn)}
 .modh+.cases{margin-top:10px}
+.mtit{margin:14px 0 6px;font:500 .7rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.zlbl text{font:600 7px var(--f-mono);fill:#3b2a1c;pointer-events:none}
+.zlbl text.out{fill:#cfe0e6}
 </style>
 
 <div class="wrap">
@@ -196,6 +199,9 @@ const QUESTIONS=[
  {id:'escarro',cat:'História atual',t:'O catarro tem alguma cor? Já saiu sangue?'},
  {id:'chiado',cat:'História atual',t:'Sente chiado no peito?'},
  {id:'dispneia',cat:'História atual',t:'Tem falta de ar? Piora quando deita?'},
+ {id:'esforco',cat:'História atual',t:'Os sintomas vêm com esforço? Melhoram com repouso?'},
+ {id:'palpitacao',cat:'História atual',t:'Sente o coração disparar ou bater falhando?'},
+ {id:'sincope',cat:'História atual',t:'Já desmaiou ou quase desmaiou?'},
  {id:'posicao',cat:'História atual',t:'Tem alguma posição que alivia ou piora a falta de ar?'},
  {id:'edema',cat:'História atual',t:'As pernas incham?'},
  {id:'urina',cat:'História atual',t:'Tem sentido muita sede ou urinado muito?'},
@@ -205,6 +211,7 @@ const QUESTIONS=[
  {id:'doencas',cat:'Antecedentes',t:'Tem alguma doença? Coração, fígado, rim?'},
  {id:'alergia',cat:'Antecedentes',t:'Tem rinite, alergia ou asma desde criança?'},
  {id:'passado',cat:'Antecedentes',t:'Já teve pneumonia ou tuberculose antes?'},
+ {id:'infancia',cat:'Antecedentes',t:'Teve alguma doença séria quando era criança?'},
  {id:'habitos',cat:'Antecedentes',t:'Bebe ou fuma?'},
  {id:'contato',cat:'Antecedentes',t:'Alguém perto de você está doente ou tossindo?'},
  {id:'imob',cat:'Antecedentes',t:'Fez cirurgia, viagem longa ou ficou muito tempo de cama?'},
@@ -213,6 +220,7 @@ const QUESTIONS=[
  {id:'moradia',cat:'Vida e hábitos',t:'Onde você mora? Quantas pessoas moram com você?'},
  {id:'sal',cat:'Vida e hábitos',t:'Como anda a alimentação?'},
  {id:'emocional',cat:'Vida e hábitos',t:'Tem passado por estresse? Anda ansioso(a)?'},
+ {id:'estimulantes',cat:'Vida e hábitos',t:'Toma café, energético ou algum remédio estimulante ou para emagrecer?'},
  {id:'hiv',cat:'Vida e hábitos',t:'Já fez teste de HIV? Usa preservativo?'}
 ];
 const EXAMS=[
@@ -226,9 +234,10 @@ const EXAMS=[
  {id:'usg',t:'Ultrassonografia de tórax',d:30},{id:'tc',t:'Tomografia de tórax',d:60},
  {id:'angio',t:'Angiotomografia de tórax',d:60},{id:'eco',t:'Ecocardiograma',d:90},
  {id:'escarro',t:'Escarro: BAAR e teste molecular',d:90},
- {id:'gaso',t:'Gasometria arterial',d:20},{id:'ecg',t:'Eletrocardiograma',d:15}
+ {id:'gaso',t:'Gasometria arterial',d:20},{id:'ecg',t:'Eletrocardiograma',d:15},
+ {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60}
 ];
-const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
+const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
 const FLUID_TESTS=[
  {id:'ph',t:'pH'},{id:'gli',t:'Glicose'},{id:'dhl',t:'DHL'},{id:'prot',t:'Proteínas totais'},{id:'alb',t:'Albumina'},
  {id:'cel',t:'Celularidade total e diferencial'},{id:'cito',t:'Citologia oncótica'},{id:'ada',t:'ADA'},
@@ -237,7 +246,9 @@ const FLUID_TESTS=[
 ];
 const FLUID_DEF={tg:'Triglicerídeos 28 mg/dL',amil:'Amilase 45 U/L',ht:'Hematócrito < 1%',cito:'Negativa para células neoplásicas'};
 const TOOLS=[{id:'inspecionar',t:'Inspecionar'},{id:'palpar',t:'Palpar'},{id:'percutir',t:'Percutir'},{id:'auscultar',t:'Auscultar'}];
-const ZNAME={apiceE:'ápice esquerdo',apiceD:'ápice direito',medioE:'terço médio esquerdo',medioD:'terço médio direito',baseE:'base esquerda',baseD:'base direita',pescoco:'pescoço',coracao:'precórdio',boca:'boca e língua',maos:'mãos e unhas',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
+const ZNAME={apiceE:'ápice esquerdo',apiceD:'ápice direito',medioE:'terço médio esquerdo',medioD:'terço médio direito',baseE:'base esquerda',baseD:'base direita',pescoco:'pescoço',coracao:'precórdio (ictus)',boca:'boca e língua',maos:'mãos e unhas',
+ focoAo:'foco aórtico (2º EIC direito)',focoP:'foco pulmonar (2º EIC esquerdo)',focoAc:'foco aórtico acessório (3º EIC esquerdo)',focoT:'foco tricúspide (4º–5º EIC paraesternal esquerdo)',focoM:'foco mitral (5º EIC, linha hemiclavicular)',
+ pulsoCar:'pulso carotídeo',pulsoRad:'pulso radial',pulsoFem:'pulso femoral',pulsoPed:'pulso pedioso',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
 const DX=[
  {id:'empiema',t:'Derrame parapneumônico complicado / empiema'},
  {id:'simples',t:'Derrame parapneumônico não complicado'},
@@ -259,11 +270,26 @@ const DX=[
  {id:'pleurite',t:'Pleurite aguda'},
  {id:'ansiedade',t:'Dispneia suspirosa (ansiedade)'},
  {id:'cad',t:'Cetoacidose diabética'},
- {id:'broncopn',t:'Broncopneumonia'}
+ {id:'broncopn',t:'Broncopneumonia'},
+ {id:'sca',t:'Síndrome coronariana aguda (infarto)'},
+ {id:'pericardite',t:'Pericardite aguda'},
+ {id:'eao',t:'Estenose aórtica'},
+ {id:'iao',t:'Insuficiência aórtica'},
+ {id:'em',t:'Estenose mitral'},
+ {id:'im',t:'Insuficiência mitral'},
+ {id:'ep',t:'Estenose pulmonar'},
+ {id:'it',t:'Insuficiência tricúspide'},
+ {id:'ic_b',t:'Insuficiência cardíaca descompensada, perfil quente e úmido'},
+ {id:'ic_c',t:'Insuficiência cardíaca descompensada, perfil frio e úmido'},
+ {id:'has',t:'Hipertensão arterial (a confirmar)'},
+ {id:'ortostatica',t:'Síncope por hipotensão ortostática (medicamentosa)'},
+ {id:'estimulantes',t:'Palpitações por uso de estimulantes'},
+ {id:'mch',t:'Miocardiopatia hipertrófica'},
+ {id:'inocente',t:'Sopro funcional (inocente)'}
 ];
 // Síndrome que o exame do tórax mostra (pergunta do prontuário em todos os casos).
 const SINDROMES=[
- {id:'normal',t:'Sem síndrome pulmonar ou pleural ao exame'},
+ {id:'normal',t:'Sem síndrome pulmonar, pleural ou cardíaca ao exame'},
  {id:'broncoesp',t:'Brônquica obstrutiva (broncoespasmo)'},
  {id:'bronqcron',t:'Brônquica crônica com hiperaeração'},
  {id:'bronqx',t:'Bronquiectasia'},
@@ -274,7 +300,25 @@ const SINDROMES=[
  {id:'caverna',t:'Caverna'},
  {id:'pleurite',t:'Pleurite'},
  {id:'derrame',t:'Derrame pleural'},
- {id:'ptx',t:'Pneumotórax'}
+ {id:'ptx',t:'Pneumotórax'},
+ {id:'isquemica',t:'Cardíaca isquêmica'},
+ {id:'valvar',t:'Cardíaca valvar'},
+ {id:'ic',t:'Insuficiência cardíaca'},
+ {id:'has',t:'Hipertensiva'},
+ {id:'pericardica',t:'Pericárdica'},
+ {id:'miocardio',t:'Miocardiopatia'}
+];
+// Manobras especiais (exame do coração e da pressão). Ficam em G.examined como 'manobra:id'.
+const MANOBRAS=[
+ {id:'pachon',t:'Decúbito lateral esquerdo (Pachon)'},
+ {id:'frente',t:'Tronco inclinado para a frente'},
+ {id:'apneia',t:'Prender a respiração'},
+ {id:'handgrip',t:'Handgrip'},
+ {id:'rivero',t:'Rivero-Carvallo (inspiração profunda)'},
+ {id:'valsalva',t:'Valsalva'},
+ {id:'cocoras',t:'Cócoras / elevar as pernas'},
+ {id:'ortostase',t:'PA deitado e em pé'},
+ {id:'pa3',t:'PA com técnica completa'}
 ];
 const LOOKS={
  doctor:{skin:'#d9a27a',hair:'#3a2618',style:'short',top:'#eef3f4',pants:'#2c3f63',steth:1},
@@ -291,8 +335,12 @@ const LOOKS={
  raimundo:{skin:'#c68a5e',hair:'#9b958e',style:'bald',top:'#6b7f99'},
  carla:{skin:'#f0c8a0',hair:'#b5652e',style:'long',top:'#9ad0e6'},
  davi:{skin:'#5a3a28',hair:'#0e0a08',style:'curly',top:'#e05a5a'},
- marcos:{skin:'#a8744e',hair:'#1b1310',style:'short',top:'#c9b38a'}
+ marcos:{skin:'#a8744e',hair:'#1b1310',style:'short',top:'#c9b38a'},
+ theo:{skin:'#e8b890',hair:'#5a3a1a',style:'short',top:'#f2d24a'},
+ ines:{skin:'#d9a27a',hair:'#d8d4cf',style:'bun',top:'#7fb39a'},
+ jose:{skin:'#c99a76',hair:'#d8d4cf',style:'bald',top:'#b98a8a',glasses:1}
 };
+const FOCOS=['focoAo','focoP','focoAc','focoT','focoM'],PULSOS=['pulsoCar','pulsoRad','pulsoFem','pulsoPed'];
 
 // Achados do exame para várias regiões de uma vez: achados(TORAX,{palpar:'...',auscultar:'...'})
 const TORAX=['apiceE','apiceD','medioE','medioD','baseE','baseD'];
@@ -317,6 +365,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: seu Carlos, 45 anos. Chegou com febre e dor no peito. Tá cansadinho.",
  "vitals": "PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 38,9 °C · SpO₂ 92% em ar ambiente",
  "answers": {
+  "esforco": "Não. Só cansa quando ando mais.",
+  "palpitacao": "Não.",
+  "sincope": "Não.",
+  "infancia": "Não, nada sério.",
+  "estimulantes": "Café de manhã, só.",
   "inicio": "Foi aos poucos. Primeiro a gripe, depois piorou.",
   "escarro": "Amarelado, meio esverdeado. Sangue não.",
   "chiado": "Não.",
@@ -672,6 +725,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: Dona Maria, 72 anos. Diz que tá com falta de ar faz uns dias.",
  "vitals": "PA 150/90 mmHg · FC 96 bpm · FR 24 irpm · T 36,4 °C · SpO₂ 91% em ar ambiente",
  "answers": {
+  "esforco": "Qualquer esforço me cansa. Parada eu melhoro um pouco.",
+  "palpitacao": "Às vezes, de noite.",
+  "sincope": "Não.",
+  "infancia": "Que eu lembre, não.",
+  "estimulantes": "Um cafezinho por dia.",
   "inicio": "Foi piorando aos poucos, nas últimas duas semanas.",
   "escarro": "Quase não tenho catarro. Sangue nunca.",
   "chiado": "Às vezes, de noite, um chiadinho.",
@@ -1022,6 +1080,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: João, 28 anos. Veio do ambulatório por tosse e dor no peito.",
  "vitals": "PA 110/70 mmHg · FC 98 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 95% em ar ambiente",
  "answers": {
+  "esforco": "Não, a dor é a mesma parado ou andando.",
+  "palpitacao": "Não.",
+  "sincope": "Não.",
+  "infancia": "Não.",
+  "estimulantes": "Café na faculdade. Energético não.",
   "inicio": "Foi aos poucos. Nem lembro o dia certo.",
   "escarro": "Quase não sai catarro. Sangue não.",
   "chiado": "Não.",
@@ -1350,6 +1413,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Arlindo, 71 anos. Chegou com febre alta e dor no peito, respirando rápido.',
  vitals:'PA 130/80 mmHg · FC 108 bpm · FR 26 irpm · T 39,2 °C · SpO₂ 89% em ar ambiente',
  answers:{
+  esforco:"Não. Tá ruim parado também.",
+  palpitacao:"Tá batendo rápido desde a febre.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Só o cafezinho.",
   queixa:'Febre alta, tremedeira e uma dor do lado direito do peito.',
   tempo:'Três dias.',
   inicio:'Começou de repente, com um calafrio forte de bater o queixo.',
@@ -1434,6 +1502,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Bruno, 22 anos. Chegou com dor no peito e falta de ar.',
  vitals:'PA 122/76 mmHg · FC 98 bpm · FR 22 irpm · T 36,7 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  esforco:"Não, começou parado.",
+  palpitacao:"Tá acelerado desde a dor.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Energético às vezes, pra trabalhar de noite.",
   queixa:'Uma dor no peito do lado esquerdo e falta de ar.',
   tempo:'Faz umas duas horas.',
   inicio:'Do nada. Eu tava sentado vendo TV.',
@@ -1519,6 +1592,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Ana, 19 anos. Chegou com falta de ar, falando com dificuldade.',
  vitals:'PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 36,6 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  esforco:"Correr piora, mas agora é parada mesmo.",
+  palpitacao:"Tá disparado depois de tanta bombinha.",
+  sincope:"Não.",
+  infancia:"Asma e rinite, desde pequena.",
+  estimulantes:"Café, às vezes.",
   queixa:'Falta de ar e chiado. Não tá passando.',
   tempo:'Desde ontem à noite.',
   inicio:'Começou depois que fiz faxina no quarto, cheio de poeira.',
@@ -1600,6 +1678,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Valdemar, 63 anos. Veio por tosse e cansaço que não melhoram.',
  vitals:'PA 136/84 mmHg · FC 96 bpm · FR 24 irpm · T 37,1 °C · SpO₂ 92% em ar ambiente',
  answers:{
+  esforco:"Cansa mais quando ando. Parado melhora.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Café de manhã.",
   queixa:'Tosse que não passa e um cansaço que só piora.',
   tempo:'Uns dois meses.',
   inicio:'Foi aos poucos.',
@@ -1688,6 +1771,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Damião, 68 anos, veio do sítio. Falta de ar, não consegue deitar.',
  vitals:'PA 150/94 mmHg · FC 104 bpm · FR 26 irpm · T 36,4 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  esforco:"Antes era só no esforço. Agora até parado.",
+  palpitacao:"Às vezes sinto o coração batendo forte.",
+  sincope:"Não.",
+  infancia:"Não lembro de nada.",
+  estimulantes:"Café preto o dia todo.",
   queixa:'Falta de ar que não me deixa dormir.',
   tempo:'Cansaço eu tenho faz anos. Piorou faz uns quinze dias.',
   inicio:'Foi piorando aos poucos.',
@@ -1749,7 +1837,7 @@ CASES.push({
  neutral:['hemo','renal','ecg','gaso','glic','eas','hep'],
  rx:{cardio:1,congest:1},
  tap:{sides:[],spaces:[]},
- correctSind:'congest',
+ correctSind:['congest','ic'],
  sindWhy:'Estertores finos e submacicez nas duas bases, já subindo para o terço médio ("maré montante"), sem líquido livre na pleura: congestão pulmonar, com líquido no interstício e nos alvéolos.',
  correctDx:'icc_cong',
  dxWhy:'Ortopneia, dispneia paroxística noturna, escarro róseo e espumoso, jugulares túrgidas, edema bilateral, ictus desviado e respiração de Cheyne-Stokes: insuficiência cardíaca avançada e descompensada. Os remédios acabaram há um mês (falha de medicação é a principal causa de descompensação). Origem rural, casa de taipa e barbeiro: pense em Chagas.',
@@ -1781,6 +1869,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Raimundo, 67 anos. Cansado, respirando com esforço.',
  vitals:'PA 138/86 mmHg · FC 100 bpm · FR 26 irpm · T 37,0 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  esforco:"Qualquer esforço. Parado melhora um pouco.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Café, umas três xícaras.",
   queixa:'Esse cansaço que piorou essa semana.',
   tempo:'Cansado eu sou faz anos. Piorou faz uma semana, depois de uma gripe.',
   inicio:'Aos poucos.',
@@ -1867,6 +1960,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Rosa, 52 anos. Veio por febre e tosse com muito catarro.',
  vitals:'PA 120/78 mmHg · FC 96 bpm · FR 22 irpm · T 38,0 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  esforco:"Ladeira me cansa.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Coqueluche e uma pneumonia forte, fiquei um mês internada.",
+  estimulantes:"Café com leite.",
   queixa:'Esse catarro que não para, e agora veio febre.',
   tempo:'Catarro eu tenho desde moça. A febre começou faz 3 dias.',
   inicio:'Aos poucos.',
@@ -1952,6 +2050,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Carla, 24 anos. Diz que está com falta de ar desde a tarde.',
  vitals:'PA 116/74 mmHg · FC 92 bpm · FR 18 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  esforco:"Não tem a ver com esforço. Parada também.",
+  palpitacao:"Às vezes sinto o coração acelerar quando fico nervosa.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Muito café pra aguentar o trabalho.",
   queixa:'Sinto que o ar não entra direito. Tenho que puxar fundo toda hora.',
   tempo:'Umas duas semanas, mas hoje veio forte.',
   inicio:'Hoje veio de repente, depois de uma discussão no trabalho.',
@@ -2024,6 +2127,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Davi, 19 anos. A mãe trouxe porque ele está respirando estranho e vomitando.',
  vitals:'PA 104/62 mmHg · FC 118 bpm · FR 30 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  esforco:"Não.",
+  palpitacao:"Tá batendo rápido.",
+  sincope:"Fiquei tonto quando levantei, mas não desmaiei.",
+  infancia:"Não, só a diabetes.",
+  estimulantes:"Refrigerante normal, não diet.",
   queixa:'Tô respirando esquisito, cansado e vomitando.',
   tempo:'Dois dias.',
   inicio:'Foi piorando.',
@@ -2103,6 +2211,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Marcos, 34 anos. Tosse há mais de um mês e febre no fim da tarde.',
  vitals:'PA 112/70 mmHg · FC 100 bpm · FR 22 irpm · T 37,9 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  esforco:"Cansa um pouco mais na obra.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Café. Energético não.",
   queixa:'Uma tosse que não passa, com catarro, e às vezes sangue.',
   tempo:'Mais de um mês. Uns quarenta dias.',
   inicio:'Aos poucos.',
@@ -2187,6 +2300,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Lúcia, 30 anos. Dor no peito do lado esquerdo há dois dias.',
  vitals:'PA 118/76 mmHg · FC 96 bpm · FR 22 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  esforco:"Não tem a ver com esforço. É com a respiração.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Um café de manhã.",
   queixa:'Uma dor do lado esquerdo que me trava quando respiro.',
   tempo:'Dois dias.',
   inicio:'Começou de um dia pro outro, depois de uma gripe.',
@@ -2260,6 +2378,1151 @@ CASES.push({
  ]
 });
 
+// ---- js/casos/cardio-01-iam.js ----
+// Cardiovascular 1: O punho no peito. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// dor precordial e classificação A–D (2.1), cardiopatia isquêmica e SCA (7.1).
+CASES.push({
+ id:'c-iam',modulo:'Semiologia cardiovascular',n:'Caso 1',title:'O punho no peito',look:'carlos',pname:'Seu Gilberto',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas, caso clínico e monitoria)',
+ card:'Gilberto, 58 anos. Dor no peito há 40 minutos.',
+ briefing:'Doutor, leito 3: Seu Gilberto, 58 anos. Dor no peito que começou há uns 40 minutos. Tá suando muito.',
+ vitals:'PA 150/92 mmHg · FC 96 bpm · FR 20 irpm · T 36,4 °C · SpO₂ 96% em ar ambiente',
+ answers:{
+  queixa:'Uma dor no meio do peito, um aperto muito forte.',
+  tempo:'Uns 40 minutos. Não passa.',
+  inicio:'Do nada. Eu tava sentado no sofá vendo o jornal.',
+  dor:'É um aperto, um peso aqui no meio (fecha a mão sobre o peito). Vai pro braço esquerdo e pro queixo.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Um pouco de falta de ar junto com a dor.',
+  esforco:'Não. Começou parado e não melhora parado.',
+  palpitacao:'Não.',
+  sincope:'Não, mas fiquei tonto e enjoado.',
+  posicao:'Nenhuma posição melhora.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Tomei um remédio de estômago achando que era gastrite. Nada.',
+  meds:'Metformina e losartana. Às vezes esqueço.',
+  doencas:'Diabetes e pressão alta.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumo um maço por dia há 35 anos. Cerveja no fim de semana.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Meu pai infartou com 55 anos.',
+  trabalho:'Taxista.',
+  moradia:'Moro com minha esposa e meu filho.',
+  sal:'Como muita fritura, na rua.',
+  emocional:'Tô com medo de morrer, doutor.',
+  estimulantes:'Café o dia todo. Remédio estimulante não.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['dor'],l:'Caráter e irradiação da dor'},{ids:['esforco','inicio'],l:'Começou em repouso'},{ids:['tempo'],l:'Duração (contínua)'},{ids:['doencas'],l:'Diabetes e pressão alta'},{ids:['habitos'],l:'Tabagismo'},{ids:['familia'],l:'Infarto precoce na família'}],
+ geral:'Pálido, suado, ansioso. Mostra a dor com o punho fechado sobre o meio do peito.',
+ effSides:[],
+ exam:{
+  'auscultar:focoM':'Bulhas rítmicas, com um som grave logo antes de B1. Sem sopros.',
+  'palpar:coracao':'Dor não muda com a palpação do tórax.',
+  'inspecionar:maos':'Mãos frias e úmidas, sem cianose.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (sinal de Levine)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},
+  {ids:['palpar:pulsoRad','palpar:pulsoFem','palpar:pulsoCar'],l:'Palpar os pulsos (simetria, afastar dissecção)'},
+  {ids:['palpar:coracao'],l:'Ver se a dor muda com a palpação'}],
+ res:{
+  // CONFERIR: o material não descreve o ECG do infarto; o achado foi construído só como resultado cru.
+  ecg:'Ritmo sinusal, FC 96 bpm. Supradesnivelamento do segmento ST de 3 mm de V1 a V5.',
+  trop:'Troponina 12 vezes acima do limite de referência',
+  hemo:'Hb 14,6 g/dL · Leucócitos 9.800/mm³ · Plaquetas 230.000/mm³',
+  glic:'Glicemia 214 mg/dL'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'}],
+ neutral:['trop','hemo','renal','glic','rx'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'isquemica',
+ sindWhy:'Dor retroesternal em aperto, irradiada para o braço esquerdo e a mandíbula, contínua, com suor e náusea: síndrome isquêmica. O exame do coração pode ser quase normal.',
+ correctDx:'sca',
+ dxWhy:'Dor retroesternal em aperto, irradiada para braço esquerdo e mandíbula, intensa, contínua há mais de 30 minutos, com suor e náusea: é a "dor de IAM" da classificação (sugestiva pelo tipo, local, intensidade e duração). Homem diabético, hipertenso, fumante e com pai infartado cedo. Na SCA a placa rompe, forma trombo e a obstrução salta para 95–100%: por isso a dor vem em repouso.',
+ conduta:[
+  {id:'c1',t:'Agir já, sem esperar exames para confirmar',ok:1,why:'Tempo é músculo: a desobstrução ideal é em 1 a 3 horas do início dos sintomas. O ECG sai em minutos; não se espera mais nada.'},
+  {id:'c2',t:'UTI, antiagregação (AAS, clopidogrel) e anticoagulação (heparina)',ok:1,why:'É o que a SCA exige.'},
+  {id:'c3',t:'Revascularização',ok:1,why:'Desobstruir a coronária é o objetivo na SCA.'},
+  {id:'c4',t:'Esperar a troponina para decidir',ok:0,why:'Com dor de IAM e ECG alterado, a conduta é imediata. Esperar custa músculo.'},
+  {id:'c5',t:'Analgésico e alta: dor muscular',ok:0,why:'Dor muscular piora com movimento e palpação e o paciente aponta o local. Aqui nada disso.'},
+  {id:'c6',t:'Tratar como pericardite',ok:0,why:'A dor não muda com a respiração nem alivia ao inclinar o tronco para a frente.'}
+ ],
+ teaching:[
+  {t:'Classificação da dor torácica',p:'Três critérios da dor anginosa: retroesternal opressiva; desencadeada por esforço ou estresse; aliviada por repouso ou nitrato. Tipo A: 3 de 3 (dispensa exames). Tipo D: nenhum. Dor de IAM: típica pelo tipo, local, intensidade e duração (≥ 30 min).'},
+  {t:'Dor isquêmica',p:'Retroesternal, em aperto, irradiando para braço esquerdo, mandíbula, ombros ou epigástrio. Náusea, vômito e suor frio. No infarto pode ser contínua.'},
+  {t:'Angina estável × SCA',p:'Estável: placa íntegra, dor só no esforço. SCA: placa rompida com trombo, dor em repouso.'},
+  {t:'Dores que matam',p:'Diante de dor torácica, pense primeiro em angina instável, infarto, dissecção de aorta e embolia pulmonar.'}
+ ]
+});
+
+// ---- js/casos/cardio-02-pericardite.js ----
+// Cardiovascular 2: Andar na neve. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// diagnóstico diferencial da dor torácica (2.1), atrito pericárdico (5.7). Atrito pleural × pericárdico: Semiologia Respiratória (9).
+CASES.push({
+ id:'c-peric',modulo:'Semiologia cardiovascular',n:'Caso 2',title:'Andar na neve',look:'joao',pname:'Rafael',
+ fonte:'Semiologia Cardiovascular e Respiratória: material de estudo do André (apostilas de Semiologia Especializada, aulas e monitoria)',
+ card:'Rafael, 26 anos. Dor no peito depois de uma gripe.',
+ briefing:'Doutor, leito 3: Rafael, 26 anos. Dor no peito desde ontem.',
+ vitals:'PA 124/78 mmHg · FC 104 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 98% em ar ambiente',
+ answers:{
+  queixa:'Uma dor no meio do peito que não me deixa deitar.',
+  tempo:'Desde ontem.',
+  inicio:'Começou uns dias depois de uma gripe forte.',
+  dor:'Pontada no meio do peito, às vezes vai pro ombro. Piora quando respiro fundo e quando deito de costas.',
+  febre:'Febrezinha desde ontem.',
+  tosse:'Uma tosse seca que ficou da gripe.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Respiro curto por causa da dor.',
+  esforco:'Não tem a ver com esforço.',
+  palpitacao:'Sinto o coração meio rápido.',
+  sincope:'Não.',
+  posicao:'Sentado e inclinado pra frente melhora muito. Deitado piora.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Dipirona. Melhora um pouco.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo. Bebo no fim de semana.',
+  contato:'Minha namorada também teve gripe.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Designer.',
+  moradia:'Moro com minha namorada.',
+  sal:'Normal.',
+  emocional:'Fiquei assustado com dor no peito.',
+  estimulantes:'Café de manhã.',
+  hiv:'Fiz ano passado, negativo.'
+ },
+ keyQ:[{ids:['dor'],l:'Dor que piora ao respirar e deitar'},{ids:['posicao'],l:'Alívio ao inclinar para a frente'},{ids:['inicio'],l:'Depois de quadro viral'},{ids:['esforco'],l:'Sem relação com esforço'},{ids:['febre'],l:'Febre'}],
+ geral:'Jovem sentado na maca, inclinado para a frente. Evita deitar.',
+ effSides:[],
+ exam:{
+  'auscultar:focoT':'Bulhas rítmicas. Junto, um ruído áspero, como couro novo ou passos na neve, com três componentes a cada batimento.',
+  'auscultar:focoAc':'Ruído áspero, como couro novo, acompanhando o batimento.',
+  'auscultar:focoM':'Bulhas rítmicas, normofonéticas. Ruído áspero discreto ao fundo.',
+  'manobra:frente':'Com o tronco inclinado para a frente, o ruído áspero fica mais alto.',
+  'manobra:apneia':'Com a respiração presa, o ruído áspero continua, acompanhando cada batimento.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (posição)'},
+  {ids:['auscultar:focoT','auscultar:focoAc'],l:'Auscultar a borda esternal esquerda'},
+  {ids:['manobra:apneia'],l:'Apneia (pleural × pericárdico)'},{ids:['manobra:frente'],l:'Tronco para a frente'},
+  {ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar os pulmões'}],
+ res:{
+  // CONFERIR: o material não descreve o ECG da pericardite; resultado construído como dado cru.
+  ecg:'Ritmo sinusal, FC 104 bpm. Supradesnivelamento de ST discreto e difuso, em quase todas as derivações.',
+  hemo:'Hb 14,2 g/dL · Leucócitos 10.900/mm³ (40% linfócitos) · Plaquetas 260.000/mm³',
+  pcr:'PCR 64 mg/L (ref. < 5)',
+  eco:'Lâmina mínima de líquido no pericárdio. Contração normal, FE 62%.'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG (dor torácica aguda)'}],
+ neutral:['trop','hemo','pcr','rx','eco'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'pericardica',
+ sindWhy:'Atrito pericárdico: ruído áspero, de couro novo, com três componentes, que aumenta com o tronco para a frente e continua na apneia. É patognomônico de pericardite aguda.',
+ correctDx:'pericardite',
+ dxWhy:'Jovem sem fatores de risco, depois de gripe, com dor que piora ao respirar e ao deitar e alivia inclinando o tronco para a frente (prece maometana), febre e atrito pericárdico.',
+ conduta:[
+  {id:'c1',t:'ECG para afastar isquemia',ok:1,why:'Toda dor torácica aguda é cardiovascular até que se prove o contrário.'},
+  // CONFERIR: o tratamento da pericardite não está no material de semiologia.
+  {id:'c2',t:'Tratar a inflamação do pericárdio e reavaliar',ok:1,why:'Pericardite aguda, provavelmente viral. (O tratamento não está no seu material de semiologia.)'},
+  {id:'c3',t:'Cateterismo e revascularização',ok:0,why:'A dor não é anginosa: piora ao respirar, alivia ao inclinar para a frente e vem com atrito pericárdico.'},
+  {id:'c4',t:'Tratar como pleurite',ok:0,why:'O atrito continua com a respiração presa e segue o batimento: é pericárdico. O pleural para na apneia.'},
+  {id:'c5',t:'Toracocentese',ok:0,why:'Pulmões normais, sem derrame pleural.'}
+ ],
+ teaching:[
+  {t:'Dor da pericardite',p:'Piora com a inspiração profunda e ao deitar; alivia inclinando o tronco para a frente. Atinge jovens sem fatores de risco.'},
+  {t:'Atrito pericárdico',p:'Som áspero ("couro novo", "andar na neve"), com até três componentes, que aumenta com o tronco para a frente. Patognomônico de pericardite aguda.'},
+  {t:'Prenda a respiração',p:'Se o atrito para, é pleural. Se continua, acompanhando o batimento, é pericárdico.'}
+ ]
+});
+
+// ---- js/casos/cardio-03-estenose-aortica.js ----
+// Cardiovascular 3: Desmaio na escada. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// síncope (2.4), estenose aórtica (7.2), caso clínico do professor e prognóstico (8). Paciente inventado, inspirado no raciocínio do caso.
+CASES.push({
+ id:'c-eao',modulo:'Semiologia cardiovascular',n:'Caso 3',title:'Desmaio na escada',look:'jose',pname:'Seu Otávio',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas, caso clínico e monitoria)',
+ card:'Otávio, 79 anos. Desmaiou subindo a escada.',
+ briefing:'Doutor, leito 3: Seu Otávio, 79 anos. A filha trouxe porque ele desmaiou hoje à tarde.',
+ vitals:'PA 112/90 mmHg · FC 72 bpm · FR 18 irpm · T 36,3 °C · SpO₂ 96% em ar ambiente',
+ answers:{
+  queixa:'Desmaiei hoje subindo a escada com as compras.',
+  tempo:'Hoje foi o desmaio. Mas faz uns meses que canso e sinto um aperto no peito quando ando mais.',
+  inicio:'O desmaio foi de repente, no meio da escada.',
+  dor:'Um aperto no peito quando faço força. Parando, passa.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Canso pra subir a escada, coisa que antes eu fazia fácil.',
+  esforco:'Tudo vem no esforço: o cansaço, o aperto e hoje o desmaio. Parado eu fico bem.',
+  palpitacao:'Às vezes sinto o coração bater forte quando subo a ladeira.',
+  sincope:'Hoje, na escada. Escureceu a vista e apaguei. Minha filha disse que foi coisa de um minuto. Acordei sozinho, sem me urinar.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Nada.',
+  meds:'Remédio de pressão, anlodipino. Só.',
+  doencas:'Pressão alta e colesterol.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumei 30 anos, parei faz 20. Não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada que eu saiba.',
+  trabalho:'Aposentado, fui comerciante.',
+  moradia:'Moro com minha filha, num sobrado.',
+  sal:'Normal.',
+  emocional:'Preocupado. Nunca tinha desmaiado.',
+  estimulantes:'Um café por dia.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['sincope'],l:'Caracterizar o desmaio'},{ids:['esforco'],l:'Sintomas no esforço'},{ids:['dor'],l:'Angina'},{ids:['dispneia'],l:'Dispneia'},{ids:['meds'],l:'Medicações'},{ids:['doencas'],l:'Comorbidades'}],
+ geral:'Idoso lúcido, corado, sem esforço para respirar em repouso.',
+ effSides:[],
+ exam:{
+  'auscultar:focoAo':'Clique logo após B1. Sopro sistólico rude, em crescendo e decrescendo, 4+/6. B2 quase inaudível.',
+  'palpar:focoAo':'Frêmito sistólico.',
+  'auscultar:focoAc':'Sopro sistólico rude, em crescendo e decrescendo.',
+  'auscultar:focoM':'Sopro sistólico mais fraco, transmitido. Som grave logo antes de B1.',
+  'palpar:coracao':'Ictus propulsivo, desviado para baixo e para a esquerda.',
+  'palpar:pulsoCar':'Pulso de pequena amplitude, com subida lenta e pico tardio.',
+  'auscultar:pulsoCar':'Sopro sistólico transmitido.',
+  'palpar:pulsoRad':'Pulso fino, de pequena amplitude e subida lenta.',
+  'manobra:valsalva':'O sopro diminui.',
+  'manobra:handgrip':'O sopro diminui.',
+  'manobra:cocoras':'O sopro aumenta.',
+  'manobra:ortostase':'Deitado e depois de 3 minutos em pé: PA e frequência praticamente iguais, sem tontura.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais (PA convergente)'},{ids:['auscultar:focoAo'],l:'Auscultar o foco aórtico'},
+  {ids:['palpar:focoAo'],l:'Palpar frêmito no foco aórtico'},{ids:['palpar:pulsoCar','palpar:pulsoRad'],l:'Palpar o pulso (parvus et tardus)'},
+  {ids:['auscultar:pulsoCar'],l:'Auscultar as carótidas (irradiação)'},{ids:['palpar:coracao'],l:'Palpar o ictus'},
+  {ids:['manobra:ortostase'],l:'PA deitado e em pé (afastar causa postural)'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 72 bpm. Sobrecarga ventricular esquerda.',
+  eco:'Valva aórtica calcificada, com abertura muito reduzida. VE hipertrofiado. FE 60%.',
+  hemo:'Hb 13,9 g/dL · Leucócitos 7.200/mm³ · Plaquetas 210.000/mm³'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'},{ids:['eco'],l:'Ecocardiograma (padrão-ouro)'}],
+ neutral:['hemo','renal','glic','trop','rx','tsh'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro sistólico ejetivo em diamante no foco aórtico, irradiando para as carótidas, com clique, frêmito, B2 apagada, B4, pulso parvus et tardus e ictus propulsivo: síndrome valvar.',
+ correctDx:'eao',
+ dxWhy:'Idoso com síncope de esforço, angina e dispneia: a tríade da estenose aórtica degenerativa. PA convergente (112×90), pulso parvus et tardus, sopro sistólico ejetivo no 2º EIC direito irradiando para as carótidas e frêmito. B2 quase sumiu: valva muito calcificada.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma transtorácico',ok:1,why:'É o padrão-ouro: mostra área valvar, gradientes e fração de ejeção.'},
+  {id:'c2',t:'Avaliação cirúrgica ou percutânea urgente',ok:1,why:'Qualquer sintoma da tríade indica avaliação urgente. Sem intervenção, a sobrevida média depois da síncope é de 3 anos (dispneia: 2 anos).'},
+  {id:'c3',t:'Síncope vasovagal: alta',ok:0,why:'Síncope durante esforço é cardíaca, a de maior risco de morte.'},
+  {id:'c4',t:'Sopro inocente da idade',ok:0,why:'Sopro inocente nunca tem frêmito. Aqui há frêmito, clique e B2 apagada.'},
+  {id:'c5',t:'Só trocar o remédio da pressão',ok:0,why:'Remédio é causa comum de síncope no idoso, mas a PA não cai em pé e o exame mostra estenose aórtica.'}
+ ],
+ teaching:[
+  {t:'Tríade da estenose aórtica',p:'Angina, síncope e dispneia. Sobrevida média sem intervenção: angina 5 anos, síncope 3, dispneia 2.'},
+  {t:'Achados',p:'Pulso parvus et tardus, PA convergente, frêmito no foco aórtico, clique de ejeção após B1, sopro ejetivo em diamante irradiando para carótidas e fúrcula, B4 e B2 apagada se calcificada.'},
+  {t:'Síncope no idoso',p:'Cardíaca (estenose aórtica, IC, arritmias, BAVT) tem maior mortalidade. A causa reversível mais comum é medicamentosa.'},
+  {t:'Manobras',p:'Valsalva e handgrip diminuem o sopro da estenose aórtica.'}
+ ]
+});
+
+// ---- js/casos/cardio-04-insuf-aortica.js ----
+// Cardiovascular 4: A cabeça que balança. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// inspeção e biótipo marfanoide (4.1), insuficiência aórtica (7.2), matriz das valvopatias.
+CASES.push({
+ id:'c-iao',modulo:'Semiologia cardiovascular',n:'Caso 4',title:'A cabeça que balança',look:'bruno',pname:'Leandro',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Leandro, 38 anos. Cansaço e o coração batendo no pescoço.',
+ briefing:'Doutor, leito 3: Leandro, 38 anos. Veio por cansaço e diz que sente o coração no pescoço.',
+ vitals:'PA 148/56 mmHg · FC 88 bpm · FR 20 irpm · T 36,5 °C · SpO₂ 97% em ar ambiente',
+ answers:{
+  queixa:'Ando muito cansado e sinto o coração batendo forte, até no pescoço.',
+  tempo:'Uns seis meses, e tá piorando.',
+  inicio:'Aos poucos.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Canso pra subir dois lances de escada. Antes não cansava.',
+  esforco:'Piora no esforço. Parado melhora.',
+  palpitacao:'Sinto o coração bater forte, pulando no pescoço, principalmente deitado.',
+  sincope:'Não.',
+  posicao:'Deitado do lado esquerdo sinto mais o coração.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não. Sempre fui magro e comprido.',
+  tratou:'Nada.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma que eu saiba.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo. Bebo pouco.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Meu pai morreu de repente com 40 anos. Era alto e magro igual a mim.',
+  trabalho:'Professor de educação física.',
+  moradia:'Moro com minha esposa.',
+  sal:'Normal.',
+  emocional:'Preocupado com meu pai.',
+  estimulantes:'Café. Nada de estimulante.',
+  hiv:'Negativo, fiz no ano passado.'
+ },
+ keyQ:[{ids:['dispneia','esforco'],l:'Dispneia aos esforços'},{ids:['palpitacao'],l:'Palpitação e pulsação no pescoço'},{ids:['familia'],l:'Morte súbita do pai (alto e magro)'},{ids:['tempo'],l:'Evolução'},{ids:['infancia'],l:'Febre reumática (afastar)'}],
+ geral:'Homem alto e magro, com braços e dedos longos. A cabeça balança levemente a cada batimento. Pulsação forte visível no pescoço.',
+ effSides:[],
+ exam:{
+  'auscultar:focoAo':'Sopro diastólico suave, agudo, aspirativo, logo após B2, em decrescendo, mais forte aqui. Sopro sistólico suave.',
+  'auscultar:focoAc':'Sopro diastólico aspirativo, em decrescendo.',
+  'auscultar:focoM':'B3 presente. Ruflar diastólico discreto na ponta.',
+  'palpar:coracao':'Ictus desviado para baixo e para a esquerda, amplo.',
+  'inspecionar:coracao':'Ictus visível.',
+  'palpar:pulsoRad':'Pulso que sobe muito rápido e cai de repente.',
+  'inspecionar:pulsoCar':'Carótidas pulsando forte no pescoço.',
+  'palpar:pulsoCar':'Pulso amplo, que sobe e cai rápido.',
+  'auscultar:pulsoFem':'Som sistólico e diastólico, como um tiro de pistola.',
+  'inspecionar:boca':'A úvula pulsa a cada batimento.',
+  'manobra:frente':'Com o tronco para a frente, o sopro diastólico fica mais nítido.',
+  'manobra:handgrip':'O sopro diastólico aumenta.',
+  'manobra:valsalva':'O sopro diminui.',
+  'manobra:cocoras':'O sopro diastólico aumenta.',
+  'manobra:rivero':'O sopro não aumenta.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (biótipo, Musset)'},
+  {ids:['auscultar:focoAo','auscultar:focoAc'],l:'Auscultar os focos aórticos'},{ids:['palpar:pulsoRad','palpar:pulsoCar'],l:'Palpar o pulso (martelo d’água)'},
+  {ids:['auscultar:pulsoFem'],l:'Auscultar a femoral (Traube)'},{ids:['palpar:coracao'],l:'Palpar o ictus'},
+  {ids:['auscultar:focoM'],l:'Auscultar o foco mitral (B3, Austin-Flint)'}],
+ res:{
+  eco:'Aorta ascendente dilatada. Refluxo aórtico importante. VE dilatado, FE 55%.',
+  ecg:'Ritmo sinusal, FC 88 bpm. Sobrecarga ventricular esquerda.'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['ecg','rx','hemo','renal','tsh'],
+ rx:{cardio:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro diastólico aspirativo logo após B2, com sinais periféricos de hiperpulsatilidade e ictus desviado: síndrome valvar.',
+ correctDx:'iao',
+ dxWhy:'Sopro holodiastólico aspirativo em decrescendo, pulso em martelo d’água (Corrigan), cabeça balançando (Musset), "tiro de pistola" na femoral (Traube), úvula pulsando (Müller) e dança das artérias. Ruflar apical é Austin-Flint e há B3. Sopro mais forte no foco aórtico e biótipo marfanoide apontam dilatação da aorta.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma o refluxo, mede a aorta e o ventrículo.'},
+  // CONFERIR: o encaminhamento e o tratamento da insuficiência aórtica não estão no material.
+  {id:'c2',t:'Encaminhar ao cardiologista',ok:1,why:'Insuficiência aórtica importante com aorta dilatada precisa de acompanhamento especializado.'},
+  {id:'c3',t:'Sopro inocente: alta',ok:0,why:'Sopro diastólico jamais é inocente.'},
+  {id:'c4',t:'Estenose mitral pelo ruflar na ponta',ok:0,why:'Esse ruflar é o Austin-Flint: o jato da insuficiência aórtica reduz a abertura do folheto mitral.'},
+  {id:'c5',t:'Palpitação de ansiedade: ansiolítico',ok:0,why:'Há sopro diastólico e vários sinais periféricos de hiperpulsatilidade.'}
+ ],
+ teaching:[
+  {t:'Sinais periféricos',p:'Corrigan (martelo d’água), Musset (cabeça balança), Traube (tiro de pistola na femoral), Müller (úvula), Landolfi (pupila), Rosenbach (fígado), dança das artérias.'},
+  {t:'O sopro',p:'Holodiastólico, aspirativo, agudo, logo após B2, em decrescendo, com o diafragma. Irradia para a ponta.'},
+  {t:'Onde é mais alto',p:'Lesão da valva: foco aórtico acessório. Dilatação da aorta: foco aórtico.'},
+  {t:'Biótipo marfanoide',p:'Associação com dilatação aórtica.'}
+ ]
+});
+
+// ---- js/casos/cardio-05-estenose-mitral.js ----
+// Cardiovascular 5: Sangue na gravidez. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// dispneia, ortopneia e DPN (2.2), estenose mitral e febre reumática (7.2), sopro inocente × orgânico (5.7).
+// Hemoptise + estenose mitral e IECA na gestação: Semiologia Respiratória (1, 2).
+CASES.push({
+ id:'c-em',modulo:'Semiologia cardiovascular',n:'Caso 5',title:'Sangue na gravidez',look:'lucia',pname:'Joana',
+ fonte:'Semiologia Cardiovascular e Respiratória: material de estudo do André (apostilas de Semiologia Especializada, aulas e monitoria)',
+ card:'Joana, 26 anos, grávida de 28 semanas. Falta de ar e tosse com sangue.',
+ briefing:'Doutor, leito 3: Joana, 26 anos, grávida de 28 semanas. Falta de ar e tossiu sangue hoje.',
+ vitals:'PA 112/70 mmHg · FC 112 bpm · FR 26 irpm · T 36,7 °C · SpO₂ 92% em ar ambiente',
+ answers:{
+  queixa:'Falta de ar que piorou muito, e hoje tossi sangue.',
+  tempo:'O cansaço começou com a gravidez. Piorou nas últimas duas semanas.',
+  inicio:'Aos poucos.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Tosse de noite.',
+  escarro:'Hoje veio sangue vivo, com espuma, misturado ao catarro.',
+  chiado:'Um chiadinho de noite.',
+  dispneia:'Antes da gravidez eu subia ladeira. Agora canso pra andar dentro de casa.',
+  esforco:'Qualquer esforço piora.',
+  palpitacao:'O coração dispara quando ando.',
+  sincope:'Não.',
+  posicao:'Deitada não consigo. Durmo com dois travesseiros e acordo de madrugada sem ar.',
+  edema:'Um pouco nos pés, de tarde.',
+  urina:'Não.',
+  peso:'Engordei o normal da gravidez.',
+  tratou:'Nada. A médica do pré-natal disse pra eu vir aqui.',
+  meds:'Sulfato ferroso e ácido fólico do pré-natal.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Com uns 10 anos tive uma dor de garganta forte e depois as juntas incharam, uma de cada vez. Tomei injeção por um tempo.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Manicure.',
+  moradia:'Moro com meu marido, na periferia.',
+  sal:'Normal.',
+  emocional:'Com medo pelo bebê.',
+  estimulantes:'Não. Parei até o café.',
+  hiv:'Fiz no pré-natal, negativo.'
+ },
+ keyQ:[{ids:['infancia'],l:'Febre reumática na infância'},{ids:['posicao'],l:'Ortopneia e dispneia paroxística noturna'},{ids:['escarro'],l:'Hemoptise'},{ids:['dispneia','esforco'],l:'Dispneia progressiva'},{ids:['tempo'],l:'Piora na gestação'}],
+ geral:'Gestante sentada, respirando rápido, sem cianose.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{auscultar:'Estertores finos no fim da inspiração. Murmúrio presente.'}),{
+  'auscultar:focoM':'B1 forte. Logo depois de B2, um estalido seco. Ruflar diastólico grave, discreto.',
+  'manobra:pachon':'Em decúbito lateral esquerdo, com a campânula: ruflar diastólico grave bem audível, que reforça logo antes de B1.',
+  'palpar:coracao':'Ictus no 5º EIC, na linha hemiclavicular, sem desvio, de tamanho normal.',
+  'manobra:valsalva':'O ruflar diminui.',
+  'manobra:rivero':'O ruflar não aumenta.',
+  'auscultar:focoP':'B2 forte.',
+  'inspecionar:pernas':'Edema discreto nos tornozelos.',
+  'palpar:pernas':'Edema mole nos tornozelos (+/4+), dos dois lados.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral'},
+  {ids:['manobra:pachon'],l:'Decúbito lateral esquerdo (Pachon)'},{ids:['palpar:coracao'],l:'Palpar o ictus (sem desvio)'},
+  {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases (congestão)'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
+ res:{
+  eco:'Valva mitral espessada, com abertura bem reduzida. Átrio esquerdo aumentado. VE de tamanho normal, FE 64%.',
+  ecg:'Ritmo sinusal, FC 112 bpm.',
+  gaso:'pH 7,45 · PaO₂ 64 mmHg · PaCO₂ 31 mmHg · HCO₃ 22 mEq/L · SatO₂ 92%',
+  hemo:'Hb 10,9 g/dL · Leucócitos 9.400/mm³ · Plaquetas 230.000/mm³'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['ecg','hemo','gaso','bnp','rx','escarro'],
+ rx:{congest:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:['valvar','congest'],
+ sindWhy:'B1 hiperfonética, estalido de abertura e ruflar diastólico com reforço pré-sistólico no foco mitral (melhor em Pachon): síndrome valvar. As bases com estertores mostram a congestão pulmonar que ela causa.',
+ correctDx:'em',
+ dxWhy:'Febre reumática na infância, dispneia que piorou na gestação, ortopneia, dispneia paroxística noturna e hemoptise: estenose mitral, a valvopatia mais comum da febre reumática no Nordeste, que descompensa com frequência em gestantes jovens. O ictus está normal: a estenose mitral isolada é a única valvopatia que não desvia o ictus.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma a estenose e mostra o átrio esquerdo aumentado com o VE protegido.'},
+  // CONFERIR: o acompanhamento conjunto não está escrito no material.
+  {id:'c2',t:'Acompanhamento conjunto com cardiologia e obstetrícia',ok:1,why:'Gestante jovem descompensada por estenose mitral.'},
+  {id:'c3',t:'Iniciar captopril ou enalapril',ok:0,why:'IECA é teratogênico: contraindicado na gestação.'},
+  {id:'c4',t:'Investigar só tuberculose pelo sangue no catarro',ok:0,why:'Diante de sangramento respiratório, afaste causa cardiovascular: na estenose mitral a pressão do átrio esquerdo rompe capilares pulmonares.'},
+  {id:'c5',t:'Sopro inocente da gravidez',ok:0,why:'A gestação dá sopro sistólico de hipercinese. Sopro diastólico jamais é inocente.'}
+ ],
+ teaching:[
+  {t:'Estenose mitral',p:'B1 hiperfonética, estalido de abertura logo após B2, ruflar diastólico grave (campânula) com reforço pré-sistólico, que some na fibrilação atrial. Melhor em decúbito lateral esquerdo e em expiração.'},
+  {t:'O ictus não muda',p:'Estenose mitral isolada é a única valvopatia que não desvia o ictus: o VE fica protegido. As repercussões são para trás: AE, pulmão, câmaras direitas.'},
+  {t:'Febre reumática',p:'Principal causa de valvopatia em jovens no Brasil. Ordem: mitral, aórtica, tricúspide, pulmonar.'},
+  {t:'Hemoptise',p:'Sempre afaste causa cardiovascular. Estenose mitral é a clássica.'}
+ ]
+});
+
+// ---- js/casos/cardio-06-insuf-mitral.js ----
+// Cardiovascular 6: Até a axila. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// ictus (4.2), sopros e manobras (5.7, 6), insuficiência mitral e etiologias (7.2), questão 1 da monitoria.
+CASES.push({
+ id:'c-im',modulo:'Semiologia cardiovascular',n:'Caso 6',title:'Até a axila',look:'maria',pname:'Dona Cleide',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Cleide, 61 anos. Cansaço que vem piorando desde o infarto.',
+ briefing:'Doutor, leito 3: Dona Cleide, 61 anos. Cansaço e coração acelerado.',
+ vitals:'PA 128/78 mmHg · FC 92 bpm · FR 22 irpm · T 36,4 °C · SpO₂ 95% em ar ambiente',
+ answers:{
+  queixa:'Cansaço e o coração acelerado.',
+  tempo:'Desde o infarto, faz dois anos, vem piorando.',
+  inicio:'Aos poucos.',
+  dor:'Hoje não. A dor foi no infarto.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Canso pra fazer o serviço de casa.',
+  esforco:'Piora no esforço. Descansando melhora.',
+  palpitacao:'Sinto o coração bater forte, principalmente quando deito do lado esquerdo.',
+  sincope:'Não.',
+  posicao:'Deito com dois travesseiros.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Tomo os remédios do cardiologista, mas faltei às consultas.',
+  meds:'AAS, sinvastatina e metoprolol.',
+  doencas:'Infarto há dois anos. Pressão alta.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Parei de fumar depois do infarto.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Minha mãe tinha problema de coração.',
+  trabalho:'Dona de casa.',
+  moradia:'Moro com meu marido.',
+  sal:'Diminuí o sal.',
+  emocional:'Normal.',
+  estimulantes:'Café com leite de manhã.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['doencas'],l:'Infarto prévio'},{ids:['dispneia','esforco'],l:'Dispneia aos esforços'},{ids:['palpitacao'],l:'Palpitação'},{ids:['posicao'],l:'Ortopneia'},{ids:['infancia'],l:'Febre reumática (afastar)'}],
+ geral:'Senhora lúcida, respirando um pouco rápido, sem cianose.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{auscultar:'Estertores finos discretos no fim da inspiração.'}),{
+  'auscultar:focoM':'B1 abafada. Sopro holossistólico em platô, agudo, 3+/6, que segue até a axila esquerda. B3 presente.',
+  'auscultar:focoT':'Sopro sistólico mais fraco, transmitido.',
+  'palpar:coracao':'Ictus desviado para baixo e para a esquerda, amplo.',
+  'inspecionar:coracao':'Precórdio com movimentos amplos.',
+  'manobra:handgrip':'O sopro aumenta.',
+  'manobra:rivero':'O sopro não muda.',
+  'manobra:valsalva':'O sopro diminui.',
+  'manobra:cocoras':'O sopro aumenta.',
+  'manobra:pachon':'Em decúbito lateral esquerdo, B3 fica mais clara.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral'},
+  {ids:['palpar:coracao'],l:'Palpar o ictus'},{ids:['manobra:handgrip'],l:'Handgrip'},{ids:['manobra:rivero'],l:'Rivero-Carvallo (separar de IT)'},
+  {ids:['auscultar:focoT'],l:'Comparar com o foco tricúspide'}],
+ res:{
+  eco:'Refluxo mitral importante, com músculo papilar posterior que não contrai bem. AE e VE aumentados. FE 50%.',
+  ecg:'Ritmo sinusal, FC 92 bpm. Ondas Q em DII, DIII e aVF.',
+  bnp:'NT-proBNP 1.400 pg/mL'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['ecg','rx','bnp','hemo','renal','trop'],
+ rx:{cardio:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro holossistólico em platô no foco mitral, irradiando para a axila, com B1 abafada, B3 e ictus desviado: síndrome valvar.',
+ correctDx:'im',
+ dxWhy:'Holossistólico em platô no foco mitral que vai para a axila esquerda, aumenta com handgrip e não muda com Rivero-Carvallo (não é tricúspide). Depois de um infarto: causa isquêmica, por disfunção do músculo papilar.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma o refluxo e mostra o músculo papilar e o tamanho das câmaras.'},
+  // CONFERIR: retorno ao cardiologista não está escrito no material como conduta.
+  {id:'c2',t:'Retomar o acompanhamento com o cardiologista',ok:1,why:'Insuficiência mitral isquêmica com piora dos sintomas.'},
+  {id:'c3',t:'Insuficiência tricúspide',ok:0,why:'O sopro tricúspide aumenta com Rivero-Carvallo. Aqui não mudou.'},
+  {id:'c4',t:'Sopro inocente: alta',ok:0,why:'Sopro inocente nunca engole B1, tem 1 a 2+ e não tem foco específico nem irradiação.'},
+  {id:'c5',t:'Estenose aórtica',ok:0,why:'A estenose aórtica dá sopro ejetivo em diamante no 2º EIC direito, irradiando para as carótidas.'}
+ ],
+ teaching:[
+  {t:'Insuficiência mitral',p:'Holossistólico em platô, agudo, no foco mitral, irradiando para a axila esquerda. B1 abafada, B3 por sobrecarga de volume, ictus desviado.'},
+  {t:'Resumo das manobras',p:'Handgrip aumenta os sopros esquerdos de regurgitação. Rivero-Carvallo aumenta os do lado direito. Valsalva diminui quase tudo, menos miocardiopatia hipertrófica e prolapso mitral.'},
+  {t:'Causas da IM',p:'Febre reumática, prolapso da valva mitral, isquemia (músculo papilar no infarto) e endocardite.'},
+  {t:'Ejetivo × regurgitação',p:'Ejetivo: crescendo-decrescendo (estenose aórtica e pulmonar). Regurgitação: holossistólico em platô (insuficiência mitral e tricúspide).'}
+ ]
+});
+
+// ---- js/casos/cardio-07-ic-perfil-b.js ----
+// Cardiovascular 7: Quente e úmido. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// edema e graduação (2.6), pulso venoso (4.4), B3 (5.5), insuficiência cardíaca e perfis de Stevenson (7.3).
+// Falha de medicação como causa de descompensação: Semiologia Respiratória (16).
+CASES.push({
+ id:'c-icb',modulo:'Semiologia cardiovascular',n:'Caso 7',title:'Quente e úmido',look:'severino',pname:'Seu Benedito',
+ fonte:'Semiologia Cardiovascular e Respiratória: material de estudo do André (apostilas de Semiologia Especializada, aulas e monitoria)',
+ card:'Benedito, 74 anos. Barriga e pernas inchadas, falta de ar.',
+ briefing:'Doutor, leito 3: Seu Benedito, 74 anos. Inchado e com falta de ar.',
+ vitals:'PA 146/88 mmHg · FC 104 bpm · FR 26 irpm · T 36,5 °C · SpO₂ 89% em ar ambiente',
+ answers:{
+  queixa:'Tô inchado, a barriga cresceu e falta o ar.',
+  tempo:'Uns dez dias.',
+  inicio:'Foi inchando aos poucos.',
+  dor:'Uma dor aqui do lado direito da barriga, embaixo das costelas.',
+  febre:'Não.',
+  tosse:'Tosse de noite.',
+  escarro:'Um catarro ralo, rosado.',
+  chiado:'Não.',
+  dispneia:'Canso pra ir ao banheiro.',
+  esforco:'Qualquer esforço piora.',
+  palpitacao:'O coração bate rápido.',
+  sincope:'Não.',
+  posicao:'Deitado não dá. Acordo de noite sufocado e sento na cama.',
+  edema:'As pernas incharam até o joelho. Aperta e fica a marca.',
+  urina:'Tô urinando pouco.',
+  peso:'Engordei uns 5 quilos em dez dias.',
+  tratou:'Nada.',
+  meds:'Tenho furosemida, mas parei porque me fazia urinar muito na rua. E o remédio da pressão.',
+  doencas:'Pressão alta há 30 anos. Infarto há cinco anos.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumei até o infarto.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Aposentado. Fui porteiro.',
+  moradia:'Moro com minha esposa.',
+  sal:'Comi muita feijoada nas festas do mês.',
+  emocional:'Normal.',
+  estimulantes:'Café.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['meds'],l:'Parou o diurético'},{ids:['sal'],l:'Excesso de sal'},{ids:['posicao'],l:'Ortopneia e DPN'},{ids:['edema'],l:'Edema'},{ids:['doencas'],l:'HAS e infarto prévio'},{ids:['peso'],l:'Ganho de peso'}],
+ geral:'Idoso sentado, respirando rápido. Barriga distendida. Lúcido.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{percutir:'Som submaciço.',auscultar:'Estertores finos no fim da inspiração, nas duas bases.'}),{
+  'auscultar:focoM':'Três sons: B1, B2 e um som grave logo depois de B2 (tum-ta-tu). Sopro sistólico suave.',
+  'manobra:pachon':'Em decúbito lateral esquerdo, o terceiro som fica bem claro, em galope.',
+  'palpar:coracao':'Ictus desviado para baixo e para a esquerda, amplo.',
+  'inspecionar:pescoco':'Jugulares túrgidas a 45°.',
+  'palpar:pescoco':'Comprimindo o hipocôndrio direito por 15 segundos, a jugular sobe e fica cheia.',
+  'palpar:abdome':'Fígado aumentado, doloroso, de borda lisa.',
+  'percutir:abdome':'Macicez nos flancos que muda de lugar quando ele vira de lado.',
+  'inspecionar:pernas':'Edema nas duas pernas até os joelhos.',
+  'palpar:pernas':'Edema mole, frio, que deixa a marca do dedo e demora a voltar (+++/4+).',
+  'inspecionar:maos':'Mãos quentes, sem cianose.',
+  'palpar:maos':'Mãos quentes, enchimento capilar rápido.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral (B3)'},
+  {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugular e refluxo hepatojugular'},
+  {ids:['palpar:abdome','percutir:abdome'],l:'Fígado e ascite'},{ids:['palpar:pernas'],l:'Graduar o edema'},
+  {ids:['palpar:maos','inspecionar:maos'],l:'Perfusão (mãos quentes ou frias)'}],
+ res:{
+  bnp:'NT-proBNP 6.200 pg/mL',
+  eco:'VE dilatado, FE 28%. Parede inferior sem contração.',
+  ecg:'Ritmo sinusal, FC 104 bpm. Ondas Q na parede inferior.',
+  renal:'Ureia 62 mg/dL · Creatinina 1,4 mg/dL',
+  gaso:'pH 7,46 · PaO₂ 57 mmHg · PaCO₂ 33 mmHg · HCO₃ 23 mEq/L · SatO₂ 89%'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['bnp','eco'],l:'NT-proBNP ou ecocardiograma'}],
+ neutral:['ecg','renal','hemo','gaso','trop','hep','eas'],
+ rx:{cardio:1,congest:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:['ic','congest'],
+ sindWhy:'Congestão pulmonar (estertores finos nas bases, ortopneia, DPN) e sistêmica (jugular túrgida, refluxo hepatojugular, fígado doloroso, ascite, edema bilateral), com B3 em galope e ictus desviado: insuficiência cardíaca esquerda e direita.',
+ correctDx:'ic_b',
+ dxWhy:'IC descompensada por suspensão do diurético e excesso de sal, em paciente com HAS e infarto prévio (a etiologia mais comum é a isquêmica). Congestionado (úmido) e com boa perfusão (mãos quentes, PA mantida): perfil B, o mais comum.',
+ conduta:[
+  {id:'c1',t:'Diurético de alça',ok:1,why:'Perfil B (quente e úmido) responde a diurético de alça.'},
+  {id:'c2',t:'Oxigênio',ok:1,why:'SatO₂ 89% em ar ambiente (≤ 90%).'},
+  {id:'c3',t:'Corrigir o que descompensou: remédio e sal',ok:1,why:'Falha de medicação é a principal causa de descompensação da IC.'},
+  {id:'c4',t:'Soro na veia porque está urinando pouco',ok:0,why:'Ele está congestionado (úmido). Soro piora a congestão.'},
+  {id:'c5',t:'Tratar como choque cardiogênico (frio e úmido)',ok:0,why:'Mãos quentes, enchimento capilar rápido e PA boa: a perfusão está preservada.'},
+  {id:'c6',t:'Toracocentese',ok:0,why:'Os estertores e a submacicez das bases são de congestão, não de derrame.'}
+ ],
+ teaching:[
+  {t:'IC esquerda × direita',p:'Esquerda: congestão pulmonar (dispneia, ortopneia, DPN, estertores finos nas bases, B3, Cheyne-Stokes). Direita: congestão sistêmica (jugular a 45°, fígado doloroso, refluxo hepatojugular, ascite, edema bilateral).'},
+  {t:'Perfis de Stevenson',p:'A quente e seco (compensado). B quente e úmido (mais comum, diurético de alça). C frio e úmido (mais grave, choque cardiogênico). L frio e seco.'},
+  {t:'Refluxo hepatojugular',p:'Paciente a 45°, compressão firme do hipocôndrio direito por 10–30 s. Positivo se a jugular sobe e se mantém (> 3 cm).'},
+  {t:'Edema em cruzes',p:'+ até o tornozelo, ++ até o meio da perna, +++ até o joelho, ++++ até a raiz da coxa. Acima disso: anasarca.'},
+  {t:'B3',p:'Logo após B2 (tum-ta-tu). Sobrecarga de volume ou falência ventricular. Campânula, ápice, decúbito lateral esquerdo.'}
+ ]
+});
+
+// ---- js/casos/cardio-08-has.js ----
+// Cardiovascular 8: Mandado da farmácia. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// hipertensão arterial: técnica, Korotkoff, classificação, avental branco, MAPA/MRPA, resistente e refratária (7.4).
+CASES.push({
+ id:'c-has',modulo:'Semiologia cardiovascular',n:'Caso 8',title:'Mandado da farmácia',look:'marcos',pname:'Seu Wellington',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Wellington, 49 anos. A farmácia mediu a pressão alta.',
+ briefing:'Doutor, leito 3: Seu Wellington, 49 anos. Mediram a pressão na farmácia e deu alta. Medi na triagem logo que ele chegou.',
+ vitals:'PA 168/102 mmHg (triagem, logo ao chegar) · FC 96 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 98% em ar ambiente',
+ answers:{
+  queixa:'Nada. Mediram minha pressão na farmácia, deu 17 por 10, e mandaram eu vir.',
+  tempo:'Foi hoje, faz uma hora.',
+  inicio:'Não sinto nada.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não sinto nada no esforço.',
+  palpitacao:'Não.',
+  sincope:'Não.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Engordei uns quilos esse ano.',
+  tratou:'Nada.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma. Nunca medi a pressão antes.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Fumo meio maço. Bebo no fim de semana.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Meu pai e minha mãe têm pressão alta.',
+  trabalho:'Motorista de aplicativo. Fico o dia todo sentado.',
+  moradia:'Moro com minha esposa e dois filhos.',
+  sal:'Como muita comida de rua.',
+  emocional:'Fiquei nervoso com essa pressão.',
+  estimulantes:'Tomei um café grande e fumei um cigarro na porta, antes de entrar. Vim andando rápido da farmácia.',
+  hiv:'Fiz no ano passado, negativo.'
+ },
+ keyQ:[{ids:['estimulantes'],l:'Café e cigarro antes da medida'},{ids:['familia'],l:'Pais hipertensos'},{ids:['meds'],l:'Medicações'},{ids:['doencas'],l:'Nunca mediu antes'},{ids:['queixa','dor'],l:'Sintomas (nenhum)'}],
+ geral:'Homem com sobrepeso, tranquilo, sem esforço para respirar.',
+ effSides:[],
+ exam:{
+  'manobra:pa3':'Depois de 5 minutos sentado, costas apoiadas, bexiga vazia, braço na altura do coração. Braço direito: 1ª 156/98, 2ª 146/92, 3ª 142/90 mmHg. Braço esquerdo: 144/90 mmHg.',
+  'auscultar:focoAo':'B2 mais forte que o habitual.',
+  'auscultar:focoM':'Bulhas rítmicas. Som grave logo antes de B1. Sem sopros.',
+  'palpar:coracao':'Ictus no 5º EIC, na linha hemiclavicular, um pouco propulsivo.'
+ },
+ keyExam:[{ids:['manobra:pa3'],l:'Medir a PA com técnica completa'},{ids:['palpar:pulsoRad'],l:'Palpar o radial (estima a PAS e evita o hiato)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},{ids:['palpar:pulsoFem','palpar:pulsoPed'],l:'Palpar os pulsos dos membros inferiores'},
+  {ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 78 bpm. Sem alterações.',
+  renal:'Ureia 30 mg/dL · Creatinina 0,9 mg/dL',
+  glic:'Glicemia 102 mg/dL'
+ },
+ keyEx:[],
+ neutral:['ecg','renal','glic','eas','hemo'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'has',
+ sindWhy:'Pressão elevada medida com técnica correta, sem sinais de congestão, isquemia ou valvopatia: síndrome hipertensiva.',
+ correctDx:'has',
+ dxWhy:'A medida da triagem não vale: café, cigarro e caminhada logo antes. Com a técnica certa, descarta-se a 1ª medida e faz-se a média das duas últimas: (146+142)/2 por (92+90)/2 = 144/91 mmHg, HAS estágio 1. Como ele não tem sintomas, é preciso confirmar fora do consultório (pode ser avental branco).',
+ conduta:[
+  {id:'c1',t:'Confirmar fora do consultório (MAPA ou MRPA)',ok:1,why:'MAPA 24 h ou MRPA com média ≥ 130/80 confirma. Separa a HAS do efeito do avental branco.'},
+  {id:'c2',t:'Orientar a medida: sem café e cigarro 30 min antes e repouso de 3 a 5 min',ok:1,why:'São os cuidados da técnica para não superestimar a PA.'},
+  {id:'c3',t:'Classificar pela PA da triagem (estágio 3)',ok:0,why:'A 1ª medida, sem técnica, não serve para classificar. A média correta é 144/91: estágio 1.'},
+  {id:'c4',t:'Internar em UTI por emergência hipertensiva',ok:0,why:'Está assintomático e a PA correta é de estágio 1.'},
+  {id:'c5',t:'Encaminhar por HAS refratária',ok:0,why:'Refratária é não controlada com 5 ou mais classes de remédio. Ele não usa nenhum.'}
+ ],
+ teaching:[
+  {t:'Técnica',p:'Repouso de 3 a 5 min, bexiga vazia, sem exercício em 60 min e sem café, álcool ou cigarro em 30 min. Sentado, braço na altura do coração. Na 1ª consulta, os dois braços. Três medidas, descarta a 1ª e faz a média das duas últimas.'},
+  {t:'Korotkoff',p:'Fase I = PAS. Fase V (desaparecimento) = PAD. O hiato auscultatório fica na fase II: palpe o radial antes de insuflar.'},
+  {t:'Classificação',p:'Ótima < 120/80; normal 120–129/80–84; pré-hipertensão 130–139/85–89; estágio 1 140–159/90–99; estágio 2 160–179/100–109; estágio 3 ≥ 180/110.'},
+  {t:'Avental branco e mascarada',p:'Avental branco: alta no consultório e normal fora. Mascarada: normal no consultório e alta fora. MAPA ou MRPA com média ≥ 130/80 confirma.'}
+ ]
+});
+
+// ---- js/casos/cardio-09-sincope-ortostatica.js ----
+// Cardiovascular 9: Levantou para urinar. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// síncope (2.4), o que perguntar no idoso com síncope e síncope no idoso (8).
+CASES.push({
+ id:'c-orto',modulo:'Semiologia cardiovascular',n:'Caso 9',title:'Levantou para urinar',look:'ines',pname:'Dona Celeste',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas, caso clínico e monitoria)',
+ card:'Celeste, 81 anos. Desmaiou de madrugada.',
+ briefing:'Doutor, leito 3: Dona Celeste, 81 anos. A neta trouxe porque ela desmaiou de madrugada.',
+ vitals:'PA 128/76 mmHg (sentada) · FC 78 bpm · FR 16 irpm · T 36,2 °C · SpO₂ 97% em ar ambiente',
+ answers:{
+  queixa:'Desmaiei quando levantei pra ir ao banheiro.',
+  tempo:'Foi hoje de madrugada. Mas faz umas semanas que fico tonta quando levanto rápido.',
+  inicio:'Levantei da cama de uma vez, a vista escureceu e eu caí.',
+  dor:'Só o joelho que bateu no chão.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não. Caminho na praça e não sinto nada. É só quando levanto.',
+  palpitacao:'Não.',
+  sincope:'Escureceu tudo, fiquei suada, e caí. A neta diz que acordei em poucos segundos, já falando. Não me urinei nem me debati.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Levanto à noite pra urinar.',
+  peso:'Não.',
+  tratou:'Nada.',
+  meds:'Hidroclorotiazida, anlodipino, que o médico aumentou mês passado, e diazepam pra dormir.',
+  doencas:'Pressão alta. Insônia.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Aposentada, fui costureira.',
+  moradia:'Moro com minha neta.',
+  sal:'Como pouco sal. Bebo pouca água pra não levantar de noite.',
+  emocional:'Com medo de cair de novo.',
+  estimulantes:'Um café de manhã.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['meds'],l:'Medicações (diurético, anti-hipertensivo, benzodiazepínico)'},{ids:['sincope'],l:'Caracterizar o desmaio e os pródromos'},{ids:['inicio'],l:'Ao levantar'},{ids:['esforco'],l:'Sem relação com esforço'},{ids:['sal'],l:'Pouca ingestão de água'}],
+ geral:'Idosa lúcida, um pouco sonolenta, com escoriação no joelho direito.',
+ effSides:[],
+ exam:{
+  'manobra:ortostase':'Deitada: PA 134/78 mmHg, FC 74 bpm. Depois de 3 minutos em pé: PA 102/64 mmHg, FC 92 bpm. Ela fica tonta e pede para sentar.',
+  'inspecionar:boca':'Mucosas um pouco secas.',
+  'inspecionar:pernas':'Escoriação no joelho direito. Sem edema.'
+ },
+ keyExam:[{ids:['manobra:ortostase'],l:'PA deitada e em pé'},{ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração (afastar sopro)'},
+  {ids:['palpar:pulsoRad','palpar:pulsoCar'],l:'Palpar o pulso'},{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 76 bpm. Condução normal.',
+  glic:'Glicemia 98 mg/dL',
+  renal:'Ureia 46 mg/dL · Creatinina 1,1 mg/dL'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG (afastar arritmia e BAVT)'}],
+ neutral:['glic','renal','hemo','eco'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'Coração sem sopros, ritmo regular, pulmões limpos: nenhuma síndrome cardíaca, pulmonar ou pleural. O achado é a queda da PA em pé.',
+ correctDx:'ortostatica',
+ dxWhy:'Desmaio ao levantar, com pródromos, recuperação rápida e completa, sem relação com esforço. A PA cai mais de 30 mmHg em pé, com tontura. Usa diurético, anti-hipertensivo recém-aumentado e benzodiazepínico, e bebe pouca água. No idoso, a causa reversível mais comum é medicamentosa.',
+ conduta:[
+  {id:'c1',t:'Rever os remédios (diurético, anlodipino, diazepam)',ok:1,why:'A causa reversível mais comum de síncope no idoso é medicamentosa. Benzodiazepínico ainda causa sedação, hipotensão e quedas.'},
+  // CONFERIR: a orientação de levantar devagar não está escrita no material.
+  {id:'c2',t:'Orientar a levantar devagar',ok:1,why:'Na hipotensão postural o reflexo que ajusta a pressão ao levantar está lento, como no idoso.'},
+  {id:'c3',t:'Troca valvar',ok:0,why:'Não há sopro. A estenose aórtica dá síncope no esforço, com sopro ejetivo.'},
+  {id:'c4',t:'Investigar convulsão',ok:0,why:'Sem abalos, sem perda de urina, recuperação em segundos e completa.'},
+  {id:'c5',t:'Aumentar o remédio da pressão porque a PA sentada está boa',ok:0,why:'O problema é a PA cair em pé.'}
+ ],
+ teaching:[
+  {t:'Síncope',p:'Perda transitória e abrupta da consciência e do tônus por menos sangue no cérebro, curta, com recuperação espontânea e completa.'},
+  {t:'O que perguntar',p:'Duração, se acordou sozinho, convulsão, perda de urina ou fezes, pródromos, o que fazia na hora (esforço?), doenças e remédios.'},
+  {t:'Cardíaca × não cardíaca',p:'Cardíaca (arritmias, BAVT, estenose aórtica, IC) tem maior mortalidade e vem no esforço. Não cardíaca: hipotensão postural, metabólica, vasovagal, medicamentosa.'},
+  {t:'No idoso',p:'Cerca de 30% já tiveram um episódio. O grande risco são as quedas (fêmur, TCE).'}
+ ]
+});
+
+// ---- js/casos/cardio-10-estimulantes.js ----
+// Cardiovascular 10: Semana de provas. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// palpitação, estimulantes, TSH e T4 livre, taquicardiomiopatia (2.3).
+CASES.push({
+ id:'c-estim',modulo:'Semiologia cardiovascular',n:'Caso 10',title:'Semana de provas',look:'ana',pname:'Lívia',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Lívia, 22 anos. Coração disparado há três dias.',
+ briefing:'Doutor, leito 3: Lívia, 22 anos. Diz que o coração está disparado.',
+ vitals:'PA 132/80 mmHg · FC 122 bpm · FR 18 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
+ answers:{
+  queixa:'Meu coração tá disparado e não para.',
+  tempo:'Uns três dias. Piorou hoje.',
+  inicio:'Foi piorando nesses dias.',
+  dor:'Não.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não tem a ver com esforço. Parada também tá acelerado.',
+  palpitacao:'Batendo rápido e forte, mas no ritmo, o dia todo. Não fica falhando.',
+  sincope:'Não. Às vezes uma tontura leve.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Emagreci uns 2 quilos, sem fome.',
+  tratou:'Nada.',
+  meds:'Anticoncepcional.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo. Bebo nas festas.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Estudo medicina. Tô em semana de prova.',
+  moradia:'Moro com duas amigas.',
+  sal:'Comendo mal, pulando refeição.',
+  emocional:'Estressada com as provas, dormindo pouco.',
+  estimulantes:'Tô tomando um Venvanse de uma colega pra estudar, sem receita. E uns três energéticos por dia, mais café.',
+  hiv:'Fiz, negativo.'
+ },
+ keyQ:[{ids:['estimulantes'],l:'Estimulantes e energéticos'},{ids:['palpitacao'],l:'Caracterizar a palpitação (ritmo)'},{ids:['sincope'],l:'Síncope ou pré-síncope'},{ids:['familia'],l:'Morte súbita na família (afastar)'},{ids:['emocional'],l:'Estresse e sono'}],
+ geral:'Jovem agitada, mãos trêmulas, sem esforço para respirar.',
+ effSides:[],
+ exam:{
+  'auscultar:focoM':'Bulhas rítmicas, normofonéticas, rápidas, sem sopros.',
+  'palpar:pulsoRad':'Pulso rápido, regular, amplitude normal.',
+  'inspecionar:maos':'Tremor fino nas mãos.',
+  'palpar:pescoco':'Tireoide de tamanho normal, sem nódulos.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['palpar:pulsoRad','palpar:pulsoCar'],l:'Palpar o pulso (ritmo)'},
+  {ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},{ids:['palpar:pescoco'],l:'Palpar a tireoide'}],
+ res:{
+  ecg:'Taquicardia sinusal, FC 122 bpm. Sem outras alterações.',
+  tsh:'TSH 1,9 mUI/L · T4 livre 1,1 ng/dL',
+  hemo:'Hb 13,2 g/dL · Leucócitos 7.000/mm³ · Plaquetas 250.000/mm³'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'},{ids:['tsh'],l:'TSH e T4 livre'}],
+ neutral:['hemo','glic','eco'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'Coração sem sopros, ritmo regular, pulmões limpos: nenhuma síndrome ao exame. Só taquicardia.',
+ correctDx:'estimulantes',
+ dxWhy:'Taquicardia sinusal em jovem usando lisdexanfetamina sem receita, três energéticos e café por dia, em semana de prova. TSH e T4 livre normais afastam hipertireoidismo.',
+ conduta:[
+  {id:'c1',t:'Suspender o estimulante e os energéticos',ok:1,why:'São a causa. Taquicardia crônica por estimulantes pode causar taquicardiomiopatia.'},
+  {id:'c2',t:'Dosar TSH e T4 livre',ok:1,why:'São obrigatórios na investigação de palpitações e arritmias.'},
+  {id:'c3',t:'Só um ansiolítico: é estresse',ok:0,why:'Sem tirar os estimulantes a taquicardia continua.'},
+  {id:'c4',t:'Cateterismo',ok:0,why:'Não há dor anginosa nem sinal de isquemia.'},
+  {id:'c5',t:'Liberar sem orientação: palpitação nunca é grave',ok:0,why:'Taquicardia crônica por estimulante pode levar a remodelamento e falência do coração.'}
+ ],
+ teaching:[
+  {t:'Palpitação',p:'Queixa mais comum no consultório. Analise frequência, ritmo ("batuque na mesa"), horário, duração, padrão e sintomas associados. Sinal de ação irregular: ECG.'},
+  {t:'Pergunte ativamente',p:'Café, refrigerante, energéticos e estimulantes (Ritalina, Venvanse, termogênicos).'},
+  {t:'TSH e T4 livre',p:'Obrigatórios na investigação de palpitações.'},
+  {t:'Causas não cardíacas',p:'HAS não controlada, hipertireoidismo, exercício, ansiedade, estimulantes, anemia e febre.'}
+ ]
+});
+
+// ---- js/casos/cardio-11-mch.js ----
+// Cardiovascular 11: Caiu na quadra. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// miocardiopatia hipertrófica e morte súbita (2.3), síncope de esforço (2.4), ictus sistólico apical duplo (4.2), Valsalva (6).
+CASES.push({
+ id:'c-mch',modulo:'Semiologia cardiovascular',n:'Caso 11',title:'Caiu na quadra',look:'davi',pname:'Caio',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Caio, 17 anos. Desmaiou jogando futsal.',
+ briefing:'Doutor, leito 3: Caio, 17 anos. Desmaiou no meio do jogo de futsal. O técnico trouxe.',
+ vitals:'PA 118/72 mmHg · FC 78 bpm · FR 16 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
+ answers:{
+  queixa:'Desmaiei no jogo.',
+  tempo:'Hoje, faz uma hora.',
+  inicio:'Tava correndo no contra-ataque e apaguei.',
+  dor:'Senti um aperto no peito antes de cair.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Ultimamente canso mais que os outros no treino.',
+  esforco:'Sim. O cansaço, o aperto e o desmaio foram correndo.',
+  palpitacao:'Senti o coração disparar antes de apagar.',
+  sincope:'Hoje, jogando. O técnico disse que fiquei uns segundos desacordado e voltei sozinho.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Nada.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Um tio, irmão do meu pai, morreu de repente com 30 anos, jogando bola.',
+  trabalho:'Estudo e treino no time da escola.',
+  moradia:'Moro com meus pais.',
+  sal:'Normal.',
+  emocional:'Assustado.',
+  estimulantes:'Não. Nem energético.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['esforco'],l:'Síncope durante esforço'},{ids:['familia'],l:'Morte súbita na família'},{ids:['estimulantes'],l:'Estimulantes (afastar)'},{ids:['dor'],l:'Dor torácica no esforço'},{ids:['palpitacao'],l:'Palpitação antes do desmaio'}],
+ geral:'Adolescente atlético, lúcido, corado.',
+ effSides:[],
+ exam:{
+  'auscultar:focoAc':'Sopro sistólico rude, em crescendo e decrescendo, 3+/6, mais forte entre a borda esternal e a ponta.',
+  'auscultar:focoM':'Sopro sistólico rude. Som grave logo antes de B1.',
+  'auscultar:focoAo':'Sopro sistólico mais fraco. Não se transmite às carótidas.',
+  'palpar:coracao':'Ictus com dois impulsos a cada sístole.',
+  'manobra:valsalva':'O sopro aumenta bastante.',
+  // CONFERIR: o material não diz o efeito das cócoras na miocardiopatia hipertrófica.
+  'manobra:cocoras':'O sopro diminui.',
+  // CONFERIR: o material também não diz o efeito do handgrip na miocardiopatia hipertrófica.
+  'manobra:handgrip':'O sopro diminui.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoAc','auscultar:focoM'],l:'Auscultar a borda esternal e a ponta'},
+  {ids:['palpar:coracao'],l:'Palpar o ictus (sistólico duplo)'},{ids:['manobra:valsalva'],l:'Valsalva'},
+  {ids:['auscultar:pulsoCar','auscultar:focoAo'],l:'Separar da estenose aórtica (carótidas, foco aórtico)'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 78 bpm. Sobrecarga ventricular esquerda importante.',
+  eco:'Septo interventricular muito espesso (24 mm), com obstrução da saída do VE. FE 70%.',
+  tsh:'TSH 1,6 mUI/L · T4 livre 1,2 ng/dL'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG'},{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['hemo','glic','tsh','trop','renal'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'miocardio',
+ sindWhy:'Sopro sistólico que aumenta com Valsalva e ictus sistólico apical duplo: doença do músculo cardíaco (miocardiopatia hipertrófica), não da valva.',
+ correctDx:'mch',
+ dxWhy:'Jovem atleta com síncope durante esforço, tio com morte súbita aos 30 anos, sopro sistólico que aumenta com Valsalva (uma das duas exceções) e ictus sistólico apical duplo. A miocardiopatia hipertrófica tem forte componente genético e é uma das principais causas de morte súbita em jovens e atletas.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Mostra o septo espessado e a obstrução.'},
+  // CONFERIR: afastamento do esporte e rastreio familiar não estão escritos no material.
+  {id:'c2',t:'Não liberar para treinar até o cardiologista avaliar',ok:1,why:'Síncope de esforço com miocardiopatia hipertrófica: risco de morte súbita.'},
+  {id:'c3',t:'Avaliar a família',ok:1,why:'A doença tem forte componente genético.'},
+  {id:'c4',t:'Síncope vasovagal do esforço: alta',ok:0,why:'Síncope durante esforço é cardíaca, a de maior risco.'},
+  {id:'c5',t:'Sopro inocente de atleta',ok:0,why:'Sopro inocente tem 1 a 2+. Este tem 3+ e aumenta com Valsalva.'}
+ ],
+ teaching:[
+  {t:'Valsalva',p:'Diminui quase todos os sopros. Aumenta só os da miocardiopatia hipertrófica obstrutiva e do prolapso mitral.'},
+  {t:'Ictus',p:'Sistólico apical duplo: miocardiopatia hipertrófica. Pré-sistólico proeminente: HAS, estenose aórtica, miocardiopatia hipertrófica.'},
+  {t:'Morte súbita no jovem',p:'Miocardiopatia hipertrófica é uma das principais causas em jovens e atletas.'},
+  {t:'Síncope de esforço',p:'É cardíaca até prova em contrário e tem o maior risco de morte.'}
+ ]
+});
+
+// ---- js/casos/cardio-12-sopro-inocente.js ----
+// Cardiovascular 12: Sopro com febre. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// sopro funcional (inocente) × orgânico e hipercinese (5.7).
+CASES.push({
+ id:'c-inoc',modulo:'Semiologia cardiovascular',n:'Caso 12',title:'Sopro com febre',look:'joao',pname:'Gabriel',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Gabriel, 18 anos. Febre e dor de garganta.',
+ briefing:'Doutor, leito 3: Gabriel, 18 anos. Febre alta e dor de garganta. Na UPA disseram que ele tem um sopro.',
+ vitals:'PA 116/68 mmHg · FC 112 bpm · FR 18 irpm · T 38,9 °C · SpO₂ 99% em ar ambiente',
+ answers:{
+  queixa:'Febre e uma dor de garganta que não deixa engolir. E falaram que eu tenho sopro.',
+  tempo:'Dois dias.',
+  inicio:'Começou com dor de garganta e depois a febre.',
+  dor:'Na garganta.',
+  febre:'Febre alta, de dia e de noite.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não. Jogo bola normal.',
+  palpitacao:'Com a febre o coração fica rápido.',
+  sincope:'Não.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Dipirona.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma. Nunca ninguém falou de sopro antes.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo. Bebo nas festas.',
+  contato:'Meu irmão teve dor de garganta semana passada.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Estudante.',
+  moradia:'Moro com meus pais e meu irmão.',
+  sal:'Não consigo comer por causa da garganta.',
+  emocional:'Preocupado com o sopro.',
+  estimulantes:'Não.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['febre'],l:'Febre'},{ids:['doencas'],l:'Sopro nunca ouvido antes'},{ids:['esforco','dispneia'],l:'Sem sintomas cardíacos'},{ids:['infancia'],l:'Febre reumática (afastar)'}],
+ geral:'Jovem febril, corado, sem esforço para respirar.',
+ effSides:[],
+ exam:{
+  'auscultar:focoP':'Sopro sistólico suave, 2+/6, curto, no meio da sístole. B1 e B2 normais.',
+  'auscultar:focoAc':'Sopro sistólico suave, mais fraco.',
+  'palpar:focoP':'Sem frêmito.',
+  'manobra:pachon':'Deitado de lado, o sopro quase desaparece.',
+  'inspecionar:boca':'Amígdalas aumentadas e vermelhas, com placas brancas.',
+  'palpar:pescoco':'Linfonodos doloridos abaixo da mandíbula.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais (febre, FC)'},{ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração'},
+  {ids:FOCOS.map(z=>'palpar:'+z),l:'Procurar frêmito'},{ids:MANOBRAS.filter(x=>['pachon','frente','valsalva','cocoras','handgrip','rivero'].includes(x.id)).map(x=>'manobra:'+x.id),l:'Ver se o sopro muda com posição ou manobra'},
+  {ids:['inspecionar:boca'],l:'Examinar a garganta'}],
+ res:{
+  hemo:'Hb 14,8 g/dL · Leucócitos 16.200/mm³ (82% neutrófilos) · Plaquetas 280.000/mm³',
+  pcr:'PCR 118 mg/L (ref. < 5)'
+ },
+ keyEx:[],
+ neutral:['hemo','pcr'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'O sopro é funcional: não indica doença do coração. Nenhuma síndrome cardíaca, pulmonar ou pleural.',
+ correctDx:'inocente',
+ dxWhy:'Sopro sistólico 2+/6, sem frêmito, sem foco definido, que não engole B1 e muda com a posição, em jovem com febre alta e taquicardia: sopro funcional por hipercinese. A febre da amigdalite é a causa.',
+ conduta:[
+  {id:'c1',t:'Explicar que o sopro é funcional, da febre',ok:1,why:'Sopro inocente não tem alteração estrutural. Hipercinese (febre, anemia, gestação, tireotoxicose) causa sopro funcional.'},
+  // CONFERIR: o tratamento da amigdalite não está no material de semiologia.
+  {id:'c2',t:'Tratar a infecção da garganta',ok:1,why:'É a causa da febre. (O tratamento não está no seu material de semiologia.)'},
+  // CONFERIR: reauscultar depois da febre não está escrito no material.
+  {id:'c3',t:'Reauscultar quando a febre passar',ok:1,why:'Sem a hipercinese, o sopro funcional tende a sumir.'},
+  {id:'c4',t:'Ecocardiograma urgente',ok:0,why:'Todos os sinais são de sopro funcional. Pedir exame sem necessidade custa tempo e ponto.'},
+  {id:'c5',t:'Proibir esporte',ok:0,why:'Sopro inocente não tem doença do coração.'}
+ ],
+ teaching:[
+  {t:'Sopro inocente',p:'Comum em crianças e jovens (até 80%). Intensidade 1 a 2+/6, nunca engole B1, nunca tem frêmito, muda com a posição, sempre sistólico.'},
+  {t:'Funcional × orgânico',p:'Funcional: sem alteração estrutural, hipercinese, sem frêmito, sem foco definido, sempre sistólico. Orgânico: com lesão, pode ter frêmito, foco específico, sistólico ou diastólico.'},
+  {t:'Nunca inocente',p:'Sopro diastólico jamais é inocente. Frêmito é sempre patológico (sopro a partir de 4+/6).'}
+ ]
+});
+
+// ---- js/casos/cardio-13-estenose-pulmonar.js ----
+// Cardiovascular 13: O peito de pombo. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// focos (5.2), clique (5.6), estenose pulmonar (7.2), pulsos na criança (4.5), questão 2 da monitoria.
+// Tórax carinado: Semiologia Respiratória (6).
+CASES.push({
+ id:'c-ep',modulo:'Semiologia cardiovascular',n:'Caso 13',title:'O peito de pombo',look:'theo',pname:'Théo',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Théo, 4 anos. Gripado, e cansa mais que os primos.',
+ briefing:'Doutor, leito 3: Théo, 4 anos, com a mãe. Veio por gripe, mas a mãe tá preocupada porque ele cansa muito brincando.',
+ vitals:'PA 96/60 mmHg · FC 108 bpm · FR 26 irpm · T 37,4 °C · SpO₂ 98% em ar ambiente',
+ answers:{
+  queixa:'(A mãe responde) Tá gripado, com tosse e nariz escorrendo. E ele cansa muito quando corre.',
+  tempo:'A gripe faz dois dias. O cansaço eu reparo faz um ano.',
+  inicio:'O cansaço foi aparecendo quando ele começou a correr mais.',
+  dor:'Ele não reclama de dor.',
+  febre:'Uma febrinha ontem.',
+  tosse:'Tosse com catarro, da gripe.',
+  escarro:'Catarro claro.',
+  chiado:'Não.',
+  dispneia:'Quando corre com os primos, para antes de todo mundo, ofegante.',
+  esforco:'Só quando corre. Parado fica bem.',
+  palpitacao:'Ele não sabe dizer.',
+  sincope:'Não.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Tá crescendo normal, segundo o posto.',
+  tratou:'Xarope de mel.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma. Uma vez no posto falaram que tinha um sopro, mas não pediram nada.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Ele é criança ainda. Nasceu bem, de 9 meses.',
+  habitos:'Ninguém fuma em casa.',
+  contato:'O primo tá gripado.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Vai pra creche.',
+  moradia:'Mora comigo e com o pai.',
+  sal:'Come bem.',
+  emocional:'Ele é calmo.',
+  estimulantes:'Não.',
+  hiv:'(A mãe) Fiz no pré-natal, negativo.'
+ },
+ keyQ:[{ids:['dispneia','esforco'],l:'Cansaço aos esforços'},{ids:['doencas'],l:'Sopro já ouvido antes'},{ids:['tempo'],l:'Duração do cansaço'},{ids:['infancia'],l:'Nascimento'}],
+ geral:'Menino ativo, corado, sem cianose, brincando na maca.',
+ effSides:[],
+ exam:{
+  'inspecionar:coracao':'Esterno projetado para a frente (peito de pombo).',
+  'auscultar:focoP':'Clique logo após B1. Sopro sistólico em crescendo e decrescendo, 3+/6.',
+  'palpar:focoP':'Sem frêmito.',
+  'auscultar:focoAc':'Sopro sistólico transmitido, mais fraco.',
+  'auscultar:apiceE':'Sopro sistólico transmitido para baixo da clavícula e para o dorso.',
+  'inspecionar:pescoco':'Jugulares sem turgência.',
+  'inspecionar:boca':'Língua e lábios rosados.',
+  'manobra:rivero':'O sopro fica um pouco mais alto na inspiração profunda.',
+  'manobra:valsalva':'O sopro diminui.'
+ },
+ keyExam:[{ids:['auscultar:focoP'],l:'Auscultar o foco pulmonar'},{ids:['palpar:pulsoFem'],l:'Palpar o femoral (obrigatório na criança)'},
+  {ids:['auscultar:focoAo'],l:'Comparar com o foco aórtico'},{ids:['auscultar:apiceE','auscultar:medioE'],l:'Procurar irradiação (infraclavicular e dorso)'},
+  {ids:['inspecionar:boca','inspecionar:maos'],l:'Procurar cianose'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  eco:'Valva pulmonar espessada, com abertura reduzida. VD levemente hipertrofiado. Septos íntegros.',
+  ecg:'Ritmo sinusal, FC 108 bpm. Sinais de sobrecarga do ventrículo direito.'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['rx','hemo','ecg'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro sistólico ejetivo com clique no foco pulmonar, irradiando para a região infraclavicular esquerda e o dorso: síndrome valvar.',
+ correctDx:'ep',
+ dxWhy:'Criança acianótica, com tórax carinado, sem turgência jugular e sopro sistólico no 2º EIC esquerdo paraesternal: foco pulmonar + sistólico = estenose pulmonar. É rara em adultos e frequente nas cardiopatias congênitas. Femorais normais afastam coarctação.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma a lesão da valva pulmonar.'},
+  // CONFERIR: o encaminhamento à cardiologia pediátrica não está escrito no material.
+  {id:'c2',t:'Encaminhar à cardiologia pediátrica',ok:1,why:'Cardiopatia congênita com sintomas aos esforços.'},
+  {id:'c3',t:'Sopro inocente: alta sem seguimento',ok:0,why:'Sopro 3+/6, com clique, foco específico e irradiação: orgânico.'},
+  {id:'c4',t:'Estenose aórtica',ok:0,why:'O foco aórtico é o 2º EIC direito. Este sopro é no 2º EIC esquerdo (pulmonar).'},
+  {id:'c5',t:'Coarctação da aorta',ok:0,why:'Femorais presentes e simétricos com os braços.'}
+ ],
+ teaching:[
+  {t:'Focos',p:'Aórtico: 2º EIC direito (o único à direita). Pulmonar: 2º EIC esquerdo. Aórtico acessório: 3º EIC esquerdo. Tricúspide: 4º–5º EIC paraesternal esquerdo. Mitral: 4º–5º EIC na linha hemiclavicular.'},
+  {t:'Aplicação rápida',p:'Sistólico no 2º EIC direito: estenose aórtica. Diastólico no 5º EIC hemiclavicular: estenose mitral. Sistólico no 2º EIC esquerdo: estenose pulmonar.'},
+  {t:'Criança',p:'Palpar o femoral é obrigatório. Diminuído ou assimétrico em relação aos braços: coarctação da aorta.'},
+  {t:'Clique × estalido',p:'Clique logo após B1: valva semilunar (aórtica, pulmonar). Estalido logo após B2: valva AV estenótica (mitral, tricúspide).'}
+ ]
+});
+
 // ---- js/ia.js ----
 /* Casos criados por IA a partir do material do aluno.
    Funciona só na versão publicada no Claude: usa o Claude da própria pessoa (claude.use("sample")).
@@ -2290,7 +3553,7 @@ function iaValidar(bruto,fonte){
  const num=v=>{const n=typeof v==='string'?parseFloat(v.replace(',','.')):v;return typeof n==='number'&&isFinite(n)&&n>0?n:null;};
  const ids=lista=>new Set(lista.map(x=>x.id));
  const qIds=ids(QUESTIONS),exIds=ids(EXAMS),flIds=ids(FLUID_TESTS),dxIds=ids(DX);
- const manobra=id=>id==='vitals'||id==='inspecionar:geral'||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
+ const manobra=id=>id==='vitals'||id==='inspecionar:geral'||MANOBRAS.some(x=>'manobra:'+x.id===id)||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
  const grupos=(lista,valido,nome)=>{const out=(Array.isArray(lista)?lista:[]).map(g=>({ids:(Array.isArray(g&&g.ids)?g.ids:[]).map(String).filter(valido),l:txt(g&&g.l)?g.l:''})).filter(g=>g.ids.length&&g.l);
   if(!out.length)graves.push('nenhum item que vale ponto em '+nome);return out;};
  const so=(obj,valido)=>Object.fromEntries(Object.entries(obj&&typeof obj==='object'?obj:{}).filter(([k,v])=>valido(k)&&txt(v)));
@@ -2463,6 +3726,8 @@ const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,sind:4,dx:12,cond:16};
 const MAX_SEMIO={q:16,ex:24,lab:10,sind:16,dx:16,cond:18};
 const ehPleural=c=>!!c.light;
 const pesos=c=>ehPleural(c)?MAX:MAX_SEMIO;
+// correctSind pode ser uma síndrome ou uma lista de síndromes aceitas (a primeira é a principal)
+const sindLista=c=>[].concat(c.correctSind),sindOk=(c,id)=>sindLista(c).includes(id);
 
 /* ================= UTIL ================= */
 const $=s=>document.querySelector(s);
@@ -2713,7 +3978,21 @@ function mPatient(m){
     <rect x="70" y="156" width="26" height="60" fill="#c99a76"/><rect x="104" y="156" width="26" height="60" fill="#c99a76"/>
     <rect x="34" y="52" width="16" height="78" rx="6" fill="#c99a76"/><rect x="150" y="52" width="16" height="78" rx="6" fill="#c99a76"/>
     ${z('boca',88,20,24,14)}${z('pescoco',80,36,40,14)}${z('coracao',96,62,44,40)}${z('abdome',62,108,76,46)}${z('pernas',66,160,68,54)}${z('maos',28,128,26,22)}${z('maos',146,128,26,22)}
+   </svg></div>
+   <div class="fig"><h4>Coração e pulsos</h4><svg viewBox="0 0 200 220">
+    <circle cx="100" cy="18" r="13" fill="#c99a76"/><rect x="92" y="30" width="16" height="10" fill="#c99a76"/>
+    <path d="M58 40 Q100 34 142 40 L144 128 L56 128 Z" fill="#d8ad88"/><rect x="62" y="128" width="76" height="22" fill="#d8ad88"/>
+    <rect x="40" y="42" width="14" height="90" rx="6" fill="#c99a76"/><rect x="146" y="42" width="14" height="90" rx="6" fill="#c99a76"/>
+    <rect x="66" y="150" width="28" height="56" fill="#c99a76"/><rect x="106" y="150" width="28" height="56" fill="#c99a76"/>
+    <rect x="62" y="204" width="34" height="10" rx="4" fill="#c99a76"/><rect x="104" y="204" width="34" height="10" rx="4" fill="#c99a76"/>
+    <path d="M70 58 H130 M68 70 H132 M68 82 H132 M70 94 H130" stroke="#b88a66" stroke-width="1.5"/><line x1="100" y1="44" x2="100" y2="108" stroke="#b88a66" stroke-width="3"/>
+    <text x="22" y="66" fill="#94aab3" font-size="10" font-family="monospace">D</text><text x="170" y="66" fill="#94aab3" font-size="10" font-family="monospace">E</text>
+    ${z('focoAo',78,50,18,14)}${z('focoP',104,50,18,14)}${z('focoAc',104,64,18,14)}${z('focoT',104,86,18,14)}${z('focoM',124,90,18,14)}
+    ${z('pulsoCar',84,30,14,12)}${z('pulsoRad',150,120,16,14)}${z('pulsoFem',76,136,16,14)}${z('pulsoPed',66,200,22,14)}
+    <g class="zlbl">${[['Ao',87,60],['P',113,60],["Ao'",113,74],['T',113,96],['M',133,100],['carótida',126,30,1],['radial',176,118,1],['femoral',44,146,1],['pedioso',42,212,1]].map(([t,x,y,o])=>`<text x="${x}" y="${y}" text-anchor="middle"${o?' class="out"':''}>${t}</text>`).join('')}</g>
    </svg></div></div>
+  <h4 class="mtit">Manobras (cada uma leva 1 minuto)</h4>
+  <div class="chips">${MANOBRAS.map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>
   <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
@@ -2796,7 +4075,7 @@ function mXray(){
 function mClose(){
  const f=G.final,c=G.c,liq=G.tapped;
  const h=`<p class="muted" style="font-size:.9rem">Quando assinar, o caso acaba. Ainda dá para voltar e investigar mais.</p>
- <h3 class="sec">Síndrome ao exame do tórax</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
+ <h3 class="sec">Síndrome principal</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  ${liq?`<h3 class="sec">O líquido pleural é</h3><div class="opts">${['transudato','exsudato'].map(v=>`<label><input type="radio" name="cls" data-m="fcls" value="${v}" ${f.cls===v?'checked':''}>${v[0].toUpperCase()+v.slice(1)}</label>`).join('')}</div>`:''}
  <h3 class="sec">Diagnóstico</h3><div class="opts">${DX.map(d=>`<label><input type="radio" name="dx" data-m="fdx" value="${d.id}" ${f.dx===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  <h3 class="sec">Conduta (marque todas as corretas)</h3><div class="opts">${c.conduta.map(x=>`<label><input type="checkbox" data-m="fcond" value="${x.id}" ${f.cond.includes(x.id)?'checked':''}>${x.t}</label>`).join('')}</div>
@@ -2838,6 +4117,8 @@ modal.addEventListener('click',e=>{
  if(a==='ex'){const z=el.dataset.v,tool=z==='geral'?'inspecionar':G.tool,key=tool+':'+z;
   if(!G.examined.includes(key))G.examined.push(key);
   G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v:findExam(tool,z)});advance(1);renderM();return;}
+ if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
+  G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
  if(a==='tvol'){G.tap.vol=el.value;renderM();return;}
@@ -2868,6 +4149,11 @@ function findExam(tool,z){
  const c=G.c;
  if(z==='geral')return c.geral;
  const k=tool+':'+z;if(c.exam[k])return c.exam[k];
+ if(tool==='manobra')return {ortostase:'Deitado e depois de 3 minutos em pé: PA e frequência praticamente iguais, sem sintomas.',
+  pa3:'Depois de 5 minutos de repouso, três medidas nos dois braços: valores iguais aos dos sinais vitais. Diferença entre os braços menor que 15 mmHg.'}[z]||'Nenhuma mudança na ausculta.';
+ if(FOCOS.includes(z))return {inspecionar:'Sem pulsações visíveis.',palpar:'Sem frêmito.',percutir:'A percussão não faz parte do exame do coração.',
+  auscultar:'Bulhas rítmicas, normofonéticas, em 2 tempos, sem sopros.'}[tool];
+ if(PULSOS.includes(z))return {inspecionar:'Sem pulsação visível.',palpar:'Pulso presente, simétrico com o outro lado, amplitude normal (++).',percutir:'Não se aplica.',auscultar:'Sem sopros.'}[tool];
  if(/^(apice|medio|base)[DE]$/.test(z)){
   const side=z.slice(-1),eff=z.startsWith('base')&&c.effSides.includes(side);
   return {inspecionar:eff?'Expansibilidade reduzida deste lado.':'Expansibilidade simétrica, sem abaulamentos, retrações ou tiragem.',
@@ -2913,8 +4199,8 @@ function score(){
  const P=pesos(c),s={
   q:Math.round(P.q*qH.length/c.keyQ.length),
   ex:Math.round(P.ex*eH.length/c.keyExam.length),
-  lab:Math.max(0,Math.round(P.lab*xH.length/c.keyEx.length)-2*extra.length),
-  sind:f.sind===c.correctSind?P.sind:0,
+  lab:Math.max(0,Math.round(P.lab*(c.keyEx.length?xH.length/c.keyEx.length:1))-2*extra.length), // sem exame-chave: nota cheia se não pedir nada à toa
+  sind:sindOk(c,f.sind)?P.sind:0,
   dx:f.dx===c.correctDx?P.dx:0,
   cond:Math.max(0,Math.round(P.cond*okH/okT)-4*wr)
  };
@@ -2948,8 +4234,8 @@ function finish(){
   <h2 style="font-size:1.6rem;margin-top:4px">${verdict}</h2>
   <div class="bars">${bars.map(b=>`<div class="bar"><span>${b[0]}</span><div class="tr"><i style="width:${Math.round(100*b[1]/b[2])}%"></i></div><span class="nm">${b[1]}/${b[2]}</span></div>`).join('')}</div>
 
-  <h3 class="sec">Síndrome: ${nomeSind(c.correctSind)}</h3>
-  <p style="font-size:.92rem">${f.sind===c.correctSind?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
+  <h3 class="sec">Síndrome: ${sindLista(c).map(nomeSind).join(' ou ')}</h3>
+  <p style="font-size:.92rem">${sindOk(c,f.sind)?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
   ${pl?`<h3 class="sec">Classificação: ${f.cls===c.correctClass?'acertou':f.cls?'errou':'não classificou'} (${c.correctClass})</h3>
   <p class="muted" style="font-size:.92rem">${lightText()}</p>${c.clsNote?`<p style="font-size:.92rem;margin-top:6px">${c.clsNote}</p>`:''}`:''}
   <h3 class="sec">Diagnóstico: ${DX.find(x=>x.id===c.correctDx).t}</h3>

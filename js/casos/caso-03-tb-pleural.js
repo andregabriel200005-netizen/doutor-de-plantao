@@ -13,6 +13,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: João, 28 anos. Veio do ambulatório por tosse e dor no peito.",
  "vitals": "PA 110/70 mmHg · FC 98 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 95% em ar ambiente",
  "answers": {
+  "esforco": "Não, a dor é a mesma parado ou andando.",
+  "palpitacao": "Não.",
+  "sincope": "Não.",
+  "infancia": "Não.",
+  "estimulantes": "Café na faculdade. Energético não.",
   "inicio": "Foi aos poucos. Nem lembro o dia certo.",
   "escarro": "Quase não sai catarro. Sangue não.",
   "chiado": "Não.",

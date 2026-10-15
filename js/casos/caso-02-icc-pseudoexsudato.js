@@ -13,6 +13,11 @@ CASES.push({
  "briefing": "Doutor, leito 3: Dona Maria, 72 anos. Diz que tá com falta de ar faz uns dias.",
  "vitals": "PA 150/90 mmHg · FC 96 bpm · FR 24 irpm · T 36,4 °C · SpO₂ 91% em ar ambiente",
  "answers": {
+  "esforco": "Qualquer esforço me cansa. Parada eu melhoro um pouco.",
+  "palpitacao": "Às vezes, de noite.",
+  "sincope": "Não.",
+  "infancia": "Que eu lembre, não.",
+  "estimulantes": "Um cafezinho por dia.",
   "inicio": "Foi piorando aos poucos, nas últimas duas semanas.",
   "escarro": "Quase não tenho catarro. Sangue nunca.",
   "chiado": "Às vezes, de noite, um chiadinho.",

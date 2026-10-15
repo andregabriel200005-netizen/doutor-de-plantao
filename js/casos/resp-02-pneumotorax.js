@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Bruno, 22 anos. Chegou com dor no peito e falta de ar.',
  vitals:'PA 122/76 mmHg · FC 98 bpm · FR 22 irpm · T 36,7 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  esforco:"Não, começou parado.",
+  palpitacao:"Tá acelerado desde a dor.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Energético às vezes, pra trabalhar de noite.",
   queixa:'Uma dor no peito do lado esquerdo e falta de ar.',
   tempo:'Faz umas duas horas.',
   inicio:'Do nada. Eu tava sentado vendo TV.',

@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Raimundo, 67 anos. Cansado, respirando com esforço.',
  vitals:'PA 138/86 mmHg · FC 100 bpm · FR 26 irpm · T 37,0 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  esforco:"Qualquer esforço. Parado melhora um pouco.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Café, umas três xícaras.",
   queixa:'Esse cansaço que piorou essa semana.',
   tempo:'Cansado eu sou faz anos. Piorou faz uma semana, depois de uma gripe.',
   inicio:'Aos poucos.',

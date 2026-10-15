@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Arlindo, 71 anos. Chegou com febre alta e dor no peito, respirando rápido.',
  vitals:'PA 130/80 mmHg · FC 108 bpm · FR 26 irpm · T 39,2 °C · SpO₂ 89% em ar ambiente',
  answers:{
+  esforco:"Não. Tá ruim parado também.",
+  palpitacao:"Tá batendo rápido desde a febre.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Só o cafezinho.",
   queixa:'Febre alta, tremedeira e uma dor do lado direito do peito.',
   tempo:'Três dias.',
   inicio:'Começou de repente, com um calafrio forte de bater o queixo.',

@@ -1,0 +1,80 @@
+// Cardiovascular 9: Levantou para urinar. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// síncope (2.4), o que perguntar no idoso com síncope e síncope no idoso (8).
+CASES.push({
+ id:'c-orto',modulo:'Semiologia cardiovascular',n:'Caso 9',title:'Levantou para urinar',look:'ines',pname:'Dona Celeste',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas, caso clínico e monitoria)',
+ card:'Celeste, 81 anos. Desmaiou de madrugada.',
+ briefing:'Doutor, leito 3: Dona Celeste, 81 anos. A neta trouxe porque ela desmaiou de madrugada.',
+ vitals:'PA 128/76 mmHg (sentada) · FC 78 bpm · FR 16 irpm · T 36,2 °C · SpO₂ 97% em ar ambiente',
+ answers:{
+  queixa:'Desmaiei quando levantei pra ir ao banheiro.',
+  tempo:'Foi hoje de madrugada. Mas faz umas semanas que fico tonta quando levanto rápido.',
+  inicio:'Levantei da cama de uma vez, a vista escureceu e eu caí.',
+  dor:'Só o joelho que bateu no chão.',
+  febre:'Não.',
+  tosse:'Não.',
+  escarro:'Não.',
+  chiado:'Não.',
+  dispneia:'Não.',
+  esforco:'Não. Caminho na praça e não sinto nada. É só quando levanto.',
+  palpitacao:'Não.',
+  sincope:'Escureceu tudo, fiquei suada, e caí. A neta diz que acordei em poucos segundos, já falando. Não me urinei nem me debati.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Levanto à noite pra urinar.',
+  peso:'Não.',
+  tratou:'Nada.',
+  meds:'Hidroclorotiazida, anlodipino, que o médico aumentou mês passado, e diazepam pra dormir.',
+  doencas:'Pressão alta. Insônia.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Não.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Aposentada, fui costureira.',
+  moradia:'Moro com minha neta.',
+  sal:'Como pouco sal. Bebo pouca água pra não levantar de noite.',
+  emocional:'Com medo de cair de novo.',
+  estimulantes:'Um café de manhã.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['meds'],l:'Medicações (diurético, anti-hipertensivo, benzodiazepínico)'},{ids:['sincope'],l:'Caracterizar o desmaio e os pródromos'},{ids:['inicio'],l:'Ao levantar'},{ids:['esforco'],l:'Sem relação com esforço'},{ids:['sal'],l:'Pouca ingestão de água'}],
+ geral:'Idosa lúcida, um pouco sonolenta, com escoriação no joelho direito.',
+ effSides:[],
+ exam:{
+  'manobra:ortostase':'Deitada: PA 134/78 mmHg, FC 74 bpm. Depois de 3 minutos em pé: PA 102/64 mmHg, FC 92 bpm. Ela fica tonta e pede para sentar.',
+  'inspecionar:boca':'Mucosas um pouco secas.',
+  'inspecionar:pernas':'Escoriação no joelho direito. Sem edema.'
+ },
+ keyExam:[{ids:['manobra:ortostase'],l:'PA deitada e em pé'},{ids:FOCOS.map(z=>'auscultar:'+z),l:'Auscultar o coração (afastar sopro)'},
+  {ids:['palpar:pulsoRad','palpar:pulsoCar'],l:'Palpar o pulso'},{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
+ res:{
+  ecg:'Ritmo sinusal, FC 76 bpm. Condução normal.',
+  glic:'Glicemia 98 mg/dL',
+  renal:'Ureia 46 mg/dL · Creatinina 1,1 mg/dL'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG (afastar arritmia e BAVT)'}],
+ neutral:['glic','renal','hemo','eco'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'Coração sem sopros, ritmo regular, pulmões limpos: nenhuma síndrome cardíaca, pulmonar ou pleural. O achado é a queda da PA em pé.',
+ correctDx:'ortostatica',
+ dxWhy:'Desmaio ao levantar, com pródromos, recuperação rápida e completa, sem relação com esforço. A PA cai mais de 30 mmHg em pé, com tontura. Usa diurético, anti-hipertensivo recém-aumentado e benzodiazepínico, e bebe pouca água. No idoso, a causa reversível mais comum é medicamentosa.',
+ conduta:[
+  {id:'c1',t:'Rever os remédios (diurético, anlodipino, diazepam)',ok:1,why:'A causa reversível mais comum de síncope no idoso é medicamentosa. Benzodiazepínico ainda causa sedação, hipotensão e quedas.'},
+  // CONFERIR: a orientação de levantar devagar não está escrita no material.
+  {id:'c2',t:'Orientar a levantar devagar',ok:1,why:'Na hipotensão postural o reflexo que ajusta a pressão ao levantar está lento, como no idoso.'},
+  {id:'c3',t:'Troca valvar',ok:0,why:'Não há sopro. A estenose aórtica dá síncope no esforço, com sopro ejetivo.'},
+  {id:'c4',t:'Investigar convulsão',ok:0,why:'Sem abalos, sem perda de urina, recuperação em segundos e completa.'},
+  {id:'c5',t:'Aumentar o remédio da pressão porque a PA sentada está boa',ok:0,why:'O problema é a PA cair em pé.'}
+ ],
+ teaching:[
+  {t:'Síncope',p:'Perda transitória e abrupta da consciência e do tônus por menos sangue no cérebro, curta, com recuperação espontânea e completa.'},
+  {t:'O que perguntar',p:'Duração, se acordou sozinho, convulsão, perda de urina ou fezes, pródromos, o que fazia na hora (esforço?), doenças e remédios.'},
+  {t:'Cardíaca × não cardíaca',p:'Cardíaca (arritmias, BAVT, estenose aórtica, IC) tem maior mortalidade e vem no esforço. Não cardíaca: hipotensão postural, metabólica, vasovagal, medicamentosa.'},
+  {t:'No idoso',p:'Cerca de 30% já tiveram um episódio. O grande risco são as quedas (fêmur, TCE).'}
+ ]
+});

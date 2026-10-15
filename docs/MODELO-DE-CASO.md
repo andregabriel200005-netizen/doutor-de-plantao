@@ -17,10 +17,10 @@ Há dois tipos de caso:
 | `keyQ` | Perguntas que valem ponto. Cada item: `{ids:[...], l:'rótulo'}`; qualquer id da lista conta |
 | `geral` | Resultado da inspeção geral |
 | `effSides` | Lados com derrame: `['D']`, `['E']` ou `['D','E']`. Gera macicez e murmúrio abolido na base |
-| `exam` | Achados diferentes do padrão, com chave `manobra:região` (ex.: `"auscultar:coracao"`). Regiões: tórax (`apiceE`...`baseD`), `boca`, `pescoco`, `coracao`, `abdome`, `maos`, `pernas`. Para várias regiões de uma vez: `achados(TORAX,{percutir:'...'})` |
+| `exam` | Achados diferentes do padrão, com chave `manobra:região` (ex.: `"auscultar:coracao"`). Regiões: tórax (`apiceE`...`baseD`), `boca`, `pescoco`, `coracao` (precórdio/ictus), `abdome`, `maos`, `pernas`, focos (`focoAo`, `focoP`, `focoAc`, `focoT`, `focoM`) e pulsos (`pulsoCar`, `pulsoRad`, `pulsoFem`, `pulsoPed`). Manobras especiais usam `manobra:id` (lista `MANOBRAS`: pachon, frente, apneia, handgrip, rivero, valsalva, cocoras, ortostase, pa3). Escreva o efeito de cada manobra que mudaria a ausculta; a que não estiver no caso responde "Nenhuma mudança". Para várias regiões de uma vez: `achados(TORAX,{percutir:'...'})` |
 | `keyExam` | Manobras que valem ponto (`vitals` = pedir sinais vitais) |
 | `res` | Resultados de exames diferentes do padrão (`DEF_RES` em `js/jogo.js`) |
-| `keyEx` | Exames que valem ponto |
+| `keyEx` | Exames que valem ponto. Pode ficar vazio: aí a nota de exames é cheia se o aluno não pedir nada à toa |
 | `neutral` | Exames que não dão nem tiram ponto. Qualquer exame fora de `keyEx` e de `neutral` tira 2 pontos |
 | `rx` | Desenho da radiografia: `eff` (derrame por lado, 0 a 0,5), `cardio`, `consol`/`consolAp` (consolidação na base/ápice), `ptx:{lado,tam}`, `hiper` (hiperinsuflação), `atel` + `shift` (atelectasia e lado para onde o mediastino foi), `congest`, `cav` (caverna no ápice), `bronq` |
 | `tap` | Onde a punção dá líquido: lados e espaços (1 a 9, contados de cima; o 9 é baixo demais) |
@@ -29,7 +29,7 @@ Há dois tipos de caso:
 | `keyFluid` | Análises do líquido que valem ponto |
 | `light` | Números para conferir Light: `protL`, `protS`, `ldhL`, `ldhS`, `albL`, `albS` |
 | `diuretico` | `true` se o paciente usa diurético (aí os gradientes valem) |
-| `correctSind`, `sindWhy` | Síndrome ao exame do tórax (id de `SINDROMES`) e o porquê. Todo caso tem |
+| `correctSind`, `sindWhy` | Síndrome principal (id de `SINDROMES`, ou lista de ids aceitos, a primeira é a principal) e o porquê. Todo caso tem |
 | `correctClass`, `clsNote` | Só com derrame: transudato ou exsudato, e explicação extra se houver pegadinha |
 | `correctDx`, `dxWhy` | Diagnóstico (id de `DX`) e o porquê |
 | `conduta` | Opções do final: `{id, t, ok, why}`. Misture certas e erradas plausíveis |

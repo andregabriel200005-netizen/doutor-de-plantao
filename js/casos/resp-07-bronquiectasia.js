@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Rosa, 52 anos. Veio por febre e tosse com muito catarro.',
  vitals:'PA 120/78 mmHg · FC 96 bpm · FR 22 irpm · T 38,0 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  esforco:"Ladeira me cansa.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Coqueluche e uma pneumonia forte, fiquei um mês internada.",
+  estimulantes:"Café com leite.",
   queixa:'Esse catarro que não para, e agora veio febre.',
   tempo:'Catarro eu tenho desde moça. A febre começou faz 3 dias.',
   inicio:'Aos poucos.',

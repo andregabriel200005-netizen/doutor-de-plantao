@@ -1,0 +1,87 @@
+// Cardiovascular 13: O peito de pombo. Fonte: Semiologia Cardiovascular — Material de Estudo (André, UNINASSAU, 2026):
+// focos (5.2), clique (5.6), estenose pulmonar (7.2), pulsos na criança (4.5), questão 2 da monitoria.
+// Tórax carinado: Semiologia Respiratória (6).
+CASES.push({
+ id:'c-ep',modulo:'Semiologia cardiovascular',n:'Caso 13',title:'O peito de pombo',look:'theo',pname:'Théo',
+ fonte:'Semiologia Cardiovascular: material de estudo do André (apostila de Semiologia Especializada p. 64–78, aulas e monitoria)',
+ card:'Théo, 4 anos. Gripado, e cansa mais que os primos.',
+ briefing:'Doutor, leito 3: Théo, 4 anos, com a mãe. Veio por gripe, mas a mãe tá preocupada porque ele cansa muito brincando.',
+ vitals:'PA 96/60 mmHg · FC 108 bpm · FR 26 irpm · T 37,4 °C · SpO₂ 98% em ar ambiente',
+ answers:{
+  queixa:'(A mãe responde) Tá gripado, com tosse e nariz escorrendo. E ele cansa muito quando corre.',
+  tempo:'A gripe faz dois dias. O cansaço eu reparo faz um ano.',
+  inicio:'O cansaço foi aparecendo quando ele começou a correr mais.',
+  dor:'Ele não reclama de dor.',
+  febre:'Uma febrinha ontem.',
+  tosse:'Tosse com catarro, da gripe.',
+  escarro:'Catarro claro.',
+  chiado:'Não.',
+  dispneia:'Quando corre com os primos, para antes de todo mundo, ofegante.',
+  esforco:'Só quando corre. Parado fica bem.',
+  palpitacao:'Ele não sabe dizer.',
+  sincope:'Não.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Tá crescendo normal, segundo o posto.',
+  tratou:'Xarope de mel.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma. Uma vez no posto falaram que tinha um sopro, mas não pediram nada.',
+  alergia:'Não.',
+  passado:'Não.',
+  infancia:'Ele é criança ainda. Nasceu bem, de 9 meses.',
+  habitos:'Ninguém fuma em casa.',
+  contato:'O primo tá gripado.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Vai pra creche.',
+  moradia:'Mora comigo e com o pai.',
+  sal:'Come bem.',
+  emocional:'Ele é calmo.',
+  estimulantes:'Não.',
+  hiv:'(A mãe) Fiz no pré-natal, negativo.'
+ },
+ keyQ:[{ids:['dispneia','esforco'],l:'Cansaço aos esforços'},{ids:['doencas'],l:'Sopro já ouvido antes'},{ids:['tempo'],l:'Duração do cansaço'},{ids:['infancia'],l:'Nascimento'}],
+ geral:'Menino ativo, corado, sem cianose, brincando na maca.',
+ effSides:[],
+ exam:{
+  'inspecionar:coracao':'Esterno projetado para a frente (peito de pombo).',
+  'auscultar:focoP':'Clique logo após B1. Sopro sistólico em crescendo e decrescendo, 3+/6.',
+  'palpar:focoP':'Sem frêmito.',
+  'auscultar:focoAc':'Sopro sistólico transmitido, mais fraco.',
+  'auscultar:apiceE':'Sopro sistólico transmitido para baixo da clavícula e para o dorso.',
+  'inspecionar:pescoco':'Jugulares sem turgência.',
+  'inspecionar:boca':'Língua e lábios rosados.',
+  'manobra:rivero':'O sopro fica um pouco mais alto na inspiração profunda.',
+  'manobra:valsalva':'O sopro diminui.'
+ },
+ keyExam:[{ids:['auscultar:focoP'],l:'Auscultar o foco pulmonar'},{ids:['palpar:pulsoFem'],l:'Palpar o femoral (obrigatório na criança)'},
+  {ids:['auscultar:focoAo'],l:'Comparar com o foco aórtico'},{ids:['auscultar:apiceE','auscultar:medioE'],l:'Procurar irradiação (infraclavicular e dorso)'},
+  {ids:['inspecionar:boca','inspecionar:maos'],l:'Procurar cianose'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  eco:'Valva pulmonar espessada, com abertura reduzida. VD levemente hipertrofiado. Septos íntegros.',
+  ecg:'Ritmo sinusal, FC 108 bpm. Sinais de sobrecarga do ventrículo direito.'
+ },
+ keyEx:[{ids:['eco'],l:'Ecocardiograma'}],
+ neutral:['rx','hemo','ecg'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'valvar',
+ sindWhy:'Sopro sistólico ejetivo com clique no foco pulmonar, irradiando para a região infraclavicular esquerda e o dorso: síndrome valvar.',
+ correctDx:'ep',
+ dxWhy:'Criança acianótica, com tórax carinado, sem turgência jugular e sopro sistólico no 2º EIC esquerdo paraesternal: foco pulmonar + sistólico = estenose pulmonar. É rara em adultos e frequente nas cardiopatias congênitas. Femorais normais afastam coarctação.',
+ conduta:[
+  {id:'c1',t:'Ecocardiograma',ok:1,why:'Confirma a lesão da valva pulmonar.'},
+  // CONFERIR: o encaminhamento à cardiologia pediátrica não está escrito no material.
+  {id:'c2',t:'Encaminhar à cardiologia pediátrica',ok:1,why:'Cardiopatia congênita com sintomas aos esforços.'},
+  {id:'c3',t:'Sopro inocente: alta sem seguimento',ok:0,why:'Sopro 3+/6, com clique, foco específico e irradiação: orgânico.'},
+  {id:'c4',t:'Estenose aórtica',ok:0,why:'O foco aórtico é o 2º EIC direito. Este sopro é no 2º EIC esquerdo (pulmonar).'},
+  {id:'c5',t:'Coarctação da aorta',ok:0,why:'Femorais presentes e simétricos com os braços.'}
+ ],
+ teaching:[
+  {t:'Focos',p:'Aórtico: 2º EIC direito (o único à direita). Pulmonar: 2º EIC esquerdo. Aórtico acessório: 3º EIC esquerdo. Tricúspide: 4º–5º EIC paraesternal esquerdo. Mitral: 4º–5º EIC na linha hemiclavicular.'},
+  {t:'Aplicação rápida',p:'Sistólico no 2º EIC direito: estenose aórtica. Diastólico no 5º EIC hemiclavicular: estenose mitral. Sistólico no 2º EIC esquerdo: estenose pulmonar.'},
+  {t:'Criança',p:'Palpar o femoral é obrigatório. Diminuído ou assimétrico em relação aos braços: coarctação da aorta.'},
+  {t:'Clique × estalido',p:'Clique logo após B1: valva semilunar (aórtica, pulmonar). Estalido logo após B2: valva AV estenótica (mitral, tricúspide).'}
+ ]
+});

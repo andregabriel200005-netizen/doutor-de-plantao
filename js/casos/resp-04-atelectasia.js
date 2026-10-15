@@ -7,6 +7,11 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Valdemar, 63 anos. Veio por tosse e cansaço que não melhoram.',
  vitals:'PA 136/84 mmHg · FC 96 bpm · FR 24 irpm · T 37,1 °C · SpO₂ 92% em ar ambiente',
  answers:{
+  esforco:"Cansa mais quando ando. Parado melhora.",
+  palpitacao:"Não.",
+  sincope:"Não.",
+  infancia:"Não.",
+  estimulantes:"Café de manhã.",
   queixa:'Tosse que não passa e um cansaço que só piora.',
   tempo:'Uns dois meses.',
   inicio:'Foi aos poucos.',

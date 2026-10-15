@@ -4,6 +4,8 @@ const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,sind:4,dx:12,cond:16};
 const MAX_SEMIO={q:16,ex:24,lab:10,sind:16,dx:16,cond:18};
 const ehPleural=c=>!!c.light;
 const pesos=c=>ehPleural(c)?MAX:MAX_SEMIO;
+// correctSind pode ser uma síndrome ou uma lista de síndromes aceitas (a primeira é a principal)
+const sindLista=c=>[].concat(c.correctSind),sindOk=(c,id)=>sindLista(c).includes(id);
 
 /* ================= UTIL ================= */
 const $=s=>document.querySelector(s);
@@ -254,7 +256,21 @@ function mPatient(m){
     <rect x="70" y="156" width="26" height="60" fill="#c99a76"/><rect x="104" y="156" width="26" height="60" fill="#c99a76"/>
     <rect x="34" y="52" width="16" height="78" rx="6" fill="#c99a76"/><rect x="150" y="52" width="16" height="78" rx="6" fill="#c99a76"/>
     ${z('boca',88,20,24,14)}${z('pescoco',80,36,40,14)}${z('coracao',96,62,44,40)}${z('abdome',62,108,76,46)}${z('pernas',66,160,68,54)}${z('maos',28,128,26,22)}${z('maos',146,128,26,22)}
+   </svg></div>
+   <div class="fig"><h4>Coração e pulsos</h4><svg viewBox="0 0 200 220">
+    <circle cx="100" cy="18" r="13" fill="#c99a76"/><rect x="92" y="30" width="16" height="10" fill="#c99a76"/>
+    <path d="M58 40 Q100 34 142 40 L144 128 L56 128 Z" fill="#d8ad88"/><rect x="62" y="128" width="76" height="22" fill="#d8ad88"/>
+    <rect x="40" y="42" width="14" height="90" rx="6" fill="#c99a76"/><rect x="146" y="42" width="14" height="90" rx="6" fill="#c99a76"/>
+    <rect x="66" y="150" width="28" height="56" fill="#c99a76"/><rect x="106" y="150" width="28" height="56" fill="#c99a76"/>
+    <rect x="62" y="204" width="34" height="10" rx="4" fill="#c99a76"/><rect x="104" y="204" width="34" height="10" rx="4" fill="#c99a76"/>
+    <path d="M70 58 H130 M68 70 H132 M68 82 H132 M70 94 H130" stroke="#b88a66" stroke-width="1.5"/><line x1="100" y1="44" x2="100" y2="108" stroke="#b88a66" stroke-width="3"/>
+    <text x="22" y="66" fill="#94aab3" font-size="10" font-family="monospace">D</text><text x="170" y="66" fill="#94aab3" font-size="10" font-family="monospace">E</text>
+    ${z('focoAo',78,50,18,14)}${z('focoP',104,50,18,14)}${z('focoAc',104,64,18,14)}${z('focoT',104,86,18,14)}${z('focoM',124,90,18,14)}
+    ${z('pulsoCar',84,30,14,12)}${z('pulsoRad',150,120,16,14)}${z('pulsoFem',76,136,16,14)}${z('pulsoPed',66,200,22,14)}
+    <g class="zlbl">${[['Ao',87,60],['P',113,60],["Ao'",113,74],['T',113,96],['M',133,100],['carótida',126,30,1],['radial',176,118,1],['femoral',44,146,1],['pedioso',42,212,1]].map(([t,x,y,o])=>`<text x="${x}" y="${y}" text-anchor="middle"${o?' class="out"':''}>${t}</text>`).join('')}</g>
    </svg></div></div>
+  <h4 class="mtit">Manobras (cada uma leva 1 minuto)</h4>
+  <div class="chips">${MANOBRAS.map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>
   <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
@@ -337,7 +353,7 @@ function mXray(){
 function mClose(){
  const f=G.final,c=G.c,liq=G.tapped;
  const h=`<p class="muted" style="font-size:.9rem">Quando assinar, o caso acaba. Ainda dá para voltar e investigar mais.</p>
- <h3 class="sec">Síndrome ao exame do tórax</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
+ <h3 class="sec">Síndrome principal</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  ${liq?`<h3 class="sec">O líquido pleural é</h3><div class="opts">${['transudato','exsudato'].map(v=>`<label><input type="radio" name="cls" data-m="fcls" value="${v}" ${f.cls===v?'checked':''}>${v[0].toUpperCase()+v.slice(1)}</label>`).join('')}</div>`:''}
  <h3 class="sec">Diagnóstico</h3><div class="opts">${DX.map(d=>`<label><input type="radio" name="dx" data-m="fdx" value="${d.id}" ${f.dx===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  <h3 class="sec">Conduta (marque todas as corretas)</h3><div class="opts">${c.conduta.map(x=>`<label><input type="checkbox" data-m="fcond" value="${x.id}" ${f.cond.includes(x.id)?'checked':''}>${x.t}</label>`).join('')}</div>
@@ -379,6 +395,8 @@ modal.addEventListener('click',e=>{
  if(a==='ex'){const z=el.dataset.v,tool=z==='geral'?'inspecionar':G.tool,key=tool+':'+z;
   if(!G.examined.includes(key))G.examined.push(key);
   G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v:findExam(tool,z)});advance(1);renderM();return;}
+ if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
+  G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
  if(a==='tvol'){G.tap.vol=el.value;renderM();return;}
@@ -409,6 +427,11 @@ function findExam(tool,z){
  const c=G.c;
  if(z==='geral')return c.geral;
  const k=tool+':'+z;if(c.exam[k])return c.exam[k];
+ if(tool==='manobra')return {ortostase:'Deitado e depois de 3 minutos em pé: PA e frequência praticamente iguais, sem sintomas.',
+  pa3:'Depois de 5 minutos de repouso, três medidas nos dois braços: valores iguais aos dos sinais vitais. Diferença entre os braços menor que 15 mmHg.'}[z]||'Nenhuma mudança na ausculta.';
+ if(FOCOS.includes(z))return {inspecionar:'Sem pulsações visíveis.',palpar:'Sem frêmito.',percutir:'A percussão não faz parte do exame do coração.',
+  auscultar:'Bulhas rítmicas, normofonéticas, em 2 tempos, sem sopros.'}[tool];
+ if(PULSOS.includes(z))return {inspecionar:'Sem pulsação visível.',palpar:'Pulso presente, simétrico com o outro lado, amplitude normal (++).',percutir:'Não se aplica.',auscultar:'Sem sopros.'}[tool];
  if(/^(apice|medio|base)[DE]$/.test(z)){
   const side=z.slice(-1),eff=z.startsWith('base')&&c.effSides.includes(side);
   return {inspecionar:eff?'Expansibilidade reduzida deste lado.':'Expansibilidade simétrica, sem abaulamentos, retrações ou tiragem.',
@@ -454,8 +477,8 @@ function score(){
  const P=pesos(c),s={
   q:Math.round(P.q*qH.length/c.keyQ.length),
   ex:Math.round(P.ex*eH.length/c.keyExam.length),
-  lab:Math.max(0,Math.round(P.lab*xH.length/c.keyEx.length)-2*extra.length),
-  sind:f.sind===c.correctSind?P.sind:0,
+  lab:Math.max(0,Math.round(P.lab*(c.keyEx.length?xH.length/c.keyEx.length:1))-2*extra.length), // sem exame-chave: nota cheia se não pedir nada à toa
+  sind:sindOk(c,f.sind)?P.sind:0,
   dx:f.dx===c.correctDx?P.dx:0,
   cond:Math.max(0,Math.round(P.cond*okH/okT)-4*wr)
  };
@@ -489,8 +512,8 @@ function finish(){
   <h2 style="font-size:1.6rem;margin-top:4px">${verdict}</h2>
   <div class="bars">${bars.map(b=>`<div class="bar"><span>${b[0]}</span><div class="tr"><i style="width:${Math.round(100*b[1]/b[2])}%"></i></div><span class="nm">${b[1]}/${b[2]}</span></div>`).join('')}</div>
 
-  <h3 class="sec">Síndrome: ${nomeSind(c.correctSind)}</h3>
-  <p style="font-size:.92rem">${f.sind===c.correctSind?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
+  <h3 class="sec">Síndrome: ${sindLista(c).map(nomeSind).join(' ou ')}</h3>
+  <p style="font-size:.92rem">${sindOk(c,f.sind)?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
   ${pl?`<h3 class="sec">Classificação: ${f.cls===c.correctClass?'acertou':f.cls?'errou':'não classificou'} (${c.correctClass})</h3>
   <p class="muted" style="font-size:.92rem">${lightText()}</p>${c.clsNote?`<p style="font-size:.92rem;margin-top:6px">${c.clsNote}</p>`:''}`:''}
   <h3 class="sec">Diagnóstico: ${DX.find(x=>x.id===c.correctDx).t}</h3>
