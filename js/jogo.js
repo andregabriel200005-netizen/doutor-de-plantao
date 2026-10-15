@@ -471,7 +471,7 @@ function finish(){
    <button class="btn" data-go="start" data-i="${next}">Próximo caso</button>
    <button class="btn ghost" data-go="start" data-i="${G.ci}">Repetir este caso</button>
    <button class="btn ghost" data-go="home">Início</button></div>
-  <p class="foot">Pacientes fictícios, criados a partir do resumo de Derrame Pleural (Estratégia MED). Confira com o seu material e com as diretrizes atuais.</p></div>`;
+  <p class="foot">${c.ia?'Paciente fictício criado pela IA a partir de: '+c.fonte+'. A IA pode errar: confira com o seu material e com as diretrizes atuais.':'Pacientes fictícios, criados a partir do resumo de Derrame Pleural (Estratégia MED). Confira com o seu material e com as diretrizes atuais.'}</p></div>`;
  show('debrief');
 }
 
@@ -479,13 +479,15 @@ function finish(){
 function show(id){['home','game','debrief'].forEach(s=>$('#'+s).hidden=s!==id);window.scrollTo(0,0);}
 function renderHome(){
  $('#home').innerHTML=`<div class="hero"><h1>Plantão Pleural</h1>
-  <p>Noite de plantão na emergência. Três pacientes com derrame pleural. Você conversa, examina, pede exames, lê a radiografia sem laudo, punciona e decide. Ninguém vai te dizer o que é importante.</p></div>
- <div class="cases">${CASES.map((c,i)=>{const b=store('best-'+c.id);return `<button class="ccard" data-go="start" data-i="${i}"><canvas data-por="${c.look}"></canvas><div><span class="n">${c.n.toUpperCase()}</span><h3>${c.title}</h3><p>${c.card}</p><span class="best">${b!==undefined?'Recorde: '+b+'/100':'Ainda não atendido'}</span></div></button>`;}).join('')}</div>
+  <p>Noite de plantão na emergência. Pacientes com derrame pleural. Você conversa, examina, pede exames, lê a radiografia sem laudo, punciona e decide. Ninguém vai te dizer o que é importante.</p></div>
+ <div class="cases">${CASES.map((c,i)=>{const b=store('best-'+c.id);return `<button class="ccard" data-go="start" data-i="${i}"><canvas data-por="${c.look}"></canvas><div><span class="n">${c.n.toUpperCase()}${c.ia?' · FEITO PELA IA':''}</span><h3>${c.title}</h3><p>${c.card}</p><span class="best">${b!==undefined?'Recorde: '+b+'/100':'Ainda não atendido'}</span></div></button>`;}).join('')}</div>
+ <section class="iabox" id="iaBox"></section>
  <div class="how"><div><b>Ande pela sala</b>WASD ou setas no computador. No celular, toque onde quer ir.</div>
   <div><b>Investigue</b>Perguntas, manobras e exames gastam tempo. Pedir tudo tira pontos.</div>
   <div><b>Interprete</b>Resultados vêm crus. A radiografia vem sem laudo. Light é com você.</div></div>
  <p class="foot">Casos fictícios construídos a partir de "Resumos Estratégicos: Derrame Pleural" (Estratégia MED, Prof. Philippe Colares). Material de estudo. Não substitui o julgamento clínico.</p>`;
  document.querySelectorAll('[data-por]').forEach(c=>drawPortrait(c,c.dataset.por,'sick'));
+ if(typeof iaHome==='function')iaHome();
 }
 function startCase(i){newGame(i);$('#hudCase').textContent=G.c.n+' · '+G.c.title;$('#hudClock').textContent=fmtT(0);show('game');
  setTimeout(()=>{openM('nurse');},250);}

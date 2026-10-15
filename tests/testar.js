@@ -114,6 +114,69 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   ok(larg <= 390, `celular sem rolagem lateral (largura ${larg}px)`);
   await cel.screenshot({ path: path.join(PRINTS, '05-celular.png') });
 
+  // casos da IA: fora do Claude, só um aviso
+  ok((await page.textContent('#iaBox')).includes('só funciona'), 'fora do Claude, a área da IA avisa que não está disponível');
+
+  // validação do que a IA manda
+  const val = await page.evaluate(() => {
+    const base = JSON.parse(JSON.stringify(CASES.find(c => c.id === 'tb')));
+    const bom = iaValidar(base, 'teste');
+    const errado = JSON.parse(JSON.stringify(base)); errado.light.protL = 1; errado.light.ldhL = 50;
+    const ruim = iaValidar(errado, 'teste');
+    const tag = JSON.parse(JSON.stringify(base)); tag.title = '<img src=x onerror=alert(1)>Oi'; tag.res.pcr = 'PCR < 5';
+    const lim = iaValidar(tag, 'teste').caso;
+    return { bom: bom.graves, ruim: ruim.graves, titulo: lim.title, pcr: lim.res.pcr };
+  });
+  ok(val.bom.length === 0, 'caso bem formado da IA é aceito' + (val.bom.length ? ': ' + val.bom.join('; ') : ''));
+  ok(val.ruim.some(g => g.includes('Light')), 'caso da IA com Light incoerente é barrado');
+  ok(!val.titulo.includes('<img') && val.pcr === 'PCR < 5', 'texto da IA é limpo sem estragar o sinal de menor');
+
+  // dentro do Claude (IA de mentira que devolve um caso pronto)
+  console.log('\nCriando um caso pela IA (simulada)');
+  const ia = await browser.newPage({ viewport: { width: 1000, height: 900 } });
+  ia.on('pageerror', e => erros.push(e.message));
+  await ia.addInitScript(() => {
+    const fake = async () => '';
+    fake.limits = async () => ({ maxPromptBytes: 262144, images: { maxCount: 5, maxInputBytes: 2e7, mediaTypes: ['image/png', 'image/jpeg'] } });
+    fake.json = async prompt => {
+      window.__prompt = prompt;
+      const c = JSON.parse(JSON.stringify(CASES.find(x => x.id === 'tb')));
+      c.title = 'Caso da IA'; c.pname = 'Rita'; c.look = 'maria';
+      return c;
+    };
+    window.claude = { use: async n => (n === 'sample' ? fake : null) };
+  });
+  await ia.goto(ARQ);
+  await ia.waitForSelector('#iaGerar', { timeout: 5000 });
+  await ia.fill('#iaTexto', 'Derrame pleural: critérios de Light, ADA acima de 40 sugere tuberculose...');
+  await ia.selectOption('#iaQtd', '1');
+  await ia.screenshot({ path: path.join(PRINTS, '06-ia-formulario.png'), fullPage: true });
+  await ia.click('#iaGerar');
+  await ia.waitForSelector('.ccard:has-text("Caso da IA")', { timeout: 5000 });
+  ok(true, 'caso criado pela IA apareceu no menu');
+  const r2 = await ia.evaluate(() => {
+    const i = CASES.findIndex(c => c.ia), c = CASES[i];
+    newGame(i);
+    G.asked = c.keyQ.map(g => g.ids[0]); G.examined = c.keyExam.map(g => g.ids[0]);
+    c.keyEx.forEach(g => G.orders[g.ids[0]] = 0); G.clock = 300;
+    G.tap = { space: { s: c.tap.sides[0], i: c.tap.spaces[0] }, pos: 'sup', vol: '60' }; doTap();
+    c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
+    G.final = { cls: c.correctClass, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+    const nota = score().total; G = null;
+    return { nota, guardado: JSON.parse(localStorage.getItem('plantao-pleural-ia') || '[]').length, prompt: window.__prompt.includes('ADA acima de 40') };
+  });
+  ok(r2.prompt, 'o material colado foi enviado para a IA');
+  ok(r2.nota === 100, `jogada perfeita no caso da IA = ${r2.nota}/100`);
+  ok(r2.guardado === 1, 'caso da IA fica guardado no navegador');
+  await ia.screenshot({ path: path.join(PRINTS, '07-ia-pronto.png'), fullPage: true });
+  await ia.reload();
+  await ia.waitForTimeout(300);
+  ok(await ia.isVisible('.ccard:has-text("Caso da IA")'), 'caso da IA continua no menu depois de recarregar');
+  await ia.click('.ccard:has-text("Caso da IA")');
+  await ia.waitForTimeout(300);
+  await ia.evaluate(() => { G.final = { cls: 'exsudato', dx: 'tb', cond: [] }; finish(); });
+  ok((await ia.textContent('#debrief')).includes('criado pela IA'), 'resultado do caso da IA avisa que foi feito pela IA');
+
   ok(erros.length === 0, erros.length ? 'erros de JavaScript: ' + erros.join(' | ') : 'nenhum erro de JavaScript');
   await browser.close();
   console.log(falhas ? `\n${falhas} problema(s) encontrado(s).` : '\nTudo certo. Prints em tests/prints/');

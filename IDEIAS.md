@@ -6,6 +6,15 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 <!-- Escreva aqui do jeito que vier. Ex.: "queria que o paciente piorasse se eu demorar" -->
 
+- IA que lê o material da aula e cria vários casos clínicos (pedido em out/2026). Etapa 1 feita; próximas etapas abaixo.
+
+## Próximas etapas da IA
+
+- Aceitar PDF direto (hoje: colar o texto, mandar fotos das páginas ou arquivo .txt).
+- Mais aparências de paciente (hoje a IA escolhe entre 3: homem adulto, idosa, homem jovem).
+- Outros assuntos além de derrame pleural: precisa de perguntas, exames e diagnósticos próprios de cada assunto.
+- Botão para a IA explicar uma dúvida na tela de resultado.
+
 ## Sugestões já levantadas (aguardando decisão do André)
 
 - Mais casos de derrame pleural: quilotórax, derrame neoplásico, TEP.
@@ -18,4 +27,5 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 ## Feito
 
 - v1: jogo em texto com 3 casos.
+- v3: área "Casos do seu material": cola o resumo ou manda fotos e a IA cria pacientes novos de derrame pleural (só na versão do Claude).
 - v2: jogo 2D em pixel art, com conversa, exame físico por região, exames com tempo, RX sem laudo, toracocentese e análises do líquido escolhidas pelo aluno.

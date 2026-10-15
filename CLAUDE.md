@@ -30,6 +30,7 @@ index.html              página do jogo (abre direto no navegador)
 css/style.css           visual
 js/dados.js             listas comuns: perguntas, exames, análises do líquido, diagnósticos, personagens (LOOKS)
 js/casos/*.js           um arquivo por paciente; cada um faz CASES.push({...})
+js/ia.js                casos criados por IA a partir do material colado pelo aluno (só no artifact do Claude)
 js/jogo.js              motor: desenho da sala e personagens, telas, toracocentese, pontuação
 scripts/build.js        junta tudo em dist/plantao-pleural.html (arquivo único para publicar)
 tests/testar.js         teste automático no navegador
@@ -41,13 +42,14 @@ IDEIAS.md               ideias do André, organizadas
 - Caso novo = arquivo novo em `js/casos/` + uma linha `<script src="js/casos/...">` no `index.html`, antes de `js/jogo.js`. Siga a skill `criar-caso` e `docs/MODELO-DE-CASO.md`.
 - Pergunta, exame ou diagnóstico novo entra em `js/dados.js` e passa a valer para todos os casos. Ao adicionar uma pergunta, todo caso precisa de resposta para ela (o teste cobra isso).
 - Sem frameworks e sem etapa de compilação: HTML, CSS e JavaScript puros, para abrir com dois cliques e publicar em qualquer lugar.
+- Casos da IA (`js/ia.js`): usam o Claude de quem joga (`claude.use("sample")`), por isso só funcionam no artifact publicado. O que a IA devolve passa por `iaValidar` (ids das listas, Light batendo com a classificação, texto limpo) e fica no navegador de quem criou. Se mudar o formato de um caso, ajuste `iaValidar` e o prompt em `iaPrompt`.
 - Pontuação: `MAX` em `js/jogo.js` (soma 100). Se mudar os pesos, o total continua 100.
 
 ## Antes de dizer que terminou
 
 1. `npm test` (gera `dist/` e joga todos os casos no navegador). Tudo precisa passar.
 2. Olhe os prints em `tests/prints/` e confira se a mudança aparece certa, inclusive no celular.
-3. Se o André pedir para publicar, publique `dist/plantao-pleural.html`. O artifact atual é https://claude.ai/artifact/2wzjHWrrK7Yk2PJgARnsEH (atualize esse, não crie outro). No GitHub Pages, o `index.html` da raiz já é o jogo.
+3. Se o André pedir para publicar, publique `dist/plantao-pleural.html` com `capabilities: {sample: {images: true}}` (é o que liga a IA). O artifact atual é https://claude.ai/artifact/2wzjHWrrK7Yk2PJgARnsEH (atualize esse, não crie outro). No GitHub Pages, o `index.html` da raiz já é o jogo.
 4. Faça commit com mensagem em português dizendo o que mudou para o jogador.
 
 ## Visual
