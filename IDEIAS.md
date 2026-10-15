@@ -8,6 +8,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 - IA que lê o material da aula e cria vários casos clínicos (pedido em out/2026). Etapa 1 feita; próximas etapas abaixo.
 
+- Vender o jogo (out/2026). Antes: testar com colegas de graça, trocar o conteúdo do Estratégia MED por fontes que possam ser usadas comercialmente (diretrizes públicas, livros citados, revisão de um professor) e falar com um advogado/contador. Depois: login, pagamento (plataforma pronta tipo Hotmart/Kiwify) e servidor próprio da IA com limite de casos por assinante.
+
 ## Próximas etapas da IA
 
 - Aceitar PDF direto (hoje: colar o texto, mandar fotos das páginas ou arquivo .txt).
