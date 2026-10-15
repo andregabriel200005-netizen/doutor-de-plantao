@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plantão Pleural</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+  <section id="home"></section>
+  <section id="game" hidden>
+    <div class="hud">
+      <div class="who"><b id="hudCase"></b><span class="clock" id="hudClock">19:00</span></div>
+      <div class="tools">
+        <button class="btn ghost small" data-hud="notes">Caderneta</button>
+        <button class="btn ghost small" data-hud="wait">Esperar 15 min</button>
+        <button class="btn ghost small" data-hud="help">Ajuda</button>
+        <button class="btn ghost small" data-hud="quit">Sair</button>
+      </div>
+    </div>
+    <div class="stage">
+      <canvas id="cv" width="480" height="288" aria-label="Sala de emergência"></canvas>
+      <div id="toast"></div>
+      <button id="actBtn" hidden></button>
+    </div>
+    <p class="ctrl">Ande com <kbd>WASD</kbd> ou setas, interaja com <kbd>E</kbd>. No celular, toque no lugar ou na pessoa para ir até lá. <kbd>N</kbd> abre a caderneta.</p>
+  </section>
+  <section id="debrief" hidden></section>
+</div>
+<div id="modal" hidden><div class="panel" role="dialog" aria-modal="true"><header><h2 id="mTitle"></h2><button class="x" data-m="close" aria-label="Fechar">✕</button></header><div class="pbody" id="mBody"></div></div></div>
+<script src="js/dados.js"></script>
+<script src="js/casos/caso-01-empiema.js"></script>
+<script src="js/casos/caso-02-icc-pseudoexsudato.js"></script>
+<script src="js/casos/caso-03-tb-pleural.js"></script>
+<script src="js/jogo.js"></script>
+</body>
+</html>

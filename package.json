@@ -1,0 +1,13 @@
+{
+  "name": "plantao-pleural",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Jogo de casos clínicos para estudar medicina: o aluno é o médico de plantão.",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/build.js && node tests/testar.js"
+  },
+  "devDependencies": {
+    "playwright": "1.47.2"
+  }
+}
