@@ -1,0 +1,84 @@
+// Respiratório 6: Lábios semicerrados. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// hábitos (1), mMRC (4), tórax em barril e cianose (6), bronquites (11), insuficiência respiratória (14), quadro comparativo (15).
+CASES.push({
+ id:'r-dpoc',modulo:'Semiologia respiratória',n:'Caso 6',title:'Lábios semicerrados',look:'raimundo',pname:'Seu Raimundo',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Raimundo, 67 anos. Cansaço que piorou depois de uma gripe.',
+ briefing:'Doutor, leito 3: Seu Raimundo, 67 anos. Cansado, respirando com esforço.',
+ vitals:'PA 138/86 mmHg · FC 100 bpm · FR 26 irpm · T 37,0 °C · SpO₂ 88% em ar ambiente',
+ answers:{
+  queixa:'Esse cansaço que piorou essa semana.',
+  tempo:'Cansado eu sou faz anos. Piorou faz uma semana, depois de uma gripe.',
+  inicio:'Aos poucos.',
+  dor:'Não.',
+  febre:'Uma febrinha no começo da gripe.',
+  tosse:'Tusso todo dia de manhã, há muitos anos. No inverno piora e fico meses assim.',
+  escarro:'Catarro grosso, branco. Essa semana ficou amarelado. Sangue não.',
+  chiado:'Chia, principalmente quando piora.',
+  dispneia:'Ando um quarteirão e tenho que parar. Hoje cansa até pra vestir a roupa.',
+  posicao:'Fico sentado, inclinado pra frente, apoiando nos joelhos.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Emagreci um pouco ao longo dos anos.',
+  tratou:'Uso uma bombinha que o posto deu.',
+  meds:'A bombinha e um remédio de pressão.',
+  doencas:'Pressão alta. O médico do posto disse que meu pulmão é de fumante.',
+  alergia:'Não.',
+  passado:'Pneumonia uma vez, faz uns cinco anos.',
+  habitos:'Fumo desde os 14 anos, um maço por dia. Parei de beber.',
+  contato:'Meu neto tava gripado.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Trabalhei a vida toda em carvoaria.',
+  moradia:'Moro com minha filha.',
+  sal:'Como pouco. Canso até pra comer.',
+  emocional:'Só fico aflito quando falta o ar.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['habitos'],l:'Tabagismo de longa data'},{ids:['tosse'],l:'Tosse produtiva por meses, há anos'},{ids:['dispneia'],l:'Dispneia progressiva (grau de limitação)'},{ids:['escarro'],l:'Mudança do escarro'},{ids:['tempo'],l:'Piora recente após gripe'}],
+ geral:'Idoso magro, sentado inclinado para a frente com as mãos nos joelhos, soltando o ar com os lábios semicerrados.',
+ effSides:[],
+ exam:Object.assign(achados(TORAX,{
+   inspecionar:'Diâmetro anteroposterior aumentado, costelas horizontalizadas. Expansibilidade diminuída.',
+   palpar:'Expansibilidade diminuída. Frêmito toracovocal diminuído.',
+   percutir:'Som hipersonoro.',
+   auscultar:'Murmúrio vesicular difusamente diminuído, com roncos e sibilos esparsos. Ressonância vocal diminuída.'}),{
+  'inspecionar:pescoco':'Esternocleidomastoideos contraindo na inspiração. Jugulares sem turgência.',
+  'inspecionar:boca':'Lábios e língua arroxeados.',
+  'inspecionar:maos':'Leito das unhas arroxeado. Ângulo das unhas normal.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:TORAX.map(z=>'inspecionar:'+z),l:'Inspecionar o formato do tórax'},
+  {ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax'},{ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax'},
+  {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},{ids:['inspecionar:boca'],l:'Olhar a língua (tipo de cianose)'}],
+ res:{
+  gaso:'pH 7,35 · PaO₂ 55 mmHg · PaCO₂ 52 mmHg · HCO₃ 29 mEq/L · SatO₂ 88%',
+  hemo:'Hb 16,4 g/dL · Leucócitos 11.200/mm³ · Plaquetas 250.000/mm³',
+  pcr:'PCR 32 mg/L (ref. < 5)',
+  tc:'Pulmões hiperinsuflados, com áreas de destruição do parênquima nos ápices. Paredes brônquicas espessadas.'
+ },
+ keyEx:[{ids:['gaso'],l:'Gasometria'},{ids:['rx'],l:'Radiografia de tórax'}],
+ neutral:['hemo','pcr','renal','ecg','glic','escarro'],
+ rx:{hiper:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'bronqcron',
+ sindWhy:'Tórax em barril, expansibilidade e frêmito diminuídos dos dois lados, hipersonoridade e murmúrio difusamente diminuído com roncos e sibilos: síndrome brônquica crônica com hiperaeração.',
+ correctDx:'dpoc',
+ dxWhy:'Tabagismo de 50 anos e tosse produtiva por pelo menos 3 meses ao ano há mais de 2 anos (bronquite crônica), tórax em barril e lábios semicerrados: DPOC, agora piorada por infecção. A gasometria tem PaO₂ baixa com PaCO₂ alta: falha ventilatória (tipo 2), por obstrução.',
+ conduta:[
+  {id:'c1',t:'Oxigênio',ok:1,why:'SatO₂ 88% em ar ambiente (≤ 90%): insuficiência respiratória.'},
+  {id:'c2',t:'Vigiar o nível de consciência',ok:1,why:'PaCO₂ alta é insuficiência ventilatória. Se a consciência cair (Glasgow ≤ 8), há indicação de intubação.'},
+  // CONFERIR: o material não traz o tratamento da exacerbação, só "tratar a causa".
+  {id:'c3',t:'Tratar a causa da piora (a infecção)',ok:1,why:'Tratar a causa faz parte do manejo da insuficiência respiratória.'},
+  {id:'c4',t:'Drenagem torácica: há hipersonoridade',ok:0,why:'Hipersonoridade difusa, dos dois lados, com murmúrio presente, é ar preso nos alvéolos (enfisema), não pneumotórax.'},
+  {id:'c5',t:'Toracocentese',ok:0,why:'Não há macicez.'},
+  {id:'c6',t:'Intubação imediata',ok:0,why:'Está consciente e sem choque.'}
+ ],
+ teaching:[
+  {t:'Tórax em barril',p:'Diâmetro anteroposterior aumentado e costelas horizontalizadas: aprisionamento de ar (DPOC, enfisema).'},
+  {t:'Bronquite crônica',p:'Tosse produtiva por pelo menos 3 meses ao ano, por 2 anos seguidos, em adulto tabagista.'},
+  {t:'Dois tipos de insuficiência',p:'Hipoxêmica (tipo 1): PaO₂ < 60 mmHg com PaCO₂ normal ou baixa. Ventilatória (tipo 2): PaO₂ baixa com PaCO₂ alta, por falha da bomba ou obstrução.'},
+  {t:'Cianose central',p:'Língua e lábios roxos: insaturação arterial, como nas pneumopatias.'},
+  {t:'Escala mMRC',p:'Grau 3: para depois de cerca de 100 metros no plano. Grau 4: cansa ao se vestir ou tomar banho.'}
+ ]
+});

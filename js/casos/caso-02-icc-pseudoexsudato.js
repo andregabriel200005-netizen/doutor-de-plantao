@@ -1,6 +1,10 @@
 // Caso 2: Dormindo sentada. Fonte: Resumos Estratégicos, Derrame Pleural (Estratégia MED).
 CASES.push({
  "id": "icc",
+ "modulo": "Derrame pleural",
+ "fonte": "Resumos Estratégicos: Derrame Pleural (Estratégia MED)",
+ "correctSind": "derrame",
+ "sindWhy": "Macicez, frêmito e murmúrio abolidos na base, com egofonia na borda superior: líquido entre o pulmão e a parede.",
  "n": "Caso 2",
  "title": "Dormindo sentada",
  "look": "maria",
@@ -9,6 +13,15 @@ CASES.push({
  "briefing": "Doutor, leito 3: Dona Maria, 72 anos. Diz que tá com falta de ar faz uns dias.",
  "vitals": "PA 150/90 mmHg · FC 96 bpm · FR 24 irpm · T 36,4 °C · SpO₂ 91% em ar ambiente",
  "answers": {
+  "inicio": "Foi piorando aos poucos, nas últimas duas semanas.",
+  "escarro": "Quase não tenho catarro. Sangue nunca.",
+  "chiado": "Às vezes, de noite, um chiadinho.",
+  "posicao": "Deitada piora muito. Durmo sentada com três travesseiros.",
+  "urina": "Não. Até urino pouco desde que piorou.",
+  "alergia": "Não.",
+  "passado": "Não.",
+  "moradia": "Moro com minha filha, aqui no bairro.",
+  "emocional": "Preocupada, mas é pela falta de ar.",
   "queixa": "Ai, doutor... essa falta de ar que não me deixa. E as pernas inchadas.",
   "tempo": "Vem piorando faz umas três semanas.",
   "dor": "Dor não. É mais um aperto, um cansaço.",
@@ -177,6 +190,7 @@ CASES.push({
   }
  ],
  "neutral": [
+  "ecg",
   "renal",
   "glic",
   "hemo",

@@ -1,0 +1,79 @@
+// Respiratório 3: O ar não sai. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// hábitos (abuso de bombinha) (1), síndromes brônquicas / asma (11), quadro comparativo (15).
+CASES.push({
+ id:'r-asma',modulo:'Semiologia respiratória',n:'Caso 3',title:'O ar não sai',look:'ana',pname:'Ana',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Ana, 19 anos. Falta de ar desde ontem à noite.',
+ briefing:'Doutor, leito 3: Ana, 19 anos. Chegou com falta de ar, falando com dificuldade.',
+ vitals:'PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 36,6 °C · SpO₂ 93% em ar ambiente',
+ answers:{
+  queixa:'Falta de ar e chiado. Não tá passando.',
+  tempo:'Desde ontem à noite.',
+  inicio:'Começou depois que fiz faxina no quarto, cheio de poeira.',
+  dor:'Um aperto no peito, mas não é pontada.',
+  febre:'Não.',
+  tosse:'Tosse seca.',
+  escarro:'Quase nada. Um catarro claro e grudento.',
+  chiado:'Muito. Dá pra ouvir de longe.',
+  dispneia:'Muita. O ar entra, mas não sai.',
+  posicao:'Sentada é melhor.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Usei a bombinha umas oito vezes desde ontem e não melhorou.',
+  meds:'Só a bombinha de salbutamol quando aperta. Não uso outro remédio.',
+  doencas:'Asma.',
+  alergia:'Tenho rinite e asma desde pequena. Poeira e pelo de gato atacam.',
+  passado:'Não.',
+  habitos:'Não fumo, não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Minha mãe tem rinite.',
+  trabalho:'Estudante de direito.',
+  moradia:'Moro com minha tia e dois gatos.',
+  sal:'Normal.',
+  emocional:'Nervosa por causa da falta de ar. Ansiosa eu não sou.',
+  hiv:'Já fiz, negativo.'
+ },
+ keyQ:[{ids:['chiado'],l:'Chiado'},{ids:['alergia'],l:'Rinite e asma desde a infância'},{ids:['tratou','meds'],l:'Uso abusivo da bombinha'},{ids:['inicio'],l:'Gatilho (poeira)'},{ids:['dispneia'],l:'Dispneia expiratória'}],
+ geral:'Jovem sentada, inclinada para a frente, falando frases curtas. Pescoço contraindo a cada inspiração.',
+ effSides:[],
+ exam:Object.assign(achados(TORAX,{
+   inspecionar:'Tórax hiperinsuflado. Retração dos espaços intercostais na inspiração.',
+   palpar:'Expansibilidade diminuída dos dois lados. Frêmito toracovocal diminuído.',
+   percutir:'Som hipersonoro.',
+   auscultar:'Murmúrio vesicular diminuído, expiração prolongada e sibilos expiratórios difusos. Ressonância vocal diminuída.'}),{
+  'inspecionar:pescoco':'Esternocleidomastoideos contraindo a cada inspiração. Jugulares sem turgência.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax (sibilos, expiração prolongada)'},
+  {ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax (hipersonoridade)'},
+  {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},
+  {ids:TORAX.map(z=>'inspecionar:'+z).concat(['inspecionar:pescoco']),l:'Procurar tiragem e uso de musculatura acessória'}],
+ res:{
+  gaso:'pH 7,47 · PaO₂ 68 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 93%'
+ },
+ keyEx:[{ids:['gaso'],l:'Gasometria (gravidade da crise)'}],
+ neutral:['rx','hemo'],
+ rx:{hiper:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'broncoesp',
+ sindWhy:'Murmúrio diminuído, expiração prolongada e sibilos expiratórios (o trio da asma), com hipersonoridade, frêmito diminuído e tiragem: ar que entra fácil e não consegue sair.',
+ correctDx:'asma',
+ dxWhy:'Jovem com rinite e asma desde a infância, crise após poeira, chiado e dispneia expiratória. Usou a bombinha oito vezes sem melhora: crise grave, que pode evoluir para mal asmático.',
+ conduta:[
+  // CONFERIR: o material cita a bombinha de salbutamol como remédio de alívio, mas não traz o tratamento da crise.
+  {id:'c1',t:'Broncodilatador inalatório de alívio (salbutamol)',ok:1,why:'É o remédio de alívio da crise. (O tratamento detalhado da crise não está no seu material de semiologia.)'},
+  {id:'c2',t:'Vigiar saturação e sinais de insuficiência respiratória',ok:1,why:'Crise que não responde (mal asmático) pode evoluir para insuficiência respiratória.'},
+  {id:'c3',t:'Encaminhar para acompanhamento da asma',ok:1,why:'Usar a bombinha sem acompanhamento é sinal de hiper-reatividade mal controlada.'},
+  {id:'c4',t:'Drenagem torácica: há hipersonoridade',ok:0,why:'A hipersonoridade aqui é ar preso nos alvéolos, dos dois lados, com sibilos. No pneumotórax o murmúrio some de um lado.'},
+  {id:'c5',t:'Intubação imediata',ok:0,why:'Consciente e com SatO₂ 93%: sem critério (Glasgow ≤ 8 ou choque).'},
+  {id:'c6',t:'Ansiolítico: é crise de ansiedade',ok:0,why:'Dispneia suspirosa não tem sibilos nem tiragem.'}
+ ],
+ teaching:[
+  {t:'O trio da asma',p:'Murmúrio diminuído, expiração prolongada e sibilos expiratórios.'},
+  {t:'Ar demais na percussão',p:'Hipersonoridade na asma, na DPOC/enfisema e no pneumotórax; timpanismo na caverna. O resto é maciço ou submaciço.'},
+  {t:'Sibilos × roncos',p:'Sibilos: agudos, como apito, por broncoespasmo em brônquios pequenos. Roncos: graves, por secreção em brônquios grandes, e mudam com a tosse.'},
+  {t:'Sinais de esforço',p:'Tiragem intercostal e esternocleidomastoideo contraindo mostram aumento do trabalho respiratório.'}
+ ]
+});

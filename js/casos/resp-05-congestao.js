@@ -1,0 +1,92 @@
+// Respiratório 5: Dorme na cadeira. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// dispneia e posição, Cheyne-Stokes (4), cianose (6), congestão pulmonar (12), caso clínico da professora (16).
+// Paciente inventado, inspirado no raciocínio do caso do Seu Severino (não é o mesmo caso).
+CASES.push({
+ id:'r-cong',modulo:'Semiologia respiratória',n:'Caso 5',title:'Dorme na cadeira',look:'tonho',pname:'Seu Damião',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas, monitoria e caso clínico da professora)',
+ card:'Damião, 68 anos, agricultor. Falta de ar que não deixa dormir.',
+ briefing:'Doutor, leito 3: Seu Damião, 68 anos, veio do sítio. Falta de ar, não consegue deitar.',
+ vitals:'PA 150/94 mmHg · FC 104 bpm · FR 26 irpm · T 36,4 °C · SpO₂ 88% em ar ambiente',
+ answers:{
+  queixa:'Falta de ar que não me deixa dormir.',
+  tempo:'Cansaço eu tenho faz anos. Piorou faz uns quinze dias.',
+  inicio:'Foi piorando aos poucos.',
+  dor:'Não sinto dor.',
+  febre:'Não.',
+  tosse:'Tosse de noite.',
+  escarro:'Um catarro ralo, rosado, com espuma.',
+  chiado:'Um chiadinho de noite.',
+  dispneia:'Antes cansava pra andar longe. Agora canso pra tomar banho.',
+  posicao:'Deitado não dá. Durmo sentado na cadeira e acordo de madrugada sufocado.',
+  edema:'As duas pernas tão inchadas, até o joelho.',
+  urina:'Não.',
+  peso:'Engordei uns quilos, mas é inchaço.',
+  tratou:'Nada.',
+  meds:'Tinha uns remédios do coração, mas acabaram faz um mês e não fui buscar.',
+  doencas:'O médico disse que meu coração é grande. E pressão alta.',
+  alergia:'Não.',
+  passado:'Não.',
+  habitos:'Uma dose de cachaça todo dia. Fumei até os 50.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Minha irmã morreu do coração, nova.',
+  trabalho:'Agricultor.',
+  moradia:'No sítio, numa casa de taipa. Desde menino vejo barbeiro na parede.',
+  sal:'Como de tudo. Muito sal, charque.',
+  emocional:'Tô agoniado por não dormir.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['posicao'],l:'Ortopneia e dispneia paroxística noturna'},{ids:['meds'],l:'Remédios suspensos'},{ids:['moradia'],l:'Casa de taipa e barbeiro (Chagas)'},{ids:['edema'],l:'Edema bilateral'},{ids:['dispneia'],l:'Dispneia progressiva'},{ids:['escarro'],l:'Escarro róseo e espumoso'}],
+ geral:'Idoso sentado na beira da maca, sem conseguir deitar. A respiração aumenta de amplitude, diminui e para por alguns segundos, em ciclos.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{
+   percutir:'Som submaciço.',
+   auscultar:'Estertores finos no fim da inspiração, que não mudam com a tosse. Murmúrio vesicular diminuído.'}),
+  achados(['medioD','medioE'],{auscultar:'Estertores finos no fim da inspiração.'}),{
+  'inspecionar:pescoco':'Jugulares túrgidas a 45°.',
+  'palpar:pescoco':'Refluxo hepatojugular positivo.',
+  'palpar:coracao':'Ictus desviado para baixo e para a esquerda, além da linha hemiclavicular.',
+  'inspecionar:pernas':'Edema nas duas pernas, até os joelhos.',
+  'palpar:pernas':'Edema mole, que deixa a marca do dedo, nos dois lados. Panturrilhas sem dor.',
+  'inspecionar:maos':'Extremidades frias e arroxeadas.',
+  'inspecionar:boca':'Língua rósea. Mucosas coradas.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (ritmo respiratório)'},
+  {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['auscultar:medioD','auscultar:medioE'],l:'Ver até onde sobem os estertores'},
+  {ids:['percutir:baseD','percutir:baseE'],l:'Percutir as bases'},
+  {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugulares e refluxo hepatojugular'},
+  {ids:['inspecionar:pernas','palpar:pernas'],l:'Examinar o edema das pernas'},{ids:['palpar:coracao'],l:'Palpar o ictus'}],
+ res:{
+  bnp:'NT-proBNP 4.800 pg/mL',
+  eco:'VE dilatado. FE 30%.',
+  gaso:'pH 7,45 · PaO₂ 55 mmHg · PaCO₂ 33 mmHg · HCO₃ 23 mEq/L · SatO₂ 88%',
+  ecg:'Ritmo sinusal, FC 104 bpm.',
+  usg:'Sem líquido pleural. Muitas linhas B nas duas bases.',
+  laurell:'Sem lâmina de líquido livre.',
+  tc:'Opacidades nas duas bases e em volta dos hilos. Coração aumentado. Sem derrame.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['bnp','eco'],l:'NT-proBNP ou ecocardiograma'}],
+ neutral:['hemo','renal','ecg','gaso','glic','eas','hep'],
+ rx:{cardio:1,congest:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'congest',
+ sindWhy:'Estertores finos e submacicez nas duas bases, já subindo para o terço médio ("maré montante"), sem líquido livre na pleura: congestão pulmonar, com líquido no interstício e nos alvéolos.',
+ correctDx:'icc_cong',
+ dxWhy:'Ortopneia, dispneia paroxística noturna, escarro róseo e espumoso, jugulares túrgidas, edema bilateral, ictus desviado e respiração de Cheyne-Stokes: insuficiência cardíaca avançada e descompensada. Os remédios acabaram há um mês (falha de medicação é a principal causa de descompensação). Origem rural, casa de taipa e barbeiro: pense em Chagas.',
+ conduta:[
+  {id:'c1',t:'Oxigênio',ok:1,why:'SatO₂ 88% em ar ambiente (≤ 90%): insuficiência respiratória.'},
+  // CONFERIR: o material diz que a falha de medicação descompensa a IC, mas não detalha o tratamento.
+  {id:'c2',t:'Retomar e organizar os remédios do coração',ok:1,why:'Falha de medicação é a principal causa de descompensação da IC e da HAS.'},
+  {id:'c3',t:'Investigar doença de Chagas',ok:1,why:'Zona rural, casa de taipa e barbeiro: Chagas é a principal hipótese de causa da IC no paciente rural.'},
+  {id:'c4',t:'Toracocentese nas bases',ok:0,why:'Não há derrame. Submacicez com estertores finos é líquido dentro do pulmão (congestão), não na pleura.'},
+  {id:'c5',t:'Antibiótico para pneumonia bilateral',ok:0,why:'Sem febre, escarro róseo e espumoso e sinais de congestão no corpo todo: é edema, não infecção.'},
+  {id:'c6',t:'Pedir para ele deitar reto durante o exame',ok:0,why:'Ortopneia: deitado ele piora. Examine sentado.'}
+ ],
+ teaching:[
+  {t:'Maré montante',p:'Na congestão, os estertores finos começam nas bases e sobem para os ápices conforme piora.'},
+  {t:'Dispneia e posição',p:'Ortopneia: insuficiência cardíaca. Trepopneia: derrame (deita sobre o lado sadio). Platipneia: piora em pé ou sentado.'},
+  {t:'Cheyne-Stokes',p:'A amplitude cresce, decresce e para em apneia, em ciclos. Insuficiência cardíaca grave, AVC, TCE e drogas; normal no recém-nascido.'},
+  {t:'Cianose: olhe a língua',p:'Língua rósea com extremidades roxas: cianose periférica, por baixo fluxo. Língua roxa: central.'},
+  {t:'Edema nas pernas',p:'Unilateral: TVP. Bilateral: causa sistêmica (IC, rim, cirrose, hipotireoidismo grave).'}
+ ]
+});

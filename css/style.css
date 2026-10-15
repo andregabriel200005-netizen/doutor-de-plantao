@@ -150,3 +150,5 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 .iastatus .note,.iastatus .event,.iastatus .okmsg{margin-top:0}
 .iawait{font-size:.9rem;color:var(--warn);animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.5}}
+.modh{font-size:1.25rem;margin-top:24px;color:var(--warn)}
+.modh+.cases{margin-top:10px}

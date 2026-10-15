@@ -1,0 +1,82 @@
+// Respiratório 10: O quartinho da obra. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// tosse crônica (2), expectoração (3), caverna pulmonar (12), aglomeração e TB (caso clínico, 16), quadro comparativo (15).
+CASES.push({
+ id:'r-cav',modulo:'Semiologia respiratória',n:'Caso 10',title:'O quartinho da obra',look:'marcos',pname:'Marcos',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Marcos, 34 anos. Tosse com catarro há mais de um mês.',
+ briefing:'Doutor, leito 3: Marcos, 34 anos. Tosse há mais de um mês e febre no fim da tarde.',
+ vitals:'PA 112/70 mmHg · FC 100 bpm · FR 22 irpm · T 37,9 °C · SpO₂ 94% em ar ambiente',
+ answers:{
+  queixa:'Uma tosse que não passa, com catarro, e às vezes sangue.',
+  tempo:'Mais de um mês. Uns quarenta dias.',
+  inicio:'Aos poucos.',
+  dor:'Às vezes um incômodo no alto do peito, do lado direito.',
+  febre:'Febre no fim da tarde, quase todo dia.',
+  tosse:'Tosse com catarro o dia todo.',
+  escarro:'Amarelado, às vezes com risco de sangue. Uma vez veio uma golfada de catarro de uma vez só, encheu a pia.',
+  chiado:'Não.',
+  dispneia:'Um pouco.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Perdi uns 8 quilos. E acordo encharcado de suor.',
+  tratou:'Tomei amoxicilina por uma semana. Não melhorou.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  habitos:'Fumo meio maço por dia. Bebo no fim de semana.',
+  contato:'Um colega do quarto tava tossindo muito e foi embora pro interior.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Servente de obra.',
+  moradia:'Num quartinho da obra, com mais cinco homens.',
+  sal:'Como o que dá. Pouca coisa.',
+  emocional:'Preocupado.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['febre'],l:'Febre vespertina'},{ids:['peso'],l:'Emagrecimento e sudorese noturna'},{ids:['escarro'],l:'Vômica e sangue no escarro'},{ids:['moradia'],l:'Moradia aglomerada'},{ids:['contato'],l:'Contato com tossidor'},{ids:['tempo'],l:'Tosse há mais de 3 semanas'}],
+ geral:'Emagrecido, quente ao toque, tossindo com catarro durante a conversa.',
+ effSides:[],
+ exam:{
+  'inspecionar:apiceD':'Expansibilidade reduzida no ápice direito.',
+  'palpar:apiceD':'Expansibilidade reduzida. Frêmito toracovocal aumentado.',
+  'percutir:apiceD':'Som timpânico.',
+  'auscultar:apiceD':'Respiração brônquica de timbre oco, como soprar o gargalo de uma garrafa. Ressonância vocal aumentada.',
+  'auscultar:medioD':'Murmúrio vesicular diminuído, com alguns estertores.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['palpar:apiceD'],l:'Palpar o ápice direito (frêmito aumentado)'},{ids:['percutir:apiceD'],l:'Percutir o ápice direito (timpanismo)'},
+  {ids:['auscultar:apiceD'],l:'Auscultar o ápice direito'},{ids:['palpar:apiceE','percutir:apiceE','auscultar:apiceE'],l:'Comparar com o ápice esquerdo'}],
+ res:{
+  escarro:'BAAR positivo (++) · Teste molecular para TB: detectado',
+  hemo:'Hb 11,9 g/dL · Leucócitos 9.200/mm³ · Plaquetas 340.000/mm³',
+  pcr:'PCR 58 mg/L (ref. < 5)',
+  gaso:'pH 7,43 · PaO₂ 74 mmHg · PaCO₂ 36 mmHg · HCO₃ 24 mEq/L · SatO₂ 94%',
+  tc:'Cavidade de paredes espessas no ápice direito, com nódulos em volta. Sem derrame.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['escarro'],l:'Escarro: BAAR e teste molecular'}],
+ neutral:['hemo','pcr','hiv','gaso','renal','hep','tc'],
+ rx:{cav:'D'},
+ tap:{sides:[],spaces:[]},
+ correctSind:'caverna',
+ sindWhy:'No ápice direito: frêmito aumentado, timpanismo e respiração brônquica de timbre oco (anfórico), com ressonância vocal aumentada. É uma cavidade cheia de ar, cercada de pulmão condensado, perto da superfície.',
+ correctDx:'tbpulm',
+ dxWhy:'Tosse há mais de 3 semanas, febre no fim da tarde, suor noturno, emagrecimento, vômica e moradia aglomerada: tuberculose, a causa mais clássica de caverna. BAAR positivo no escarro.',
+ conduta:[
+  // CONFERIR: o tratamento da TB pulmonar não está no material de semiologia respiratória.
+  {id:'c1',t:'Tratar tuberculose',ok:1,why:'BAAR positivo com caverna. (O esquema não está no seu material de semiologia.)'},
+  // CONFERIR: avaliação de contatos não está escrita no material; o material liga aglomeração a risco de TB.
+  {id:'c2',t:'Avaliar quem mora no quartinho',ok:1,why:'Aglomeração aumenta o risco de tuberculose. Quem divide o quarto precisa ser avaliado.'},
+  {id:'c3',t:'Drenagem torácica: tem timpanismo',ok:0,why:'Timpanismo localizado com frêmito aumentado e respiração anfórica é caverna. No pneumotórax o frêmito some.'},
+  {id:'c4',t:'Mais uma semana de amoxicilina',ok:0,why:'Já falhou, o quadro é arrastado e o BAAR é positivo.'},
+  {id:'c5',t:'Toracocentese',ok:0,why:'Não há derrame.'},
+  {id:'c6',t:'Intubação orotraqueal',ok:0,why:'Consciente e estável.'}
+ ],
+ teaching:[
+  {t:'Caverna ao exame',p:'Expansibilidade diminuída, frêmito aumentado, timpanismo, respiração brônquica anfórica (soprar gargalo de garrafa) e ressonância vocal aumentada se estiver perto da superfície.'},
+  {t:'Vômica',p:'Eliminação súbita de grande volume de pus pela tosse. Abscesso e caverna.'},
+  {t:'Frêmito aumentado',p:'Só consolidação e caverna aumentam o frêmito.'},
+  {t:'Pense em TB',p:'Febre vespertina, sudorese noturna, emagrecimento, tosse há mais de 3 semanas e aglomeração.'}
+ ]
+});

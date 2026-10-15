@@ -1,0 +1,83 @@
+// Respiratório 2: Dor de repente. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// dor torácica (5), síndromes pleurais / pneumotórax (13), questão USP 2024 discutida pelo Prof. Serginho (17).
+CASES.push({
+ id:'r-ptx',modulo:'Semiologia respiratória',n:'Caso 2',title:'Dor de repente',look:'bruno',pname:'Bruno',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Bruno, 22 anos. Dor no peito e falta de ar.',
+ briefing:'Doutor, leito 3: Bruno, 22 anos. Chegou com dor no peito e falta de ar.',
+ vitals:'PA 122/76 mmHg · FC 98 bpm · FR 22 irpm · T 36,7 °C · SpO₂ 94% em ar ambiente',
+ answers:{
+  queixa:'Uma dor no peito do lado esquerdo e falta de ar.',
+  tempo:'Faz umas duas horas.',
+  inicio:'Do nada. Eu tava sentado vendo TV.',
+  dor:'Uma pontada forte do lado esquerdo. Piora quando respiro.',
+  febre:'Não.',
+  tosse:'Uma tossinha seca.',
+  escarro:'Não sai nada.',
+  chiado:'Não.',
+  dispneia:'Falta de ar desde que a dor começou.',
+  posicao:'Não muda.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não. Sempre fui magro assim.',
+  tratou:'Nada, vim direto.',
+  meds:'Nenhum.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  habitos:'Fumo uns dez cigarros por dia. Bebo no fim de semana.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Sou entregador de aplicativo.',
+  moradia:'Moro com minha mãe.',
+  sal:'Normal.',
+  emocional:'Fiquei nervoso com a dor, mas antes tava de boa.',
+  hiv:'Fiz ano passado, deu negativo.'
+ },
+ keyQ:[{ids:['inicio'],l:'Início súbito, em repouso'},{ids:['habitos'],l:'Tabagismo'},{ids:['dor'],l:'Caracterizar a dor'},{ids:['dispneia'],l:'Dispneia'},{ids:['imob'],l:'Risco para TEP (afastar)'}],
+ geral:'Jovem magro e longilíneo, desconfortável pela dor, respirando curto. Consciente.',
+ effSides:[],
+ exam:Object.assign(achados(['apiceE','medioE','baseE'],{
+   inspecionar:'Expansibilidade reduzida à esquerda.',
+   palpar:'Expansibilidade reduzida. Frêmito toracovocal abolido.',
+   percutir:'Som hipertimpânico.',
+   auscultar:'Murmúrio vesicular abolido. Ressonância vocal abolida.'}),{
+  'inspecionar:pescoco':'Traqueia na linha média. Jugulares sem turgência.',
+  'palpar:pescoco':'Traqueia centrada. Sem crepitação sob a pele.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (biotipo)'},
+  {ids:['percutir:apiceE','percutir:medioE','percutir:baseE'],l:'Percutir o lado esquerdo (hipertimpanismo)'},
+  {ids:['palpar:apiceE','palpar:medioE','palpar:baseE'],l:'Palpar o frêmito à esquerda'},
+  {ids:['auscultar:apiceE','auscultar:medioE','auscultar:baseE'],l:'Auscultar o lado esquerdo'},
+  {ids:['percutir:apiceD','percutir:medioD','percutir:baseD','auscultar:apiceD','auscultar:medioD','auscultar:baseD'],l:'Comparar com o lado direito'},
+  {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Ver a posição da traqueia'}],
+ res:{
+  gaso:'pH 7,44 · PaO₂ 72 mmHg · PaCO₂ 36 mmHg · HCO₃ 24 mEq/L · SatO₂ 94%',
+  usg:'Sem líquido pleural. Deslizamento pleural ausente à esquerda.',
+  laurell:'Sem lâmina de líquido livre.',
+  tc:'Ar no espaço pleural esquerdo, com afastamento da pleura visceral de cerca de 1,5 cm no ápice. Pequenas bolhas subpleurais apicais. Mediastino centrado.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['ecg'],l:'ECG (dor torácica aguda)'}],
+ neutral:['hemo','gaso','tc'],
+ rx:{ptx:{lado:'E',tam:.25}},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ptx',
+ sindWhy:'Hemitórax esquerdo com frêmito abolido, hipertimpanismo e murmúrio abolido: ar na pleura. O derrame também abole frêmito e murmúrio, mas dá macicez, não timpanismo.',
+ correctDx:'ptx',
+ dxWhy:'Jovem, magro, longilíneo e fumante, com dor súbita em repouso e dispneia: perfil do pneumotórax espontâneo primário (ruptura de bolhas subpleurais). Está estável, com traqueia centrada e pneumotórax pequeno (< 2 cm).',
+ conduta:[
+  {id:'c1',t:'Radiografia e oxigênio, em observação',ok:1,why:'Pneumotórax pequeno (< 2 cm) em paciente estável: raio X e O₂, que lava o nitrogênio e acelera a reabsorção do ar.'},
+  {id:'c2',t:'ECG para afastar causa cardíaca da dor',ok:1,why:'Toda dor torácica aguda é cardiovascular até que se prove o contrário.'},
+  {id:'c3',t:'Drenagem torácica imediata',ok:0,why:'Pequeno e estável: observação com O₂, sem drenagem imediata.'},
+  {id:'c4',t:'Toracocentese diagnóstica',ok:0,why:'Não há líquido: o som é timpânico, não maciço.'},
+  {id:'c5',t:'Tratar como TEP',ok:0,why:'Sem viagem longa, imobilização ou outro fator de risco, e o exame é de pneumotórax.'},
+  {id:'c6',t:'Intubação orotraqueal',ok:0,why:'Consciente e estável: sem critério (Glasgow ≤ 8 ou choque).'}
+ ],
+ teaching:[
+  {t:'O conjunto que identifica',p:'Dor súbita e dispneia em jovem longilíneo, com frêmito abolido, hipersonoridade (ou hipertimpanismo) e murmúrio abolido.'},
+  {t:'Derrame × pneumotórax',p:'Os dois abolem frêmito e murmúrio. A percussão separa: macicez no derrame, hipersonoridade no pneumotórax.'},
+  {t:'Mediastino',p:'Pneumotórax volumoso (hipertensivo) e derrame volumoso empurram a traqueia para o lado oposto. Atelectasia puxa para o mesmo lado.'},
+  {t:'Pense pela história',p:'Jovem com dor súbita e dispneia sem trauma: pneumotórax. Idoso após viagem longa ou mulher jovem com anticoncepcional: TEP.'}
+ ]
+});

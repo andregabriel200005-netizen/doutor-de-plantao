@@ -1,0 +1,81 @@
+// Respiratório 11: Couro novo. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// dor torácica (5), frêmito pleural (7), atrito pleural × pericárdico (9), pleurites (13).
+CASES.push({
+ id:'r-pleur',modulo:'Semiologia respiratória',n:'Caso 11',title:'Couro novo',look:'lucia',pname:'Lúcia',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Lúcia, 30 anos. Dor ao respirar depois de uma gripe.',
+ briefing:'Doutor, leito 3: Lúcia, 30 anos. Dor no peito do lado esquerdo há dois dias.',
+ vitals:'PA 118/76 mmHg · FC 96 bpm · FR 22 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
+ answers:{
+  queixa:'Uma dor do lado esquerdo que me trava quando respiro.',
+  tempo:'Dois dias.',
+  inicio:'Começou de um dia pro outro, depois de uma gripe.',
+  dor:'Pontada do lado esquerdo, embaixo. Piora muito quando puxo o ar ou tusso. Respirando curtinho, alivia.',
+  febre:'Uma febrinha, 37 e pouco.',
+  tosse:'Tosse seca.',
+  escarro:'Não sai catarro.',
+  chiado:'Não.',
+  dispneia:'Respiro curto por causa da dor.',
+  posicao:'Deitada em cima do lado que dói melhora um pouco.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não.',
+  tratou:'Dipirona. Ajuda pouco.',
+  meds:'Nenhum. Uso DIU de cobre.',
+  doencas:'Nenhuma.',
+  alergia:'Não.',
+  passado:'Não.',
+  habitos:'Não fumo. Vinho às vezes.',
+  contato:'Meu filho teve gripe semana passada.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Professora.',
+  moradia:'Moro com meu marido e meu filho.',
+  sal:'Normal.',
+  emocional:'Não. Só com dor.',
+  hiv:'Fiz na gravidez, deu negativo.'
+ },
+ keyQ:[{ids:['dor'],l:'Dor pleurítica (piora ao respirar)'},{ids:['inicio'],l:'Depois de quadro viral'},{ids:['febre'],l:'Febre'},{ids:['imob','meds'],l:'Risco para TEP (afastar)'},{ids:['tempo'],l:'Duração'}],
+ geral:'Adulta jovem, respira curto e segura o lado esquerdo do tórax quando inspira.',
+ effSides:[],
+ exam:{
+  'inspecionar:baseE':'Expansibilidade reduzida à esquerda. Ela limita a inspiração por causa da dor.',
+  'palpar:baseE':'Expansibilidade diminuída. Frêmito toracovocal diminuído. A mão sente uma vibração áspera durante a respiração.',
+  'percutir:baseE':'Som submaciço.',
+  'auscultar:baseE':'Ruído áspero, como couro novo, na inspiração e na expiração. Quando ela prende a respiração, o ruído desaparece. Murmúrio vesicular presente.',
+  'auscultar:coracao':'Ritmo regular em 2 tempos, bulhas normofonéticas, sem sopros. Nenhum ruído extra junto com o batimento.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['auscultar:baseE'],l:'Auscultar a base esquerda (atrito)'},{ids:['palpar:baseE'],l:'Palpar a base esquerda'},{ids:['percutir:baseE'],l:'Percutir a base esquerda'},
+  {ids:['auscultar:coracao'],l:'Auscultar o coração (afastar atrito pericárdico)'},{ids:['auscultar:baseD','percutir:baseD','palpar:baseD'],l:'Comparar com o lado direito'}],
+ res:{
+  hemo:'Hb 13,1 g/dL · Leucócitos 9.800/mm³ (38% linfócitos) · Plaquetas 240.000/mm³',
+  pcr:'PCR 28 mg/L (ref. < 5)',
+  usg:'Pleura espessada na base esquerda, com lâmina mínima de líquido, pequena demais para puncionar.',
+  laurell:'Lâmina de líquido livre de 3 mm à esquerda.',
+  ecg:'Ritmo sinusal, FC 96 bpm. Sem alterações de ST ou T.'
+ },
+ keyEx:[{ids:['ecg'],l:'ECG (dor torácica aguda)'}],
+ neutral:['rx','hemo','pcr','usg','ddim'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'pleurite',
+ sindWhy:'Atrito pleural (o principal achado), com submacicez, expansibilidade e frêmito diminuídos e dor que piora ao inspirar: pleurite aguda. O atrito some quando ela prende a respiração, então é pleural, não pericárdico.',
+ correctDx:'pleurite',
+ dxWhy:'Dor pleurítica depois de uma gripe, febre baixa e atrito pleural, sem sinais de consolidação ou derrame puncionável: pleurite aguda, provavelmente viral (viroses estão entre as causas de pleurite).',
+ conduta:[
+  // CONFERIR: o material descreve a pleurite, mas não traz o tratamento.
+  {id:'c1',t:'Analgesia e reavaliar a evolução',ok:1,why:'Pleurite viral: alívio da dor e acompanhamento. (O tratamento não está no seu material de semiologia.)'},
+  {id:'c2',t:'ECG para afastar causa cardíaca da dor',ok:1,why:'Toda dor torácica aguda é cardiovascular até que se prove o contrário.'},
+  {id:'c3',t:'Toracocentese',ok:0,why:'Não há derrame para puncionar.'},
+  {id:'c4',t:'Tratar como pericardite',ok:0,why:'O atrito para na apneia: é pleural. O pericárdico continua, acompanhando o batimento.'},
+  {id:'c5',t:'Antibiótico para pneumonia',ok:0,why:'Sem consolidação: frêmito não está aumentado, sem sopro tubárico nem estertores.'},
+  {id:'c6',t:'Drenagem torácica',ok:0,why:'Não há ar nem líquido para drenar.'}
+ ],
+ teaching:[
+  {t:'Quem dói é a parietal',p:'A pleura parietal tem nociceptores e dá a dor em pontada que piora com a respiração. A visceral e o parênquima não doem.'},
+  {t:'Atrito pleural × pericárdico',p:'Peça para prender a respiração. Se o ruído para, é pleural. Se continua, acompanhando o batimento, é pericárdico.'},
+  {t:'O atrito some',p:'Quando o derrame fica volumoso, os folhetos se afastam e o atrito desaparece.'},
+  {t:'Frêmito pleural',p:'Normalmente não se sente o deslizamento das pleuras. Na pleurite, a mão sente o atrito.'}
+ ]
+});

@@ -1,0 +1,82 @@
+// Respiratório 1: Escarro cor de tijolo. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// expectoração (3), insuficiência respiratória (14), síndrome de consolidação (12), quadro comparativo e macete das exceções (15).
+CASES.push({
+ id:'r-pneumo',modulo:'Semiologia respiratória',n:'Caso 1',title:'Escarro cor de tijolo',look:'severino',pname:'Seu Arlindo',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Arlindo, 71 anos. Febre, calafrio e dor no lado direito.',
+ briefing:'Doutor, leito 3: Seu Arlindo, 71 anos. Chegou com febre alta e dor no peito, respirando rápido.',
+ vitals:'PA 130/80 mmHg · FC 108 bpm · FR 26 irpm · T 39,2 °C · SpO₂ 89% em ar ambiente',
+ answers:{
+  queixa:'Febre alta, tremedeira e uma dor do lado direito do peito.',
+  tempo:'Três dias.',
+  inicio:'Começou de repente, com um calafrio forte de bater o queixo.',
+  dor:'Pontada do lado direito. Quando puxo o ar fundo, dói mais.',
+  febre:'Febre alta com calafrio, de dia e de noite.',
+  tosse:'Tosse com catarro.',
+  escarro:'Saiu um catarro cor de ferrugem, meio cor de tijolo. Sangue vivo não.',
+  chiado:'Não.',
+  dispneia:'Tô respirando curto, cansado. Deitado não piora.',
+  posicao:'Nenhuma. Fico do jeito que der.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Não reparei.',
+  tratou:'Tomei dipirona pra febre.',
+  meds:'Losartana, pra pressão.',
+  doencas:'Pressão alta. Só isso.',
+  alergia:'Não.',
+  passado:'Nunca tive.',
+  habitos:'Fumei quando era moço, parei faz 30 anos. Não bebo.',
+  contato:'Meu neto teve gripe semana passada.',
+  imob:'Não.',
+  familia:'Nada importante.',
+  trabalho:'Aposentado. Era motorista de ônibus.',
+  moradia:'Moro com minha esposa, aqui na cidade.',
+  sal:'Comendo pouco esses dias.',
+  emocional:'Não, tô tranquilo. Só essa febre.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['escarro'],l:'Cor do escarro (ferruginoso)'},{ids:['inicio'],l:'Início súbito com calafrio'},{ids:['dor'],l:'Caracterizar a dor (pleurítica)'},{ids:['febre'],l:'Febre'},{ids:['tempo'],l:'Duração (quadro agudo)'}],
+ geral:'Idoso febril ao toque, taquipneico, consciente e orientado.',
+ effSides:[],
+ exam:{
+  'inspecionar:baseD':'Expansibilidade reduzida à direita.',
+  'palpar:baseD':'Expansibilidade reduzida. Frêmito toracovocal aumentado.',
+  'percutir:baseD':'Som submaciço.',
+  'auscultar:baseD':'Murmúrio vesicular diminuído, com sopro tubárico e estertores finos no fim da inspiração, que não mudam com a tosse. A voz chega nítida, palavra por palavra.',
+  'inspecionar:maos':'Extremidades quentes, sem cianose. Unhas com ângulo normal.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['palpar:baseD'],l:'Palpar a base direita (frêmito aumentado)'},{ids:['percutir:baseD'],l:'Percutir a base direita'},
+  {ids:['auscultar:baseD'],l:'Auscultar a base direita'},{ids:['palpar:baseE','percutir:baseE','auscultar:baseE'],l:'Comparar com o lado esquerdo'}],
+ res:{
+  hemo:'Hb 13,8 g/dL · Leucócitos 18.400/mm³ (86% neutrófilos) · Plaquetas 260.000/mm³',
+  pcr:'PCR 210 mg/L (ref. < 5)',
+  gaso:'pH 7,46 · PaO₂ 56 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 89%',
+  usg:'Sem líquido pleural. Parênquima da base direita com aspecto sólido.',
+  laurell:'Sem lâmina de líquido livre.',
+  tc:'Consolidação no lobo inferior direito, com broncograma aéreo. Sem derrame.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['gaso'],l:'Gasometria (SatO₂ ≤ 90%)'}],
+ neutral:['hemo','pcr','renal','hemoc','glic','hep','eas'],
+ rx:{consol:'D'},
+ tap:{sides:[],spaces:[]},
+ correctSind:'consol',
+ sindWhy:'Na base direita: frêmito aumentado, submacicez, sopro tubárico, estertores finos e voz nítida (pectorilóquia). O parênquima virou meio sólido com o brônquio aberto. Das síndromes, só consolidação e caverna aumentam o frêmito.',
+ correctDx:'pneumo',
+ dxWhy:'Início súbito com calafrio, febre alta, dor pleurítica e escarro ferruginoso ("suco de tijolo") em idoso: quadro clássico da pneumonia pneumocócica, que consolida o lobo. SatO₂ 89% e PaO₂ 56 mmHg com PaCO₂ baixa mostram insuficiência respiratória hipoxêmica (tipo 1).',
+ conduta:[
+  {id:'c1',t:'Oxigênio por cateter ou máscara',ok:1,why:'SatO₂ ≤ 90% em ar ambiente: insuficiência respiratória. Nos casos leves, oxigênio.'},
+  // CONFERIR: o antibiótico específico não está no material de semiologia; o jogo só cobra "tratar a causa".
+  {id:'c2',t:'Tratar a causa: a infecção pulmonar',ok:1,why:'O manejo da insuficiência respiratória inclui tratar a causa. (A escolha do antibiótico não está no seu material de semiologia.)'},
+  {id:'c3',t:'Toracocentese na base direita',ok:0,why:'Frêmito aumentado e sopro tubárico apontam consolidação. No derrame o frêmito some.'},
+  {id:'c4',t:'Intubação orotraqueal agora',ok:0,why:'Intubação é para rebaixamento de consciência (Glasgow ≤ 8) ou choque. Ele está consciente e com pressão normal.'},
+  {id:'c5',t:'Drenagem torácica',ok:0,why:'Não há ar nem líquido na pleura.'},
+  {id:'c6',t:'Alta com remédio para febre',ok:0,why:'SatO₂ 89% e taquipneia: há insuficiência respiratória.'}
+ ],
+ teaching:[
+  {t:'Frêmito aumentado',p:'Só consolidação e caverna aumentam o frêmito toracovocal. Todo o resto diminui.'},
+  {t:'O escarro conta a história',p:'Ferruginoso: pneumococo. Róseo e espumoso: edema pulmonar. Purulento: bronquiectasia. Com raias de sangue: TB, TEP, neoplasia, bronquiectasia, estenose mitral.'},
+  {t:'Estertores finos',p:'Vêm do alvéolo, no fim da inspiração, e não mudam com a tosse. Os grossos vêm do brônquio e mudam.'},
+  {t:'Insuficiência respiratória',p:'SatO₂ ≤ 90% em ar ambiente. Hipoxêmica (tipo 1): PaO₂ < 60 mmHg com PaCO₂ normal ou baixa, como na pneumonia.'}
+ ]
+});

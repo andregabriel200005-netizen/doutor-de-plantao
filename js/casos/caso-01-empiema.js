@@ -1,6 +1,10 @@
 // Caso 1: A febre que voltou. Fonte: Resumos Estratégicos, Derrame Pleural (Estratégia MED).
 CASES.push({
  "id": "empiema",
+ "modulo": "Derrame pleural",
+ "fonte": "Resumos Estratégicos: Derrame Pleural (Estratégia MED)",
+ "correctSind": "derrame",
+ "sindWhy": "Macicez, frêmito e murmúrio abolidos na base, com egofonia na borda superior: líquido entre o pulmão e a parede.",
  "n": "Caso 1",
  "title": "A febre que voltou",
  "look": "carlos",
@@ -9,6 +13,15 @@ CASES.push({
  "briefing": "Doutor, leito 3: seu Carlos, 45 anos. Chegou com febre e dor no peito. Tá cansadinho.",
  "vitals": "PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 38,9 °C · SpO₂ 92% em ar ambiente",
  "answers": {
+  "inicio": "Foi aos poucos. Primeiro a gripe, depois piorou.",
+  "escarro": "Amarelado, meio esverdeado. Sangue não.",
+  "chiado": "Não.",
+  "posicao": "Deitado do lado direito fica um pouco melhor.",
+  "urina": "Não.",
+  "alergia": "Não.",
+  "passado": "Nunca tive.",
+  "moradia": "Moro com minha esposa e minha filha, aqui na cidade.",
+  "emocional": "Só preocupado com o trabalho parado.",
   "queixa": "Doutor, é essa febre que não passa e uma fisgada aqui do lado quando eu puxo o ar.",
   "tempo": "Começou faz uma semana. Achei que era gripe.",
   "dor": "É uma pontada aqui do lado direito, embaixo. Quando respiro fundo ou tusso, parece uma faca.",

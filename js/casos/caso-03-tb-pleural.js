@@ -1,6 +1,10 @@
 // Caso 3: Suor de madrugada. Fonte: Resumos Estratégicos, Derrame Pleural (Estratégia MED).
 CASES.push({
  "id": "tb",
+ "modulo": "Derrame pleural",
+ "fonte": "Resumos Estratégicos: Derrame Pleural (Estratégia MED)",
+ "correctSind": "derrame",
+ "sindWhy": "Macicez, frêmito e murmúrio abolidos na base, com egofonia na borda superior: líquido entre o pulmão e a parede.",
  "n": "Caso 3",
  "title": "Suor de madrugada",
  "look": "joao",
@@ -9,6 +13,15 @@ CASES.push({
  "briefing": "Doutor, leito 3: João, 28 anos. Veio do ambulatório por tosse e dor no peito.",
  "vitals": "PA 110/70 mmHg · FC 98 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 95% em ar ambiente",
  "answers": {
+  "inicio": "Foi aos poucos. Nem lembro o dia certo.",
+  "escarro": "Quase não sai catarro. Sangue não.",
+  "chiado": "Não.",
+  "posicao": "Deitado do lado direito é melhor.",
+  "urina": "Não.",
+  "alergia": "Não.",
+  "passado": "Nunca tive.",
+  "moradia": "Moro com meus pais e meu irmão. Casa pequena.",
+  "emocional": "Ando preocupado com o estágio e com meu pai.",
   "queixa": "Tô com uma tosse que não passa e uma dor do lado esquerdo.",
   "tempo": "Umas três semanas, mais ou menos.",
   "dor": "Pontada do lado esquerdo. Piora quando respiro fundo.",

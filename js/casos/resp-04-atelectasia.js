@@ -1,0 +1,85 @@
+// Respiratório 4: Puxando para o lado. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// tosse crônica e hemoptise (2, 3), atelectasia (12), questões da monitoria (17), quadro comparativo (15).
+CASES.push({
+ id:'r-atel',modulo:'Semiologia respiratória',n:'Caso 4',title:'Puxando para o lado',look:'pedro',pname:'Seu Valdemar',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Valdemar, 63 anos. Tosse há dois meses e cansaço.',
+ briefing:'Doutor, leito 3: Seu Valdemar, 63 anos. Veio por tosse e cansaço que não melhoram.',
+ vitals:'PA 136/84 mmHg · FC 96 bpm · FR 24 irpm · T 37,1 °C · SpO₂ 92% em ar ambiente',
+ answers:{
+  queixa:'Tosse que não passa e um cansaço que só piora.',
+  tempo:'Uns dois meses.',
+  inicio:'Foi aos poucos.',
+  dor:'Um incômodo do lado esquerdo. Não é bem dor.',
+  febre:'Não.',
+  tosse:'Tusso todo dia, há uns dois meses.',
+  escarro:'Às vezes vem umas raias de sangue no catarro.',
+  chiado:'Não.',
+  dispneia:'Canso pra andar uma quadra.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Perdi uns 7 quilos sem fazer dieta. A calça tá caindo.',
+  tratou:'Xarope. Nada.',
+  meds:'Nenhum.',
+  doencas:'Não sei. Nunca fui muito ao médico.',
+  alergia:'Não.',
+  passado:'Não.',
+  habitos:'Fumo desde os 15 anos, um maço por dia. Cerveja no domingo.',
+  contato:'Ninguém doente em casa.',
+  imob:'Não.',
+  familia:'Meu irmão morreu de câncer. Não sei de quê.',
+  trabalho:'Pedreiro.',
+  moradia:'Moro com minha esposa.',
+  sal:'Ando sem fome.',
+  emocional:'Preocupado com esse emagrecimento.',
+  hiv:'Nunca fiz.'
+ },
+ keyQ:[{ids:['peso'],l:'Emagrecimento'},{ids:['habitos'],l:'Tabagismo pesado'},{ids:['escarro'],l:'Escarro com raias de sangue'},{ids:['tempo','tosse'],l:'Tosse há mais de 3 semanas'},{ids:['familia'],l:'História familiar'}],
+ geral:'Emagrecido, roupas largas, levemente descorado. Respira um pouco rápido.',
+ effSides:[],
+ exam:{
+  'inspecionar:baseE':'Retração dos espaços intercostais na base esquerda. Expansibilidade reduzida.',
+  'palpar:baseE':'Expansibilidade reduzida. Frêmito toracovocal abolido.',
+  'percutir:baseE':'Som maciço.',
+  'auscultar:baseE':'Murmúrio vesicular abolido. Ressonância vocal diminuída.',
+  'auscultar:medioE':'Murmúrio vesicular diminuído.',
+  'inspecionar:pescoco':'Traqueia desviada para a esquerda. Jugulares sem turgência.',
+  'palpar:pescoco':'Traqueia desviada para a esquerda.',
+  'palpar:coracao':'Ictus palpável mais à esquerda que o habitual.'
+ },
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['palpar:baseE'],l:'Palpar a base esquerda'},{ids:['percutir:baseE'],l:'Percutir a base esquerda'},{ids:['auscultar:baseE'],l:'Auscultar a base esquerda'},
+  {ids:['inspecionar:baseE'],l:'Inspecionar a base esquerda (retração)'},
+  {ids:['inspecionar:pescoco','palpar:pescoco','palpar:coracao'],l:'Ver para onde foi o mediastino (traqueia, ictus)'}],
+ res:{
+  hemo:'Hb 11,2 g/dL · Leucócitos 8.100/mm³ · Plaquetas 380.000/mm³',
+  gaso:'pH 7,42 · PaO₂ 64 mmHg · PaCO₂ 38 mmHg · HCO₃ 24 mEq/L · SatO₂ 92%',
+  usg:'Sem líquido pleural. Base esquerda com pulmão sem ar.',
+  laurell:'Sem lâmina de líquido livre.',
+  tc:'Lesão dentro do brônquio do lobo inferior esquerdo, obstruindo a luz. Lobo inferior esquerdo colapsado. Mediastino desviado para a esquerda.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['escarro'],l:'Escarro para TB (tosse > 3 semanas, emagrecimento)'}],
+ neutral:['hemo','gaso','tc','renal','hep','glic','usg'],
+ rx:{atel:'E',shift:'E'},
+ tap:{sides:[],spaces:[]},
+ correctSind:'atel',
+ sindWhy:'Macicez, frêmito e murmúrio abolidos lembram derrame, mas a traqueia e o ictus foram puxados para o lado doente e há retração intercostal: perda de volume. Derrame volumoso empurraria para o lado oposto.',
+ correctDx:'neoatel',
+ dxWhy:'Tabagista pesado de 63 anos, com emagrecimento, tosse há mais de 3 semanas e raias de sangue no escarro: neoplasia obstruindo o brônquio e colabando o lobo (atelectasia por obstrução).',
+ conduta:[
+  // CONFERIR: o material lista a neoplasia como causa de atelectasia, mas não diz como investigar.
+  {id:'c1',t:'Investigar a lesão que obstrui o brônquio',ok:1,why:'Atelectasia por obstrução: corpo estranho, rolha de secreção ou neoplasia. Aqui o perfil aponta neoplasia.'},
+  {id:'c2',t:'Pesquisar tuberculose no escarro',ok:1,why:'Tosse por mais de 3 semanas, emagrecimento e sangue no escarro também acontecem na TB.'},
+  {id:'c3',t:'Toracocentese à esquerda',ok:0,why:'Mediastino puxado para o mesmo lado: perda de volume, não líquido.'},
+  {id:'c4',t:'Drenagem torácica à esquerda',ok:0,why:'Não há ar nem líquido na pleura.'},
+  {id:'c5',t:'Antibiótico e alta',ok:0,why:'Sem febre e com perda de peso há 2 meses: não é pneumonia aguda.'},
+  {id:'c6',t:'Intubação orotraqueal',ok:0,why:'Consciente, SatO₂ 92%: sem critério.'}
+ ],
+ teaching:[
+  {t:'Atelectasia × derrame',p:'Os dois dão macicez e murmúrio abolido. A atelectasia puxa o mediastino para o mesmo lado e retrai os espaços intercostais. O derrame volumoso empurra para o outro lado.'},
+  {t:'Duas causas de atelectasia',p:'Obstrução (corpo estranho, rolha de secreção, neoplasia) e compressão (neoplasia, derrame, pneumotórax).'},
+  {t:'Elimine na prova',p:'Frêmito aumentado é só de consolidação e caverna. Sibilos são da asma. Atelectasia: retração, frêmito diminuído, macicez e murmúrio diminuído ou ausente.'},
+  {t:'Tosse crônica',p:'Mais de 3 semanas. Com emagrecimento e sangue no escarro em tabagista, pense em neoplasia (e afaste TB).'}
+ ]
+});

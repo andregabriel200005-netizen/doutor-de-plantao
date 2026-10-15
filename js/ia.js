@@ -4,13 +4,13 @@
    análises e diagnósticos de js/dados.js. Tudo o que ela devolve passa por iaValidar antes de entrar no jogo.
    Os casos ficam guardados no navegador de quem criou. */
 const IA_CHAVE='plantao-pleural-ia';
-const IA_LOOKS={carlos:'homem adulto, bigode',maria:'mulher idosa, óculos, cabelo grisalho',joao:'homem jovem, cabelo cacheado'};
+const IA_LOOKS={carlos:'homem adulto, bigode',maria:'mulher idosa, óculos, cabelo grisalho',joao:'homem jovem, cabelo cacheado',severino:'homem idoso, calvo',ana:'mulher jovem, cabelo longo',bruno:'homem jovem, magro',lucia:'mulher adulta, cabelo longo',pedro:'homem de meia-idade, calvo, óculos',tonho:'homem idoso, cabelo branco, bigode',raimundo:'homem idoso, calvo',carla:'mulher jovem, ruiva',davi:'rapaz, cabelo cacheado',marcos:'homem adulto'};
 const IA_ZONAS=Object.keys(ZNAME).filter(z=>z!=='geral');
 
 function iaLer(){try{return JSON.parse(localStorage.getItem(IA_CHAVE)||'[]');}catch(e){return [];}}
 function iaGravar(lista){try{localStorage.setItem(IA_CHAVE,JSON.stringify(lista));}catch(e){}}
 function iaRenumerar(){let k=0;CASES.forEach(c=>{if(c.ia)c.n='IA '+(++k);});}
-iaLer().forEach(c=>CASES.push(c));iaRenumerar();
+iaLer().forEach(c=>{c.modulo='Feitos pela IA';c.correctSind=c.correctSind||'derrame';CASES.push(c);});iaRenumerar();
 
 // Classificação que os números de Light (e gradientes, se usa diurético) mandam.
 function iaClasse(L,diuretico){
@@ -32,7 +32,7 @@ function iaValidar(bruto,fonte){
   if(!out.length)graves.push('nenhum item que vale ponto em '+nome);return out;};
  const so=(obj,valido)=>Object.fromEntries(Object.entries(obj&&typeof obj==='object'?obj:{}).filter(([k,v])=>valido(k)&&txt(v)));
 
- const c={id:'ia-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),n:'IA',ia:true,fonte:txt(fonte)?limpa(fonte).slice(0,120):'material do aluno'};
+ const c={id:'ia-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),n:'IA',ia:true,modulo:'Feitos pela IA',correctSind:'derrame',sindWhy:'Macicez, frêmito e murmúrio abolidos onde há líquido: síndrome de derrame pleural.',fonte:txt(fonte)?limpa(fonte).slice(0,120):'material do aluno'};
  ['title','card','pname','briefing','vitals','geral','fluidLook','dxWhy'].forEach(k=>{if(txt(r[k]))c[k]=r[k];else graves.push('faltou '+k);});
  c.look=IA_LOOKS[r.look]?r.look:'carlos';
  c.answers={};QUESTIONS.forEach(q=>{const a=r.answers&&r.answers[q.id];if(txt(a))c.answers[q.id]=a;else{c.answers[q.id]='Não sei dizer, doutor.';avisos.push('sem resposta para '+q.id);}});
@@ -75,7 +75,7 @@ function iaValidar(bruto,fonte){
 
 function iaPrompt(material,feitos,temFotos){
  const exemplo=Object.assign({},CASES.find(c=>c.id==='tb')||CASES[0]);
- ['id','n','ia','fonte'].forEach(k=>delete exemplo[k]);
+ ['id','n','ia','fonte','modulo','correctSind','sindWhy'].forEach(k=>delete exemplo[k]);
  return `Você é um professor de medicina que escreve casos clínicos para um jogo de estudo. O aluno é o médico de plantão: conversa com o paciente, examina, pede exames, faz toracocentese e decide classificação, diagnóstico e conduta.
 
 TAREFA: crie UM caso clínico de derrame pleural baseado SOMENTE no material de estudo do aluno abaixo${temFotos?' (e nas fotos das páginas enviadas junto)':''}.

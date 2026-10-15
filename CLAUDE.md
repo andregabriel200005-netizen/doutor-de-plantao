@@ -29,7 +29,7 @@ André, estudante de medicina (UNINASSAU, Recife), sem formação em programaç�
 index.html              página do jogo (abre direto no navegador)
 css/style.css           visual
 js/dados.js             listas comuns: perguntas, exames, análises do líquido, diagnósticos, personagens (LOOKS)
-js/casos/*.js           um arquivo por paciente; cada um faz CASES.push({...})
+js/casos/*.js           um arquivo por paciente; cada um faz CASES.push({...}). caso-0* = derrame pleural, resp-* = semiologia respiratória
 js/ia.js                casos criados por IA a partir do material colado pelo aluno (só no artifact do Claude)
 js/jogo.js              motor: desenho da sala e personagens, telas, toracocentese, pontuação
 scripts/build.js        junta tudo em dist/plantao-pleural.html (arquivo único para publicar)
@@ -43,7 +43,8 @@ IDEIAS.md               ideias do André, organizadas
 - Pergunta, exame ou diagnóstico novo entra em `js/dados.js` e passa a valer para todos os casos. Ao adicionar uma pergunta, todo caso precisa de resposta para ela (o teste cobra isso).
 - Sem frameworks e sem etapa de compilação: HTML, CSS e JavaScript puros, para abrir com dois cliques e publicar em qualquer lugar.
 - Casos da IA (`js/ia.js`): usam o Claude de quem joga (`claude.use("sample")`), por isso só funcionam no artifact publicado. O que a IA devolve passa por `iaValidar` (ids das listas, Light batendo com a classificação, texto limpo) e fica no navegador de quem criou. Se mudar o formato de um caso, ajuste `iaValidar` e o prompt em `iaPrompt`.
-- Pontuação: `MAX` em `js/jogo.js` (soma 100). Se mudar os pesos, o total continua 100.
+- Pontuação: `MAX` (casos com derrame) e `MAX_SEMIO` (casos de semiologia) em `js/jogo.js`, cada um soma 100. Se mudar os pesos, o total continua 100.
+- O menu agrupa os casos pelo campo `modulo`. Assunto novo = `modulo` novo; perguntas, exames, diagnósticos e síndromes continuam numa lista só, para não entregar o assunto pelo que aparece na tela.
 
 ## Antes de dizer que terminou
 

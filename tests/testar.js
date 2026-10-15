@@ -34,15 +34,31 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   for (let i = 0; i < n; i++) {
     const r = await page.evaluate(i => {
       const c = CASES[i], prob = [];
-      const obrig = ['id', 'n', 'title', 'look', 'pname', 'briefing', 'vitals', 'answers', 'keyQ', 'geral', 'effSides', 'exam', 'keyExam', 'res', 'keyEx', 'neutral', 'rx', 'tap', 'fluidColor', 'fluidLook', 'fluid', 'keyFluid', 'light', 'correctClass', 'correctDx', 'dxWhy', 'conduta', 'teaching'];
+      const pleural = !!c.light;
+      const obrig = ['id', 'modulo', 'fonte', 'n', 'title', 'look', 'pname', 'briefing', 'vitals', 'answers', 'keyQ', 'geral', 'effSides', 'exam', 'keyExam', 'res', 'keyEx', 'neutral', 'rx', 'tap', 'correctSind', 'sindWhy', 'correctDx', 'dxWhy', 'conduta', 'teaching']
+        .concat(pleural ? ['fluidColor', 'fluidLook', 'fluid', 'keyFluid', 'light', 'correctClass'] : []);
       obrig.forEach(k => { if (c[k] === undefined) prob.push('falta o campo ' + k); });
+      if (CASES.some(o => o !== c && o.id === c.id)) prob.push('id repetido: ' + c.id);
+      if (!SINDROMES.some(d => d.id === c.correctSind)) prob.push('síndrome correta não está na lista SINDROMES');
+      // ids que não existem viram itens impossíveis de pontuar
+      const manobra = id => id === 'vitals' || id === 'inspecionar:geral' || (() => { const [t, z] = String(id).split(':'); return TOOLS.some(x => x.id === t) && ZNAME[z] && z !== 'geral'; })();
+      const exame = id => EXAMS.some(e => e.id === id);
+      (c.keyQ || []).forEach(g => g.ids.forEach(id => { if (!QUESTIONS.some(q => q.id === id)) prob.push('pergunta inexistente em keyQ: ' + id); }));
+      (c.keyExam || []).forEach(g => g.ids.forEach(id => { if (!manobra(id)) prob.push('manobra inexistente em keyExam: ' + id); }));
+      Object.keys(c.exam || {}).forEach(id => { if (!manobra(id)) prob.push('manobra inexistente em exam: ' + id); });
+      (c.keyEx || []).forEach(g => g.ids.forEach(id => { if (!exame(id)) prob.push('exame inexistente em keyEx: ' + id); }));
+      (c.neutral || []).forEach(id => { if (!exame(id)) prob.push('exame inexistente em neutral: ' + id); });
+      Object.keys(c.res || {}).forEach(id => { if (!exame(id)) prob.push('exame inexistente em res: ' + id); });
+      Object.keys(c.answers || {}).forEach(id => { if (!QUESTIONS.some(q => q.id === id)) prob.push('resposta para pergunta inexistente: ' + id); });
       QUESTIONS.forEach(q => { if (!c.answers || !c.answers[q.id]) prob.push('sem resposta para a pergunta ' + q.id); });
       if (!LOOKS[c.look]) prob.push('personagem inexistente: ' + c.look);
       if (!DX.some(d => d.id === c.correctDx)) prob.push('diagnóstico correto não está na lista DX');
-      const L = c.light, light = L.protL / L.protS > .5 || L.ldhL / L.ldhS > .6 || L.ldhL > 200 * 2 / 3;
-      const grad = (L.protS - L.protL) > 3.1 || (L.albS - L.albL) > 1.2;
-      const esperado = light && !(c.diuretico && grad) ? 'exsudato' : 'transudato';
-      if (esperado !== c.correctClass) prob.push(`Light/gradiente dá ${esperado}, mas o caso diz ${c.correctClass}`);
+      if (pleural) {
+        const L = c.light, light = L.protL / L.protS > .5 || L.ldhL / L.ldhS > .6 || L.ldhL > 200 * 2 / 3;
+        const grad = (L.protS - L.protL) > 3.1 || (L.albS - L.albL) > 1.2;
+        const esperado = light && !(c.diuretico && grad) ? 'exsudato' : 'transudato';
+        if (esperado !== c.correctClass) prob.push(`Light/gradiente dá ${esperado}, mas o caso diz ${c.correctClass}`);
+      }
       if (!c.conduta.some(x => x.ok)) prob.push('nenhuma conduta correta');
 
       // jogada perfeita
@@ -51,22 +67,34 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
       G.examined = c.keyExam.map(g => g.ids[0]);
       c.keyEx.forEach(g => G.orders[g.ids[0]] = 0);
       G.clock = 300;
-      G.tap = { space: { s: c.tap.sides[0], i: c.tap.spaces[0] }, pos: 'sup', vol: '60' };
-      doTap();
-      c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
-      G.final = { cls: c.correctClass, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+      if (pleural) {
+        G.tap = { space: { s: c.tap.sides[0], i: c.tap.spaces[0] }, pos: 'sup', vol: '60' };
+        doTap();
+        c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
+      }
+      G.final = { cls: c.correctClass, sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
       const perfeita = score().total;
 
       // jogada ruim
       newGame(i);
-      G.final = { cls: c.correctClass === 'exsudato' ? 'transudato' : 'exsudato', dx: DX.find(d => d.id !== c.correctDx).id, cond: c.conduta.filter(x => !x.ok).map(x => x.id) };
+      G.final = { cls: c.correctClass === 'exsudato' ? 'transudato' : 'exsudato', sind: SINDROMES.find(d => d.id !== c.correctSind).id, dx: DX.find(d => d.id !== c.correctDx).id, cond: c.conduta.filter(x => !x.ok).map(x => x.id) };
       const ruim = score().total;
-      return { nome: c.n + ' · ' + c.title, prob, perfeita, ruim };
+      // puncionar quem não tem derrame custa ponto
+      let seca = null;
+      if (!pleural) {
+        newGame(i);
+        G.asked = c.keyQ.map(g => g.ids[0]); G.examined = c.keyExam.map(g => g.ids[0]); c.keyEx.forEach(g => G.orders[g.ids[0]] = 0); G.clock = 300;
+        G.tap = { space: { s: 'D', i: 7 }, pos: 'sup', vol: '60' }; doTap();
+        G.final = { sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+        seca = { nota: score().total, colheu: G.tapped };
+      }
+      return { nome: c.modulo + ' · ' + c.n + ' · ' + c.title, prob, perfeita, ruim, seca };
     }, i);
     console.log(r.nome);
     ok(r.prob.length === 0, r.prob.length ? 'dados com problema: ' + r.prob.join('; ') : 'dados do caso coerentes');
     ok(r.perfeita === 100, `jogada perfeita = ${r.perfeita}/100`);
     ok(r.ruim <= 10, `jogada ruim = ${r.ruim}/100`);
+    if (r.seca) ok(!r.seca.colheu && r.seca.nota < 100, `punção sem derrame não colhe nada e desconta (${r.seca.nota}/100)`);
 
     await page.evaluate(i => { newGame(i); G.orders.rx = 0; openM('xray'); show('game'); }, i);
     await page.waitForTimeout(150);
@@ -95,7 +123,8 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('[data-m="tab"][data-v="tap"]');
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
   await page.click('[data-m="close"]');
-  await page.evaluate(() => openM('close'));
+  await page.evaluate(() => { G.tapped = true; openM('close'); });
+  await page.check('input[name=sind][value=derrame]');
   await page.check('input[name=cls][value=exsudato]');
   await page.check('input[name=dx][value=empiema]');
   await page.check('[data-m="fcond"][value="c1"]');
@@ -161,7 +190,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
     c.keyEx.forEach(g => G.orders[g.ids[0]] = 0); G.clock = 300;
     G.tap = { space: { s: c.tap.sides[0], i: c.tap.spaces[0] }, pos: 'sup', vol: '60' }; doTap();
     c.keyFluid.forEach(g => G.fluid[g.ids[0]] = 0);
-    G.final = { cls: c.correctClass, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
+    G.final = { cls: c.correctClass, sind: c.correctSind, dx: c.correctDx, cond: c.conduta.filter(x => x.ok).map(x => x.id) };
     const nota = score().total; G = null;
     return { nota, guardado: JSON.parse(localStorage.getItem('plantao-pleural-ia') || '[]').length, prompt: window.__prompt.includes('ADA acima de 40') };
   });

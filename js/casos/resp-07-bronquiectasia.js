@@ -1,0 +1,83 @@
+// Respiratório 7: Um copo de catarro. Fonte: Semiologia Respiratória — Material de Estudo (André, UNINASSAU, 2026):
+// expectoração e hemoptise × hematêmese (3), baqueteamento (6), bronquiectasias (11), quadro comparativo (15).
+CASES.push({
+ id:'r-bronqx',modulo:'Semiologia respiratória',n:'Caso 7',title:'Um copo de catarro',look:'maria',pname:'Dona Rosa',
+ fonte:'Semiologia Respiratória: material de estudo do André (apostila de Semiologia Especializada p. 13–22, aulas e monitoria)',
+ card:'Rosa, 52 anos. Catarro de anos e febre há três dias.',
+ briefing:'Doutor, leito 3: Dona Rosa, 52 anos. Veio por febre e tosse com muito catarro.',
+ vitals:'PA 120/78 mmHg · FC 96 bpm · FR 22 irpm · T 38,0 °C · SpO₂ 93% em ar ambiente',
+ answers:{
+  queixa:'Esse catarro que não para, e agora veio febre.',
+  tempo:'Catarro eu tenho desde moça. A febre começou faz 3 dias.',
+  inicio:'Aos poucos.',
+  dor:'Não.',
+  febre:'Febre desde anteontem.',
+  tosse:'Tusso o dia todo com muito catarro, até quando tô bem. De manhã enche um copinho.',
+  escarro:'Amarelo-esverdeado, grosso. Às vezes vem sangue junto, quando tusso.',
+  chiado:'Às vezes.',
+  dispneia:'Canso pra subir ladeira.',
+  posicao:'Não.',
+  edema:'Não.',
+  urina:'Não.',
+  peso:'Perdi uns 3 quilos esse mês.',
+  tratou:'Já tomei muito antibiótico na vida. Melhora e volta.',
+  meds:'Nenhum fixo.',
+  doencas:'Só esse problema do pulmão.',
+  alergia:'Não.',
+  passado:'Quando era criança tive coqueluche e uma pneumonia tão forte que fiquei um mês internada.',
+  habitos:'Nunca fumei. Não bebo.',
+  contato:'Não.',
+  imob:'Não.',
+  familia:'Nada.',
+  trabalho:'Costureira.',
+  moradia:'Moro com meu marido.',
+  sal:'Normal.',
+  emocional:'Cansada de viver com esse catarro.',
+  hiv:'Fiz no pré-natal, deu negativo.'
+ },
+ keyQ:[{ids:['tosse'],l:'Expectoração abundante, mesmo fora das crises'},{ids:['escarro'],l:'Aspecto do escarro e sangue com a tosse'},{ids:['passado'],l:'Coqueluche e pneumonia grave na infância'},{ids:['tratou'],l:'Infecções de repetição'},{ids:['tempo'],l:'Duração (anos)'}],
+ geral:'Mulher magra, tossindo e expectorando muito durante a conversa. Quente ao toque.',
+ effSides:[],
+ exam:Object.assign(achados(['baseD','baseE'],{
+   inspecionar:'Expansibilidade diminuída nas bases.',
+   palpar:'Expansibilidade diminuída nas bases. Frêmito toracovocal normal.',
+   percutir:'Som submaciço.',
+   auscultar:'Murmúrio vesicular diminuído, com estertores grossos que mudam depois que ela tosse, roncos e alguns sibilos.'}),
+  achados(['medioD','medioE'],{auscultar:'Roncos esparsos.'}),{
+  'inspecionar:maos':'Unhas em vidro de relógio, com ângulo ungueal aumentado. Ao encostar as unhas dos dedos homólogos, a janela entre elas desaparece.',
+  'palpar:maos':'Falanges distais alargadas.'
+ }),
+ keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['inspecionar:maos'],l:'Olhar as unhas (baqueteamento)'},
+  {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['percutir:baseD','percutir:baseE'],l:'Percutir as bases'},
+  {ids:['palpar:baseD','palpar:baseE','inspecionar:baseD','inspecionar:baseE'],l:'Avaliar a expansibilidade das bases'}],
+ res:{
+  hemo:'Hb 12,6 g/dL · Leucócitos 13.600/mm³ (78% neutrófilos) · Plaquetas 310.000/mm³',
+  pcr:'PCR 96 mg/L (ref. < 5)',
+  gaso:'pH 7,43 · PaO₂ 70 mmHg · PaCO₂ 37 mmHg · HCO₃ 24 mEq/L · SatO₂ 93%',
+  tc:'Brônquios dilatados nas duas bases, com paredes espessadas: em corte longitudinal parecem trilhos de trem; em corte transversal, anéis maiores que o vaso ao lado.'
+ },
+ keyEx:[{ids:['rx','tc'],l:'Imagem do tórax'},{ids:['tc'],l:'Tomografia (mostra os brônquios dilatados)'}],
+ neutral:['hemo','pcr','escarro','gaso','renal','hemoc'],
+ rx:{bronq:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'bronqx',
+ sindWhy:'Nas bases: estertores grossos que mudam com a tosse, roncos e sibilos, com submacicez e expansibilidade diminuída. É secreção parada dentro de brônquios dilatados.',
+ correctDx:'bronqx',
+ dxWhy:'Expectoração purulenta abundante todos os dias há anos, mesmo fora das crises, infecções de repetição, sangue com a tosse, coqueluche e pneumonia grave na infância e baqueteamento digital: bronquiectasias, com infecção agora.',
+ conduta:[
+  // CONFERIR: o material diz que a secreção parada infecta de repetição, mas não traz o tratamento.
+  {id:'c1',t:'Tratar a infecção atual',ok:1,why:'A secreção parada nos brônquios dilatados infecta de repetição. A febre de agora é mais uma infecção.'},
+  {id:'c2',t:'Tomografia de tórax para ver os brônquios',ok:1,why:'Brônquios dilatados aparecem em trilho de trem e em anel de sinete.'},
+  {id:'c3',t:'Tratar o sangue como hemorragia digestiva',ok:0,why:'Sangue que sai com a tosse, misturado ao catarro, é hemoptise. A hematêmese vem com náusea e vômito, escura e com restos de comida.'},
+  {id:'c4',t:'Tratar como asma, só com bombinha',ok:0,why:'Expectoração purulenta abundante e estertores grossos não são o quadro da asma (tosse seca e sibilos).'},
+  {id:'c5',t:'Toracocentese',ok:0,why:'Não há derrame: frêmito normal e murmúrio presente.'},
+  {id:'c6',t:'Drenagem torácica',ok:0,why:'Não há ar nem líquido na pleura.'}
+ ],
+ teaching:[
+  {t:'Bronquiectasia',p:'Dilatação irreversível dos brônquios, congênita ou depois de TB, coqueluche ou pneumonia grave. A secreção fica parada e infecta de repetição.'},
+  {t:'Estertores grossos × finos',p:'Grossos: bolhosos, no brônquio, mudam com a tosse (bronquite aguda, bronquiectasia). Finos: no alvéolo, fim da inspiração, não mudam (consolidação, broncopneumonia, congestão).'},
+  {t:'Baqueteamento',p:'Ângulo ungueal maior que 190° e sinal de Schamroth (a janela entre as unhas some). Hipóxia crônica.'},
+  {t:'Hemoptise × hematêmese',p:'Hemoptise: vermelho vivo, aerada, alcalina, com tosse. Hematêmese: borra de café, restos de comida, ácida, com náusea e vômito.'}
+ ]
+});

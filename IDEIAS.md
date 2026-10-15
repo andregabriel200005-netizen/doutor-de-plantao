@@ -10,6 +10,11 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 - Vender o jogo (out/2026). Antes: testar com colegas de graça, trocar o conteúdo do Estratégia MED por fontes que possam ser usadas comercialmente (diretrizes públicas, livros citados, revisão de um professor) e falar com um advogado/contador. Depois: login, pagamento (plataforma pronta tipo Hotmart/Kiwify) e servidor próprio da IA com limite de casos por assinante.
 
+## Próximos assuntos (PDFs já enviados)
+
+- Semiologia cardiovascular: precisa de ausculta por focos, pulsos, ictus e manobras.
+- Semiologia do aparelho digestório: precisa do abdome em 9 regiões e das manobras (Murphy, Blumberg, Rovsing, Giordano...).
+
 ## Próximas etapas da IA
 
 - Aceitar PDF direto (hoje: colar o texto, mandar fotos das páginas ou arquivo .txt).
@@ -27,6 +32,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Modo prova: sem a tela de explicação no final, só a nota.
 
 ## Feito
+
+- v4: Semiologia respiratória: 11 casos (pneumonia, pneumotórax, asma, atelectasia, congestão por IC, DPOC, bronquiectasia, dispneia suspirosa, Kussmaul, caverna por TB, pleurite), síndrome no prontuário, boca e mãos no exame, gasometria e ECG, novas radiografias.
 
 - v1: jogo em texto com 3 casos.
 - v3: área "Casos do seu material": cola o resumo ou manda fotos e a IA cria pacientes novos de derrame pleural (só na versão do Claude).

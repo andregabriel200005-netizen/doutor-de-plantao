@@ -1,4 +1,9 @@
-const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,dx:16,cond:16};
+// Pesos da nota (cada conjunto soma 100). Casos com líquido pleural (têm "light") usam MAX;
+// casos de semiologia, focados em exame físico e síndrome, usam MAX_SEMIO.
+const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,sind:4,dx:12,cond:16};
+const MAX_SEMIO={q:16,ex:24,lab:10,sind:16,dx:16,cond:18};
+const ehPleural=c=>!!c.light;
+const pesos=c=>ehPleural(c)?MAX:MAX_SEMIO;
 
 /* ================= UTIL ================= */
 const $=s=>document.querySelector(s);
@@ -17,9 +22,11 @@ function drawPortrait(cnv,look,mood){
  if(L.style==='short'){p(6,3,12,4,L.hair);p(5,5,2,5,L.hair);p(17,5,2,4,L.hair);}
  if(L.style==='bun'){p(6,3,12,4,L.hair);p(5,5,2,6,L.hair);p(17,5,2,6,L.hair);p(9,0,6,4,L.hair);}
  if(L.style==='curly'){p(5,2,14,5,L.hair);p(4,4,2,6,L.hair);p(18,4,2,6,L.hair);p(6,1,3,2,L.hair);p(12,1,4,2,L.hair);}
+ if(L.style==='long'){p(6,3,12,4,L.hair);p(4,5,3,14,L.hair);p(17,5,3,14,L.hair);}
+ if(L.style==='bald'){p(5,7,2,6,L.hair);p(17,7,2,6,L.hair);p(8,4,8,1,'rgba(255,255,255,.18)');}
  if(L.cap){p(6,2,12,3,'#e8f6f4');p(11,2,2,3,'#ef7d6d');}
  p(9,10,2,2,'#1a1a1a');p(13,10,2,2,'#1a1a1a');
- p(8,8,3,1,L.hair==='#cfcac4'?'#9b958e':L.hair);p(13,8,3,1,L.hair==='#cfcac4'?'#9b958e':L.hair);
+ const sob=['#cfcac4','#d8d4cf'].includes(L.hair)?'#9b958e':L.hair;p(8,8,3,1,sob);p(13,8,3,1,sob);
  if(L.glasses){g.strokeStyle='#5b4a3a';g.lineWidth=1;g.strokeRect(8.5,9.5,3,3);g.strokeRect(12.5,9.5,3,3);}
  if(L.must)p(9,14,6,1,L.hair);
  const sick=mood==='sick';
@@ -56,6 +63,8 @@ function drawPerson(x,y,L,t,moving,dir){
  else{px(x-5,y-28,10,4,L.hair);px(x-5,y-25,1,4,L.hair);px(x+4,y-25,1,4,L.hair);
   const o=dir==='left'?-1:dir==='right'?1:0;px(x-3+o,y-22,2,2,'#1a1a1a');px(x+1+o,y-22,2,2,'#1a1a1a');}
  if(L.style==='bun')px(x-2,y-31,4,3,L.hair);
+ if(L.style==='long'&&dir!=='up'){px(x-6,y-26,2,10,L.hair);px(x+4,y-26,2,10,L.hair);}
+ if(L.style==='bald'&&dir!=='up'){px(x-5,y-28,10,3,L.skin);}
  if(L.cap){px(x-5,y-30,10,3,'#e8f6f4');px(x-1,y-30,2,3,'#ef7d6d');}
  if(L.steth&&dir!=='up'){px(x-3,y-17,1,5,'#2e8b85');px(x+2,y-17,1,5,'#2e8b85');px(x-1,y-12,2,2,'#2e8b85');}
 }
@@ -113,28 +122,35 @@ function drawPrompt(o){
  ctx.fillStyle='#ffe2b0';ctx.textAlign='left';ctx.fillText(txt,x+6,y+10);
 }
 
+// rx: eff {D,E} derrame (0 a 0,5) · cardio · consol 'D'/'E' · consolAp 'D'/'E' (no ápice) · ptx {lado,tam 0 a 1}
+//     hiper (hiperinsuflação) · atel 'D'/'E' (base colabada) · shift 'D'/'E' (mediastino desviado para esse lado)
+//     congest (congestão bilateral) · cav 'D'/'E' (caverna no ápice) · bronq (trilhos nas bases)
 function drawRX(cnv,rx){
  cnv.width=300;cnv.height=340;const g=cnv.getContext('2d');
+ const sideX={D:92,E:208},dx=rx.shift==='D'?-24:rx.shift==='E'?24:0,dia=rx.hiper?318:300,ry=rx.hiper?128:118;
  g.fillStyle='#030405';g.fillRect(0,0,300,340);
  g.filter='blur(3px)';
  g.fillStyle='#4a4e52';g.beginPath();g.ellipse(150,200,140,175,0,0,7);g.fill();
  g.fillStyle='#5a5e62';g.fillRect(40,20,220,40);
- const lungs=[[92,175,56,118],[208,175,56,118]];
- g.fillStyle='#0d0f11';lungs.forEach(l=>{g.beginPath();g.ellipse(l[0],l[1],l[2],l[3],0,0,7);g.fill();});
- g.fillStyle='#b9bec2';g.fillRect(138,40,24,280);
+ const lungs=[[92,175+(rx.hiper?8:0),56,ry],[208,175+(rx.hiper?8:0),56,ry]];
+ g.fillStyle=rx.hiper?'#070809':'#0d0f11';lungs.forEach(l=>{g.beginPath();g.ellipse(l[0],l[1],l[2],l[3],0,0,7);g.fill();});
+ g.fillStyle='#b9bec2';g.fillRect(138+dx,40,24,280);
  g.fillStyle='rgba(205,210,214,.92)';g.beginPath();
- if(rx.cardio)g.ellipse(170,232,82,56,0,0,7);else g.ellipse(162,228,52,46,0,0,7);g.fill();
- g.fillStyle='#a6aaad';g.beginPath();g.ellipse(92,300,64,26,0,Math.PI,0);g.fill();g.beginPath();g.ellipse(208,306,64,24,0,Math.PI,0);g.fill();
- g.fillRect(28,300,244,40);
+ if(rx.cardio)g.ellipse(170+dx,232,82,56,0,0,7);else g.ellipse(162+dx,228,rx.hiper?40:52,rx.hiper?42:46,0,0,7);g.fill();
+ g.fillStyle='#a6aaad';g.beginPath();g.ellipse(92,dia,64,rx.hiper?12:26,0,Math.PI,0);g.fill();g.beginPath();g.ellipse(208,dia+6,64,rx.hiper?12:24,0,Math.PI,0);g.fill();
+ g.fillRect(28,dia,244,340-dia);
  g.filter='blur(1.5px)';
- g.strokeStyle='rgba(225,228,230,.33)';g.lineWidth=5;
+ g.strokeStyle=`rgba(225,228,230,${rx.hiper?.2:.33})`;g.lineWidth=5;
  for(let i=0;i<8;i++){const y=78+i*26;
-  g.beginPath();g.moveTo(140,y);g.quadraticCurveTo(70,y-10,40,y+24);g.stroke();
-  g.beginPath();g.moveTo(160,y);g.quadraticCurveTo(230,y-10,260,y+24);g.stroke();}
+  g.beginPath();g.moveTo(140+dx,y);g.quadraticCurveTo(70,y-10,40,y+24);g.stroke();
+  g.beginPath();g.moveTo(160+dx,y);g.quadraticCurveTo(230,y-10,260,y+24);g.stroke();}
  g.lineWidth=7;g.strokeStyle='rgba(225,228,230,.5)';
- g.beginPath();g.moveTo(140,62);g.lineTo(60,52);g.stroke();g.beginPath();g.moveTo(160,62);g.lineTo(240,52);g.stroke();
+ g.beginPath();g.moveTo(140+dx,62);g.lineTo(60,52);g.stroke();g.beginPath();g.moveTo(160+dx,62);g.lineTo(240,52);g.stroke();
+ if(rx.congest){g.filter='blur(9px)';g.fillStyle='rgba(200,204,208,.42)';
+  [[110,170,40,46],[190,170,40,46],[92,250,46,30],[208,252,46,30]].forEach(b=>{g.beginPath();g.ellipse(b[0]+dx,b[1],b[2],b[3],0,0,7);g.fill();});}
+ if(rx.bronq){g.filter='blur(.8px)';g.strokeStyle='rgba(225,228,230,.55)';g.lineWidth=2;
+  [[78,236],[96,252],[196,240],[214,256]].forEach(([x,y])=>{[0,6].forEach(o=>{g.beginPath();g.moveTo(x+o,y);g.lineTo(x+o-14,y+30);g.stroke();});});}
  g.filter='blur(4px)';
- const sideX={D:92,E:208};
  Object.entries(rx.eff||{}).forEach(([s,sz])=>{
   const cx=sideX[s],lat=s==='D'?-1:1;const top=300-sz*230;
   g.save();g.beginPath();g.ellipse(150,200,132,168,0,0,7);g.clip();g.beginPath();g.rect(s==='D'?0:158,0,142,308);g.clip();
@@ -145,6 +161,17 @@ function drawRX(cnv,rx){
  });
  if(rx.consol){const cx=sideX[rx.consol];g.fillStyle='rgba(200,204,208,.45)';
   [[0,190,24,18],[-14,206,16,12],[12,176,14,12]].forEach(b=>{g.beginPath();g.ellipse(cx+b[0],b[1],b[2],b[3],0,0,7);g.fill();});}
+ if(rx.consolAp){const cx=sideX[rx.consolAp];g.fillStyle='rgba(200,204,208,.5)';
+  [[0,104,30,22],[-10,122,18,14],[14,92,16,12]].forEach(b=>{g.beginPath();g.ellipse(cx+b[0],b[1],b[2],b[3],0,0,7);g.fill();});}
+ if(rx.atel){const cx=sideX[rx.atel];g.save();g.beginPath();g.ellipse(cx,175,58,ry+4,0,0,7);g.clip();
+  const gr=g.createLinearGradient(0,190,0,250);gr.addColorStop(0,'rgba(190,194,198,0)');gr.addColorStop(1,'rgba(190,194,198,.92)');
+  g.fillStyle=gr;g.fillRect(cx-70,190,140,dia-190);g.restore();}
+ if(rx.cav){const cx=sideX[rx.cav];g.filter='blur(2px)';g.fillStyle='rgba(200,204,208,.55)';g.beginPath();g.ellipse(cx,100,30,26,0,0,7);g.fill();
+  g.fillStyle='#050607';g.beginPath();g.ellipse(cx,98,16,13,0,0,7);g.fill();}
+ if(rx.ptx){const s=rx.ptx.lado,cx=sideX[s],lat=s==='D'?-1:1,tam=rx.ptx.tam||.3,w=56*tam*1.6;
+  g.filter='blur(1px)';g.save();g.beginPath();g.ellipse(cx,175,58,ry+4,0,0,7);g.clip();
+  g.fillStyle='#020303';g.beginPath();g.ellipse(cx+lat*56,175,w,ry+10,0,0,7);g.fill();
+  g.strokeStyle='rgba(235,238,240,.75)';g.lineWidth=1.5;g.beginPath();g.ellipse(cx+lat*56,175,w,ry+10,0,0,7);g.stroke();g.restore();}
  g.filter='none';
  g.fillStyle='#e9eef0';g.fillRect(14,14,22,24);g.fillStyle='#030405';g.font='bold 18px monospace';g.textAlign='center';g.fillText('D',25,32);
  g.fillStyle='#8a9aa3';g.font='10px monospace';g.textAlign='right';g.fillText('PA · '+G.c.pname.toUpperCase(),290,330);
@@ -155,7 +182,7 @@ let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
   tool:'percutir',examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
-  modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,dx:null,cond:[]},near:null,keys:{}};
+  modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
 const fready=id=>G.fluid[id]!==undefined&&G.fluid[id]<=G.clock;
@@ -163,6 +190,7 @@ const exName=id=>EXAMS.find(e=>e.id===id).t;
 const flName=id=>FLUID_TESTS.find(e=>e.id===id).t;
 function examResult(id){
  const c=G.c,L=c.light;
+ if(!L)return c.res[id]||DEF_RES[id];
  if(id==='sprot')return `Proteínas totais ${nf(L.protS)} g/dL · Albumina ${nf(L.albS)} g/dL`;
  if(id==='sdhl')return `DHL ${L.ldhS} UI/L (ref. até 200)`;
  return c.res[id]||DEF_RES[id];
@@ -224,7 +252,8 @@ function mPatient(m){
     <circle cx="100" cy="22" r="16" fill="#c99a76"/><rect x="88" y="36" width="24" height="12" fill="#c99a76"/>
     <path d="M52 48 Q100 40 148 48 L150 140 L50 140 Z" fill="#d8ad88"/><rect x="66" y="140" width="68" height="16" fill="#d8ad88"/>
     <rect x="70" y="156" width="26" height="60" fill="#c99a76"/><rect x="104" y="156" width="26" height="60" fill="#c99a76"/>
-    ${z('pescoco',80,34,40,18)}${z('coracao',96,62,44,40)}${z('abdome',62,108,76,46)}${z('pernas',66,160,68,54)}
+    <rect x="34" y="52" width="16" height="78" rx="6" fill="#c99a76"/><rect x="150" y="52" width="16" height="78" rx="6" fill="#c99a76"/>
+    ${z('boca',88,20,24,14)}${z('pescoco',80,36,40,14)}${z('coracao',96,62,44,40)}${z('abdome',62,108,76,46)}${z('pernas',66,160,68,54)}${z('maos',28,128,26,22)}${z('maos',146,128,26,22)}
    </svg></div></div>
   <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
@@ -306,12 +335,13 @@ function mXray(){
 }
 
 function mClose(){
- const f=G.final,c=G.c;
+ const f=G.final,c=G.c,liq=G.tapped;
  const h=`<p class="muted" style="font-size:.9rem">Quando assinar, o caso acaba. Ainda dá para voltar e investigar mais.</p>
- <h3 class="sec">O líquido é</h3><div class="opts">${['transudato','exsudato'].map(v=>`<label><input type="radio" name="cls" data-m="fcls" value="${v}" ${f.cls===v?'checked':''}>${v[0].toUpperCase()+v.slice(1)}</label>`).join('')}</div>
+ <h3 class="sec">Síndrome ao exame do tórax</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
+ ${liq?`<h3 class="sec">O líquido pleural é</h3><div class="opts">${['transudato','exsudato'].map(v=>`<label><input type="radio" name="cls" data-m="fcls" value="${v}" ${f.cls===v?'checked':''}>${v[0].toUpperCase()+v.slice(1)}</label>`).join('')}</div>`:''}
  <h3 class="sec">Diagnóstico</h3><div class="opts">${DX.map(d=>`<label><input type="radio" name="dx" data-m="fdx" value="${d.id}" ${f.dx===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  <h3 class="sec">Conduta (marque todas as corretas)</h3><div class="opts">${c.conduta.map(x=>`<label><input type="checkbox" data-m="fcond" value="${x.id}" ${f.cond.includes(x.id)?'checked':''}>${x.t}</label>`).join('')}</div>
- <div class="row"><button class="btn" data-m="sign" ${f.cls&&f.dx&&f.cond.length?'':'disabled'}>Assinar e encerrar o caso</button></div>`;
+ <div class="row"><button class="btn" data-m="sign" ${(f.cls||!liq)&&f.sind&&f.dx&&f.cond.length?'':'disabled'}>Assinar e encerrar o caso</button></div>`;
  return ['Prontuário',h];
 }
 
@@ -330,13 +360,13 @@ function mNotes(m){
 
 function mHelp(){
  return ['Como jogar',`<div class="list">
- <div class="res"><b>Objetivo</b>Descobrir a causa do derrame e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
- <div class="res"><b>Paciente (leito 3)</b>Converse, examine e faça a toracocentese.</div>
+ <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
+ <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
- <div class="res"><b>Prontuário (mesa)</b>Classificar o líquido, dar o diagnóstico e a conduta. Isso encerra o caso.</div>
- <div class="res"><b>Pontuação</b>Anamnese, exame físico, exames, procedimento, análises do líquido, classificação, diagnóstico e conduta. Exames desnecessários e complicações descontam.</div></div>`];
+ <div class="res"><b>Prontuário (mesa)</b>Dizer a síndrome, classificar o líquido (se colheu), dar o diagnóstico e a conduta. Isso encerra o caso.</div>
+ <div class="res"><b>Pontuação</b>Anamnese, exame físico, exames, síndrome, diagnóstico e conduta (e, nos casos com derrame, toracocentese e análise do líquido). Exames desnecessários e punções erradas descontam.</div></div>`];
 }
 
 modal.addEventListener('click',e=>{
@@ -363,6 +393,7 @@ modal.addEventListener('click',e=>{
   advance(2);ids.forEach(id=>G.orders[id]=G.clock+EXAMS.find(x=>x.id===id).d);toast(ids.length+' exame(s) solicitado(s)');renderM();return;}
  if(a==='fcls'){G.final.cls=el.value;renderM();return;}
  if(a==='fdx'){G.final.dx=el.value;renderM();return;}
+ if(a==='fsind'){G.final.sind=el.value;renderM();return;}
  if(a==='fcond'){const v=el.value,i=G.final.cond.indexOf(v);if(el.checked&&i<0)G.final.cond.push(v);if(!el.checked&&i>=0)G.final.cond.splice(i,1);renderM();return;}
  if(a==='sign'){closeM();finish();return;}
  if(a==='calc'){runCalc();return;}
@@ -380,16 +411,18 @@ function findExam(tool,z){
  const k=tool+':'+z;if(c.exam[k])return c.exam[k];
  if(/^(apice|medio|base)[DE]$/.test(z)){
   const side=z.slice(-1),eff=z.startsWith('base')&&c.effSides.includes(side);
-  return {inspecionar:eff?'Expansibilidade reduzida deste lado.':'Expansibilidade simétrica, sem abaulamentos.',
-   palpar:eff?'Frêmito toracovocal abolido.':'Frêmito toracovocal presente e normal.',
+  return {inspecionar:eff?'Expansibilidade reduzida deste lado.':'Expansibilidade simétrica, sem abaulamentos, retrações ou tiragem.',
+   palpar:eff?'Expansibilidade reduzida. Frêmito toracovocal abolido.':'Expansibilidade preservada. Frêmito toracovocal presente e normal.',
    percutir:eff?'Som maciço.':'Som claro pulmonar.',
-   auscultar:eff?'Murmúrio vesicular abolido.':'Murmúrio vesicular presente, sem ruídos adventícios.'}[tool];
+   auscultar:eff?'Murmúrio vesicular abolido. Ressonância vocal diminuída.':'Murmúrio vesicular presente, sem ruídos adventícios. Ressonância vocal normal.'}[tool];
  }
  const D={
   pescoco:{inspecionar:'Jugulares sem turgência a 45°.',palpar:'Sem linfonodos palpáveis. Refluxo hepatojugular negativo.',percutir:'Não ajuda aqui.',auscultar:'Sem sopros carotídeos.'},
   coracao:{inspecionar:'Ictus não visível.',palpar:'Ictus no 5º espaço intercostal, linha hemiclavicular.',percutir:'Não ajuda muito aqui.',auscultar:'Ritmo regular em 2 tempos, bulhas normofonéticas, sem sopros.'},
   abdome:{inspecionar:'Abdome plano.',palpar:'Flácido, indolor, sem visceromegalias.',percutir:'Timpânico, sem macicez móvel.',auscultar:'Ruídos hidroaéreos presentes.'},
-  pernas:{inspecionar:'Sem edema.',palpar:'Sem edema, panturrilhas livres.',percutir:'Não se aplica.',auscultar:'Não se aplica.'}
+  pernas:{inspecionar:'Sem edema.',palpar:'Sem edema, panturrilhas livres.',percutir:'Não se aplica.',auscultar:'Não se aplica.'},
+  boca:{inspecionar:'Mucosas coradas e úmidas. Língua rósea.',palpar:'Não se aplica.',percutir:'Não se aplica.',auscultar:'Não se aplica.'},
+  maos:{inspecionar:'Unhas com ângulo normal. Extremidades sem cianose.',palpar:'Mãos aquecidas, enchimento capilar normal.',percutir:'Não se aplica.',auscultar:'Não se aplica.'}
  };
  return D[z][tool];
 }
@@ -413,23 +446,27 @@ function doTap(){
 function score(){
  const c=G.c,f=G.final;
  const hit=(groups,arr)=>groups.filter(g=>g.ids.some(id=>arr.includes(id)));
- const qH=hit(c.keyQ,G.asked),eH=hit(c.keyExam,G.examined),xH=hit(c.keyEx,Object.keys(G.orders)),fH=hit(c.keyFluid,Object.keys(G.fluid));
+ const qH=hit(c.keyQ,G.asked),eH=hit(c.keyExam,G.examined),xH=hit(c.keyEx,Object.keys(G.orders)),fH=hit(c.keyFluid||[],Object.keys(G.fluid));
  const keyIds=c.keyEx.flatMap(g=>g.ids);
  const extra=Object.keys(G.orders).filter(id=>!keyIds.includes(id)&&!c.neutral.includes(id));
  const pen=G.tapEv.reduce((s,e)=>s+e.p,0);
  const okT=c.conduta.filter(x=>x.ok).length,okH=c.conduta.filter(x=>x.ok&&f.cond.includes(x.id)).length,wr=c.conduta.filter(x=>!x.ok&&f.cond.includes(x.id)).length;
- const s={
-  q:Math.round(MAX.q*qH.length/c.keyQ.length),
-  ex:Math.round(MAX.ex*eH.length/c.keyExam.length),
-  lab:Math.max(0,Math.round(MAX.lab*xH.length/c.keyEx.length)-2*extra.length),
-  proc:G.tapped?Math.max(0,MAX.proc-pen):0,
-  fl:Math.round(MAX.fl*fH.length/c.keyFluid.length),
-  cls:f.cls===c.correctClass?MAX.cls:0,
-  dx:f.dx===c.correctDx?MAX.dx:0,
-  cond:Math.max(0,Math.round(MAX.cond*okH/okT)-4*wr)
+ const P=pesos(c),s={
+  q:Math.round(P.q*qH.length/c.keyQ.length),
+  ex:Math.round(P.ex*eH.length/c.keyExam.length),
+  lab:Math.max(0,Math.round(P.lab*xH.length/c.keyEx.length)-2*extra.length),
+  sind:f.sind===c.correctSind?P.sind:0,
+  dx:f.dx===c.correctDx?P.dx:0,
+  cond:Math.max(0,Math.round(P.cond*okH/okT)-4*wr)
  };
+ if(ehPleural(c)){
+  s.proc=G.tapped?Math.max(0,P.proc-pen):0;
+  s.fl=Math.round(P.fl*fH.length/c.keyFluid.length);
+  s.cls=f.cls===c.correctClass?P.cls:0;
+ }
  s.total=Object.values(s).reduce((a,b)=>a+b,0);
- s.miss={q:c.keyQ.filter(g=>!qH.includes(g)),ex:c.keyExam.filter(g=>!eH.includes(g)),lab:c.keyEx.filter(g=>!xH.includes(g)),fl:c.keyFluid.filter(g=>!fH.includes(g))};
+ if(!ehPleural(c)){s.pen=pen;s.total=Math.max(0,s.total-pen);} // punção onde não há líquido também custa
+ s.miss={q:c.keyQ.filter(g=>!qH.includes(g)),ex:c.keyExam.filter(g=>!eH.includes(g)),lab:c.keyEx.filter(g=>!xH.includes(g)),fl:ehPleural(c)?c.keyFluid.filter(g=>!fH.includes(g)):[]};
  s.extra=extra;return s;
 }
 function lightText(){
@@ -440,7 +477,9 @@ function finish(){
  const c=G.c,s=score(),f=G.final;
  const prev=store('best-'+c.id);if(prev===undefined||s.total>prev)store('best-'+c.id,s.total);
  const verdict=s.total>=90?'Plantonista exemplar':s.total>=70?'Bom plantão':s.total>=50?'Dá para melhorar':'Vale revisar o resumo';
- const bars=[['Anamnese',s.q,MAX.q],['Exame físico',s.ex,MAX.ex],['Exames',s.lab,MAX.lab],['Toracocentese',s.proc,MAX.proc],['Análise do líquido',s.fl,MAX.fl],['Classificação',s.cls,MAX.cls],['Diagnóstico',s.dx,MAX.dx],['Conduta',s.cond,MAX.cond]];
+ const P=pesos(c),pl=ehPleural(c),NOME={q:'Anamnese',ex:'Exame físico',lab:'Exames',proc:'Toracocentese',fl:'Análise do líquido',cls:'Classificação',sind:'Síndrome',dx:'Diagnóstico',cond:'Conduta'};
+ const bars=Object.keys(P).map(k=>[NOME[k],s[k],P[k]]);
+ const nomeSind=id=>(SINDROMES.find(x=>x.id===id)||{t:'(não marcou)'}).t;
  const missList=(arr,title)=>arr.length?`<h3 class="sec">${title}</h3><ul class="miss">${arr.map(g=>`<li>${g.l}</li>`).join('')}</ul>`:'';
  const next=(G.ci+1)%CASES.length;
  const d=$('#debrief');
@@ -450,8 +489,10 @@ function finish(){
   <h2 style="font-size:1.6rem;margin-top:4px">${verdict}</h2>
   <div class="bars">${bars.map(b=>`<div class="bar"><span>${b[0]}</span><div class="tr"><i style="width:${Math.round(100*b[1]/b[2])}%"></i></div><span class="nm">${b[1]}/${b[2]}</span></div>`).join('')}</div>
 
-  <h3 class="sec">Classificação: ${f.cls===c.correctClass?'acertou':'errou'} (${c.correctClass})</h3>
-  <p class="muted" style="font-size:.92rem">${lightText()}</p>${c.clsNote?`<p style="font-size:.92rem;margin-top:6px">${c.clsNote}</p>`:''}
+  <h3 class="sec">Síndrome: ${nomeSind(c.correctSind)}</h3>
+  <p style="font-size:.92rem">${f.sind===c.correctSind?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
+  ${pl?`<h3 class="sec">Classificação: ${f.cls===c.correctClass?'acertou':f.cls?'errou':'não classificou'} (${c.correctClass})</h3>
+  <p class="muted" style="font-size:.92rem">${lightText()}</p>${c.clsNote?`<p style="font-size:.92rem;margin-top:6px">${c.clsNote}</p>`:''}`:''}
   <h3 class="sec">Diagnóstico: ${DX.find(x=>x.id===c.correctDx).t}</h3>
   <p style="font-size:.92rem">${f.dx===c.correctDx?'Você acertou. ':'Você marcou: '+DX.find(x=>x.id===f.dx).t+'. '}${c.dxWhy}</p>
 
@@ -459,8 +500,8 @@ function finish(){
   ${missList(s.miss.ex,'Exame físico que faltou')}
   ${missList(s.miss.lab,'Exames que faltaram')}
   ${s.extra.length?`<h3 class="sec">Exames desnecessários (−2 cada)</h3><ul class="miss">${s.extra.map(id=>`<li>${exName(id)}</li>`).join('')}</ul>`:''}
-  ${G.tapped?missList(s.miss.fl,'Análises do líquido que faltaram'):'<h3 class="sec">Você não colheu o líquido pleural</h3>'}
-  ${G.tapEv.length?`<h3 class="sec">Intercorrências no procedimento</h3><ul class="miss">${G.tapEv.map(e=>`<li>${e.t} (−${e.p})</li>`).join('')}</ul>`:''}
+  ${pl?(G.tapped?missList(s.miss.fl,'Análises do líquido que faltaram'):'<h3 class="sec">Você não colheu o líquido pleural</h3>'):''}
+  ${G.tapEv.length?`<h3 class="sec">Intercorrências no procedimento${pl?'':' (descontadas da nota)'}</h3><ul class="miss">${G.tapEv.map(e=>`<li>${e.t} (−${e.p})</li>`).join('')}</ul>`:''}
 
   <h3 class="sec">Revisão da conduta</h3>
   <div class="cond">${c.conduta.map(x=>{const p=f.cond.includes(x.id);const k=x.ok&&p?'ok':!x.ok&&p?'no':x.ok?'mi':'';const lab=x.ok&&p?'Acertou':!x.ok&&p?'Conduta errada':x.ok?'Faltou marcar':'Bem ignorada';return `<div class="${k}">${x.t}<small><b>${lab}.</b> ${x.why}</small></div>`;}).join('')}</div>
@@ -471,7 +512,7 @@ function finish(){
    <button class="btn" data-go="start" data-i="${next}">Próximo caso</button>
    <button class="btn ghost" data-go="start" data-i="${G.ci}">Repetir este caso</button>
    <button class="btn ghost" data-go="home">Início</button></div>
-  <p class="foot">${c.ia?'Paciente fictício criado pela IA a partir de: '+c.fonte+'. A IA pode errar: confira com o seu material e com as diretrizes atuais.':'Pacientes fictícios, criados a partir do resumo de Derrame Pleural (Estratégia MED). Confira com o seu material e com as diretrizes atuais.'}</p></div>`;
+  <p class="foot">${c.ia?'Paciente fictício criado pela IA a partir de: '+c.fonte+'. A IA pode errar: confira com o seu material e com as diretrizes atuais.':'Paciente fictício. Referência: '+c.fonte+'. Confira com o seu material e com as diretrizes atuais.'}</p></div>`;
  show('debrief');
 }
 
@@ -479,13 +520,13 @@ function finish(){
 function show(id){['home','game','debrief'].forEach(s=>$('#'+s).hidden=s!==id);window.scrollTo(0,0);}
 function renderHome(){
  $('#home').innerHTML=`<div class="hero"><h1>Plantão Pleural</h1>
-  <p>Noite de plantão na emergência. Pacientes com derrame pleural. Você conversa, examina, pede exames, lê a radiografia sem laudo, punciona e decide. Ninguém vai te dizer o que é importante.</p></div>
- <div class="cases">${CASES.map((c,i)=>{const b=store('best-'+c.id);return `<button class="ccard" data-go="start" data-i="${i}"><canvas data-por="${c.look}"></canvas><div><span class="n">${c.n.toUpperCase()}${c.ia?' · FEITO PELA IA':''}</span><h3>${c.title}</h3><p>${c.card}</p><span class="best">${b!==undefined?'Recorde: '+b+'/100':'Ainda não atendido'}</span></div></button>`;}).join('')}</div>
+  <p>Noite de plantão na emergência. Você conversa, examina, pede exames, lê a radiografia sem laudo, punciona quando precisa e decide. Ninguém vai te dizer o que é importante.</p></div>
+ ${[...new Set(CASES.map(c=>c.modulo))].map(mod=>`<h2 class="modh">${mod}</h2><div class="cases">${CASES.map((c,i)=>{if(c.modulo!==mod)return '';const b=store('best-'+c.id);return `<button class="ccard" data-go="start" data-i="${i}"><canvas data-por="${c.look}"></canvas><div><span class="n">${c.n.toUpperCase()}${c.ia?' · FEITO PELA IA':''}</span><h3>${c.title}</h3><p>${c.card}</p><span class="best">${b!==undefined?'Recorde: '+b+'/100':'Ainda não atendido'}</span></div></button>`;}).join('')}</div>`).join('')}
  <section class="iabox" id="iaBox"></section>
  <div class="how"><div><b>Ande pela sala</b>WASD ou setas no computador. No celular, toque onde quer ir.</div>
   <div><b>Investigue</b>Perguntas, manobras e exames gastam tempo. Pedir tudo tira pontos.</div>
   <div><b>Interprete</b>Resultados vêm crus. A radiografia vem sem laudo. Light é com você.</div></div>
- <p class="foot">Casos fictícios construídos a partir de "Resumos Estratégicos: Derrame Pleural" (Estratégia MED, Prof. Philippe Colares). Material de estudo. Não substitui o julgamento clínico.</p>`;
+ <p class="foot">Casos fictícios construídos a partir do material de estudo do André (a referência de cada caso aparece no resultado). Material de estudo. Não substitui o julgamento clínico.</p>`;
  document.querySelectorAll('[data-por]').forEach(c=>drawPortrait(c,c.dataset.por,'sick'));
  if(typeof iaHome==='function')iaHome();
 }
