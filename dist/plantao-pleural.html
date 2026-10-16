@@ -191,6 +191,9 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
  .figtabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-16px;padding-right:16px}.figtabs button{flex:none}
  .fig svg{max-width:230px}
 }
+
+.tapbtn{width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.tapbtn:hover{border-color:var(--accent)}
 </style>
 
 <div class="wrap">
@@ -5667,7 +5670,7 @@ function tapHtml(c){
     ribs+=`<path d="M138 ${y} Q90 ${y-8} 52 ${y+16}" stroke="#a9855f" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M162 ${y} Q210 ${y-8} 248 ${y+16}" stroke="#a9855f" stroke-width="7" fill="none" stroke-linecap="round"/>`;}
    for(let i=1;i<=9;i++){const y=34+(i-1)*24+6;
     ['E','D'].forEach(s=>{const x=s==='E'?56:162;sp+=`<rect class="space ${t.space&&t.space.s===s&&t.space.i===i?'sel':''}" data-m="space" data-s="${s}" data-i="${i}" x="${x}" y="${y}" width="82" height="16" rx="4"><title>${i}º espaço visível, lado ${s}</title></rect>`;});}
-   h+=`<p class="muted" style="font-size:.9rem">Procedimento no leito 3: paciente sentado, inclinado para a frente, e você atrás dele. Escolha o espaço intercostal, a posição da agulha e o volume.</p>
+   h+=`<p class="muted" style="font-size:.9rem">No leito 3: paciente sentado, inclinado para a frente, e você atrás dele. Escolha o espaço intercostal, a posição da agulha e o volume.</p>
    <div class="tapwrap" style="margin-top:10px">
     <svg viewBox="0 0 300 280"><rect x="40" y="10" width="220" height="262" rx="40" fill="#d8b896"/>
      <path d="M70 40 L120 46 L112 190 Z" fill="#cfa983" opacity=".8"/><path d="M230 40 L180 46 L188 190 Z" fill="#cfa983" opacity=".8"/>
@@ -5706,19 +5709,25 @@ function mNurse(){
 }
 
 function mPc(m){
- const tab=m.tab||'order';
- let h=tabs([['order','Pedir exames'],['res','Resultados'],['tap','Toracocentese']],tab==='fluid'?'tap':tab);
- if(tab==='order'){
+ if(m.tab==='tap'||m.tab==='fluid'){m.tab='order';m.sub='tap';}
+ const tab=m.tab||'order',c=G.c;
+ let h=tabs([['order','Pedir exames'],['res','Resultados']],tab);
+ if(tab==='order'&&m.sub==='tap'){
+  h+=`<button class="chip" data-m="tapback">← Voltar aos exames</button><h4 class="mtit">Toracocentese</h4>`+tapHtml(c);
+ }else if(tab==='order'){
   const left=EXAMS.filter(e=>G.orders[e.id]===undefined);
   h+=`<p class="muted" style="font-size:.9rem">Exames pedidos sem necessidade custam pontos. O tempo indica quando o resultado chega.</p>
   <div class="list" style="margin-top:8px">${left.map(e=>`<label class="check"><input type="checkbox" data-ex="${e.id}">${e.t}<span class="tm">${e.d} min</span></label>`).join('')||'<p class="muted">Tudo já foi pedido.</p>'}</div>
-  <div class="row"><button class="btn" data-m="order">Solicitar</button></div>`;
+  <div class="row"><button class="btn" data-m="order">Solicitar</button></div>
+  <h4 class="mtit">Procedimento no leito</h4>
+  ${G.tapped?`<div class="okmsg">Toracocentese feita. Líquido colhido: ${c.fluidLook}</div>${fluidForm()}`
+   :`<button class="check tapbtn" data-m="tapopen">Toracocentese<span class="tm">20 min ›</span></button>`}`;
  }
  if(tab==='res'){
-  const ids=Object.keys(G.orders);
-  h+=ids.length?`<div class="list">${ids.map(id=>{const r=ready(id);if(r&&id!=='rx')G.seen[id]=1;return `<div class="res ${r?'':'wait'}"><b>${exName(id)}</b><span class="v">${r?examResult(id):'Aguardando · pronto às '+fmtT(G.orders[id])}</span></div>`;}).join('')}</div>`:'<p class="muted">Nenhum exame pedido ainda.</p>';
+  const ids=Object.keys(G.orders),fl=Object.keys(G.fluid);
+  h+=ids.length||fl.length?`<div class="list">${ids.map(id=>{const r=ready(id);if(r&&id!=='rx')G.seen[id]=1;return `<div class="res ${r?'':'wait'}"><b>${exName(id)}</b><span class="v">${r?examResult(id):'Aguardando · pronto às '+fmtT(G.orders[id])}</span></div>`;}).join('')}</div>`:'<p class="muted">Nenhum exame pedido ainda.</p>';
+  if(fl.length)h+=`<h4 class="mtit">Líquido pleural</h4><div class="list">${fl.map(id=>{const r=fready(id);if(r)G.seen['f_'+id]=1;return `<div class="res ${r?'':'wait'}"><b>${flName(id)}</b><span class="v">${r?fluidResult(id):'Aguardando · pronto às '+fmtT(G.fluid[id])}</span></div>`;}).join('')}</div>`;
  }
- if(tab==='tap'||tab==='fluid')h+=tapHtml(G.c);
  return ['Computador do plantão',h];
 }
 
@@ -5755,7 +5764,7 @@ function mNotes(m){
 function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
- <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese (no computador do plantão, aba Toracocentese).</div>
+ <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese (no computador do plantão, em Pedir exames).</div>
  <div class="res"><b>Sons</b>Toda ausculta e toda percussão têm o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
@@ -5768,7 +5777,9 @@ modal.addEventListener('click',e=>{
  const el=e.target.closest('[data-m]');if(!el||el.disabled)return;
  const a=el.dataset.m,m=G.modal,c=G.c;
  if(a==='close'){closeM();return;}
- if(a==='tab'){m.tab=el.dataset.v;G.tap.msg=null;renderM(true);return;}
+ if(a==='tab'){m.tab=el.dataset.v;m.sub=null;G.tap.msg=null;renderM(true);return;}
+ if(a==='tapopen'){m.sub='tap';renderM(true);return;}
+ if(a==='tapback'){m.sub=null;G.tap.msg=null;renderM(true);return;}
  if(a==='qcat'){G.qcat=el.dataset.v;renderM();return;}
  if(a==='ask'){const id=el.dataset.v;if(!G.asked.includes(id)){G.asked.push(id);G.talkLog.push({q:QUESTIONS.find(q=>q.id===id).t,a:c.answers[id]});}advance(2);G.lastAns=id;m.typeNow=true;renderM();return;}
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}

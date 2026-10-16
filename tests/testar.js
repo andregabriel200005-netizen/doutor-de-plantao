@@ -124,6 +124,9 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
   const pcTap = await page.evaluate(() => { const antes = !!document.querySelector('[data-m="space"]'); const g = { t: G.tapped, f: G.fluid }; G.tapped = true; G.fluid = { prot: 0 }; renderM(); const txt = document.querySelector('#mBody').textContent; G.tapped = g.t; G.fluid = g.f; renderM(); return antes && txt.includes('Líquido colhido') && txt.includes('Análises do líquido') && !!document.querySelector('[data-m="space"]'); });
   ok(pcTap, 'toracocentese fica no computador, junto dos exames, e mostra o líquido depois de colher');
+  const naLista = await page.evaluate(() => { G.modal.sub = null; G.modal.tab = 'order'; renderM(); const b = !!document.querySelector('[data-m="tapopen"]') && !document.querySelector('[data-v="tap"]'); document.querySelector('[data-m="tapopen"]').click(); return b && !!document.querySelector('[data-m="space"]'); });
+  ok(naLista, 'toracocentese aparece no fim de Pedir exames, sem aba própria');
+  await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
   await page.click('[data-m="close"]');
   await page.evaluate(() => { G.tapped = true; openM('close'); });
   await page.check('input[name=sind][value=derrame]');
