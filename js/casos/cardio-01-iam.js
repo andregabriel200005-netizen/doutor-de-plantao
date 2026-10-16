@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Gilberto, 58 anos. Dor no peito que começou há uns 40 minutos. Tá suando muito.',
  vitals:'PA 150/92 mmHg · FC 96 bpm · FR 20 irpm · T 36,4 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Fiquei enjoado, mas não vomitei.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Uma dor no meio do peito, um aperto muito forte.',
   tempo:'Uns 40 minutos. Não passa.',
   inicio:'Do nada. Eu tava sentado no sofá vendo o jornal.',

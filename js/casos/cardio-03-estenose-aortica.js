@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Otávio, 79 anos. A filha trouxe porque ele desmaiou hoje à tarde.',
  vitals:'PA 112/90 mmHg · FC 72 bpm · FR 18 irpm · T 36,3 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei hoje subindo a escada com as compras.',
   tempo:'Hoje foi o desmaio. Mas faz uns meses que canso e sinto um aperto no peito quando ando mais.',
   inicio:'O desmaio foi de repente, no meio da escada.',

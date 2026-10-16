@@ -41,7 +41,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
       if (CASES.some(o => o !== c && o.id === c.id)) prob.push('id repetido: ' + c.id);
       sindLista(c).forEach(id => { if (!SINDROMES.some(d => d.id === id)) prob.push('síndrome inexistente: ' + id); });
       // ids que não existem viram itens impossíveis de pontuar
-      const manobra = id => id === 'vitals' || id === 'inspecionar:geral' || (String(id).startsWith('manobra:') && MANOBRAS.some(x => 'manobra:' + x.id === id)) || (() => { const [t, z] = String(id).split(':'); return TOOLS.some(x => x.id === t) && ZNAME[z] && z !== 'geral'; })();
+      const manobra = id => id === 'vitals' || id === 'inspecionar:geral' || id === 'ordem:abdome' || (String(id).startsWith('manobra:') && MANOBRAS.some(x => 'manobra:' + x.id === id)) || (() => { const [t, z] = String(id).split(':'); return TOOLS.some(x => x.id === t) && ZNAME[z] && z !== 'geral'; })();
       const exame = id => EXAMS.some(e => e.id === id);
       (c.keyQ || []).forEach(g => g.ids.forEach(id => { if (!QUESTIONS.some(q => q.id === id)) prob.push('pergunta inexistente em keyQ: ' + id); }));
       (c.keyExam || []).forEach(g => g.ids.forEach(id => { if (!manobra(id)) prob.push('manobra inexistente em keyExam: ' + id); }));
@@ -142,6 +142,20 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   const larg = await cel.evaluate(() => document.documentElement.scrollWidth);
   ok(larg <= 390, `celular sem rolagem lateral (largura ${larg}px)`);
   await cel.screenshot({ path: path.join(PRINTS, '05-celular.png') });
+
+  // abdome: palpar antes de auscultar perde o ponto da ordem e a ausculta avisa
+  const ordem = await page.evaluate(() => {
+    const i = CASES.findIndex(c => c.id === 'd-apend'); newGame(i); show('game'); openM('patient', { tab: 'exam' });
+    const clicar = (m, v) => document.querySelector(`[data-m="${m}"][data-v="${v}"]`).dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    clicar('tool', 'palpar'); clicar('ex', 'fie'); clicar('tool', 'auscultar'); clicar('ex', 'meso');
+    const errado = { ponto: G.examined.includes('ordem:abdome'), aviso: G.examLog.at(-1).v.includes('já tinha sido palpado') };
+    closeM(); newGame(i); show('game'); openM('patient', { tab: 'exam' });
+    clicar('tool', 'auscultar'); clicar('ex', 'meso');
+    const certo = G.examined.includes('ordem:abdome');
+    closeM(); G = null; renderHome(); show('home');
+    return { errado, certo };
+  });
+  ok(!ordem.errado.ponto && ordem.errado.aviso && ordem.certo, 'abdome: auscultar antes de palpar vale ponto; o contrário avisa e não pontua');
 
   // casos da IA: fora do Claude, só um aviso
   ok((await page.textContent('#iaBox')).includes('só funciona'), 'fora do Claude, a área da IA avisa que não está disponível');

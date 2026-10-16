@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Leandro, 38 anos. Veio por cansaço e diz que sente o coração no pescoço.',
  vitals:'PA 148/56 mmHg · FC 88 bpm · FR 20 irpm · T 36,5 °C · SpO₂ 97% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Ando muito cansado e sinto o coração batendo forte, até no pescoço.',
   tempo:'Uns seis meses, e tá piorando.',
   inicio:'Aos poucos.',

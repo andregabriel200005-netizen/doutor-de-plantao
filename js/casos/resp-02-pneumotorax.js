@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Bruno, 22 anos. Chegou com dor no peito e falta de ar.',
  vitals:'PA 122/76 mmHg · FC 98 bpm · FR 22 irpm · T 36,7 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não, começou parado.",
   palpitacao:"Tá acelerado desde a dor.",
   sincope:"Não.",

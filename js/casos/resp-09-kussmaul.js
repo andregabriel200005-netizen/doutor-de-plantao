@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Davi, 19 anos. A mãe trouxe porque ele está respirando estranho e vomitando.',
  vitals:'PA 104/62 mmHg · FC 118 bpm · FR 30 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Vomitei várias vezes. Primeiro comida, depois um líquido amarelo.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Tá clara, de tanto que urino.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não.",
   palpitacao:"Tá batendo rápido.",
   sincope:"Fiquei tonto quando levantei, mas não desmaiei.",
@@ -45,7 +52,8 @@ CASES.push({
  effSides:[],
  exam:{
   'inspecionar:boca':'Mucosas secas. Língua rósea.',
-  'palpar:abdome':'Dor difusa leve à palpação, sem endurecimento da parede.'
+  'palpar:abdome':'Dor difusa leve à palpação, sem endurecimento da parede.',
+  ...achados(REGIOES,{palpar:'Dor leve à palpação, sem endurecimento da parede.'})
  },
  keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (ritmo respiratório)'},
   {ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax (pulmões limpos)'},{ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax'},

@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Rafael, 26 anos. Dor no peito desde ontem.',
  vitals:'PA 124/78 mmHg · FC 104 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Uma dor no meio do peito que não me deixa deitar.',
   tempo:'Desde ontem.',
   inicio:'Começou uns dias depois de uma gripe forte.',

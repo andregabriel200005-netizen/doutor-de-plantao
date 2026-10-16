@@ -8,6 +8,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Joana, 26 anos, grávida de 28 semanas. Falta de ar e tossiu sangue hoje.',
  vitals:'PA 112/70 mmHg · FC 112 bpm · FR 26 irpm · T 36,7 °C · SpO₂ 92% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Só no começo da gravidez.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Falta de ar que piorou muito, e hoje tossi sangue.',
   tempo:'O cansaço começou com a gravidez. Piorou nas últimas duas semanas.',
   inicio:'Aos poucos.',

@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Marcos, 34 anos. Tosse há mais de um mês e febre no fim da tarde.',
  vitals:'PA 112/70 mmHg · FC 100 bpm · FR 22 irpm · T 37,9 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Na infância, no interior, no rio.",
   esforco:"Cansa um pouco mais na obra.",
   palpitacao:"Não.",
   sincope:"Não.",

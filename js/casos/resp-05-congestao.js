@@ -8,6 +8,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Damião, 68 anos, veio do sítio. Falta de ar, não consegue deitar.',
  vitals:'PA 150/94 mmHg · FC 104 bpm · FR 26 irpm · T 36,4 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Tá mais escura e pouca.",
+  transfusao:"Não.",
+  rio:"Quando menino tomava banho no açude do sítio.",
   esforco:"Antes era só no esforço. Agora até parado.",
   palpitacao:"Às vezes sinto o coração batendo forte.",
   sincope:"Não.",

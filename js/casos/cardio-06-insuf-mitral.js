@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Cleide, 61 anos. Cansaço e coração acelerado.',
  vitals:'PA 128/78 mmHg · FC 92 bpm · FR 22 irpm · T 36,4 °C · SpO₂ 95% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Cansaço e o coração acelerado.',
   tempo:'Desde o infarto, faz dois anos, vem piorando.',
   inicio:'Aos poucos.',

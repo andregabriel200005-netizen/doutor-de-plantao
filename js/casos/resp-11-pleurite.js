@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Lúcia, 30 anos. Dor no peito do lado esquerdo há dois dias.',
  vitals:'PA 118/76 mmHg · FC 96 bpm · FR 22 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não tem a ver com esforço. É com a respiração.",
   palpitacao:"Não.",
   sincope:"Não.",

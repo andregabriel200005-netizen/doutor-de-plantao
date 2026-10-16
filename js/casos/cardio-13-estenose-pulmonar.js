@@ -8,6 +8,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Théo, 4 anos, com a mãe. Veio por gripe, mas a mãe tá preocupada porque ele cansa muito brincando.',
  vitals:'PA 96/60 mmHg · FC 108 bpm · FR 26 irpm · T 37,4 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"(A mãe) Não.",
+  engolir:"(A mãe) Não.",
+  vomito:"(A mãe) Não.",
+  fezes:"(A mãe) Normais, uma vez por dia.",
+  urinacor:"(A mãe) Não, normal.",
+  transfusao:"(A mãe) Não.",
+  rio:"(A mãe) Não.",
   queixa:'(A mãe responde) Tá gripado, com tosse e nariz escorrendo. E ele cansa muito quando corre.',
   tempo:'A gripe faz dois dias. O cansaço eu reparo faz um ano.',
   inicio:'O cansaço foi aparecendo quando ele começou a correr mais.',

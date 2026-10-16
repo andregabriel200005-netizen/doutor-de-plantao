@@ -14,6 +14,11 @@ const QUESTIONS=[
  {id:'sincope',cat:'História atual',t:'Já desmaiou ou quase desmaiou?'},
  {id:'posicao',cat:'História atual',t:'Tem alguma posição que alivia ou piora a falta de ar?'},
  {id:'edema',cat:'História atual',t:'As pernas incham?'},
+ {id:'refeicao',cat:'História atual',t:'A dor tem relação com a comida?'},
+ {id:'engolir',cat:'História atual',t:'Tem dificuldade ou dor para engolir?'},
+ {id:'vomito',cat:'História atual',t:'Teve vômito? Como era?'},
+ {id:'fezes',cat:'História atual',t:'Como estão as fezes? Cor, consistência, quantas vezes?'},
+ {id:'urinacor',cat:'História atual',t:'A urina mudou de cor?'},
  {id:'urina',cat:'História atual',t:'Tem sentido muita sede ou urinado muito?'},
  {id:'peso',cat:'História atual',t:'Perdeu peso? Sua à noite?'},
  {id:'tratou',cat:'Medicamentos',t:'Já tomou algum remédio para isso?'},
@@ -22,12 +27,14 @@ const QUESTIONS=[
  {id:'alergia',cat:'Antecedentes',t:'Tem rinite, alergia ou asma desde criança?'},
  {id:'passado',cat:'Antecedentes',t:'Já teve pneumonia ou tuberculose antes?'},
  {id:'infancia',cat:'Antecedentes',t:'Teve alguma doença séria quando era criança?'},
+ {id:'transfusao',cat:'Antecedentes',t:'Já recebeu transfusão de sangue?'},
  {id:'habitos',cat:'Antecedentes',t:'Bebe ou fuma?'},
  {id:'contato',cat:'Antecedentes',t:'Alguém perto de você está doente ou tossindo?'},
  {id:'imob',cat:'Antecedentes',t:'Fez cirurgia, viagem longa ou ficou muito tempo de cama?'},
  {id:'familia',cat:'Antecedentes',t:'Tem alguma doença na família?'},
  {id:'trabalho',cat:'Vida e hábitos',t:'Trabalha com quê?'},
  {id:'moradia',cat:'Vida e hábitos',t:'Onde você mora? Quantas pessoas moram com você?'},
+ {id:'rio',cat:'Vida e hábitos',t:'Já tomou banho de rio, lagoa ou açude?'},
  {id:'sal',cat:'Vida e hábitos',t:'Como anda a alimentação?'},
  {id:'emocional',cat:'Vida e hábitos',t:'Tem passado por estresse? Anda ansioso(a)?'},
  {id:'estimulantes',cat:'Vida e hábitos',t:'Toma café, energético ou algum remédio estimulante ou para emagrecer?'},
@@ -45,9 +52,13 @@ const EXAMS=[
  {id:'angio',t:'Angiotomografia de tórax',d:60},{id:'eco',t:'Ecocardiograma',d:90},
  {id:'escarro',t:'Escarro: BAAR e teste molecular',d:90},
  {id:'gaso',t:'Gasometria arterial',d:20},{id:'ecg',t:'Eletrocardiograma',d:15},
- {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60}
+ {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60},
+ {id:'fagt',t:'Fosfatase alcalina e GGT',d:30},{id:'amil',t:'Amilase e lipase séricas',d:30},{id:'coag',t:'Coagulograma (TP)',d:30},
+ {id:'usgabd',t:'Ultrassonografia de abdome',d:40},{id:'eda',t:'Endoscopia digestiva alta',d:90},
+ {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40}
 ];
-const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
+const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',fagt:'Fosfatase alcalina 88 U/L · GGT 32 U/L',amil:'Amilase 64 U/L · Lipase 38 U/L',coag:'TP 12 s (controle 12 s)',
+ usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
 const FLUID_TESTS=[
  {id:'ph',t:'pH'},{id:'gli',t:'Glicose'},{id:'dhl',t:'DHL'},{id:'prot',t:'Proteínas totais'},{id:'alb',t:'Albumina'},
  {id:'cel',t:'Celularidade total e diferencial'},{id:'cito',t:'Citologia oncótica'},{id:'ada',t:'ADA'},
@@ -58,7 +69,9 @@ const FLUID_DEF={tg:'Triglicerídeos 28 mg/dL',amil:'Amilase 45 U/L',ht:'Hemató
 const TOOLS=[{id:'inspecionar',t:'Inspecionar'},{id:'palpar',t:'Palpar'},{id:'percutir',t:'Percutir'},{id:'auscultar',t:'Auscultar'}];
 const ZNAME={apiceE:'ápice esquerdo',apiceD:'ápice direito',medioE:'terço médio esquerdo',medioD:'terço médio direito',baseE:'base esquerda',baseD:'base direita',pescoco:'pescoço',coracao:'precórdio (ictus)',boca:'boca e língua',maos:'mãos e unhas',
  focoAo:'foco aórtico (2º EIC direito)',focoP:'foco pulmonar (2º EIC esquerdo)',focoAc:'foco aórtico acessório (3º EIC esquerdo)',focoT:'foco tricúspide (4º–5º EIC paraesternal esquerdo)',focoM:'foco mitral (5º EIC, linha hemiclavicular)',
- pulsoCar:'pulso carotídeo',pulsoRad:'pulso radial',pulsoFem:'pulso femoral',pulsoPed:'pulso pedioso',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
+ pulsoCar:'pulso carotídeo',pulsoRad:'pulso radial',pulsoFem:'pulso femoral',pulsoPed:'pulso pedioso',
+ hcd:'hipocôndrio direito',epi:'epigástrio',hce:'hipocôndrio esquerdo',fld:'flanco direito',meso:'mesogástrio',fle:'flanco esquerdo',fid:'fossa ilíaca direita',hipo:'hipogástrio',fie:'fossa ilíaca esquerda',
+ lombD:'região lombar direita',lombE:'região lombar esquerda',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
 const DX=[
  {id:'empiema',t:'Derrame parapneumônico complicado / empiema'},
  {id:'simples',t:'Derrame parapneumônico não complicado'},
@@ -95,11 +108,28 @@ const DX=[
  {id:'ortostatica',t:'Síncope por hipotensão ortostática (medicamentosa)'},
  {id:'estimulantes',t:'Palpitações por uso de estimulantes'},
  {id:'mch',t:'Miocardiopatia hipertrófica'},
- {id:'inocente',t:'Sopro funcional (inocente)'}
+ {id:'inocente',t:'Sopro funcional (inocente)'},
+ {id:'apendicite',t:'Apendicite aguda'},
+ {id:'colecistite',t:'Colecistite aguda'},
+ {id:'coledoco',t:'Icterícia obstrutiva por coledocolitíase'},
+ {id:'esquisto',t:'Hipertensão portal por esquistossomose, com hemorragia por varizes'},
+ {id:'cirrose',t:'Cirrose descompensada com ascite'},
+ {id:'mixedema',t:'Ascite por hipotireoidismo grave (mixedema)'},
+ {id:'pancreatite',t:'Pancreatite aguda'},
+ {id:'pancrcron',t:'Pancreatite crônica'},
+ {id:'perfuracao',t:'Úlcera péptica perfurada'},
+ {id:'neopanc',t:'Neoplasia de cabeça de pâncreas'},
+ {id:'hepviral',t:'Hepatite viral aguda'},
+ {id:'hemolise',t:'Icterícia por hemólise'},
+ {id:'obstrucao',t:'Obstrução intestinal por bridas'},
+ {id:'pielo',t:'Pielonefrite aguda'},
+ {id:'lactose',t:'Intolerância à lactose'},
+ {id:'neoesof',t:'Neoplasia de esôfago'},
+ {id:'fecaloma',t:'Fecaloma'}
 ];
 // Síndrome que o exame do tórax mostra (pergunta do prontuário em todos os casos).
 const SINDROMES=[
- {id:'normal',t:'Sem síndrome pulmonar, pleural ou cardíaca ao exame'},
+ {id:'normal',t:'Nenhuma síndrome da lista'},
  {id:'broncoesp',t:'Brônquica obstrutiva (broncoespasmo)'},
  {id:'bronqcron',t:'Brônquica crônica com hiperaeração'},
  {id:'bronqx',t:'Bronquiectasia'},
@@ -116,19 +146,33 @@ const SINDROMES=[
  {id:'ic',t:'Insuficiência cardíaca'},
  {id:'has',t:'Hipertensiva'},
  {id:'pericardica',t:'Pericárdica'},
- {id:'miocardio',t:'Miocardiopatia'}
+ {id:'miocardio',t:'Miocardiopatia'},
+ {id:'ascite',t:'Ascite / hipertensão portal'},
+ {id:'ictericia',t:'Ictérica'},
+ {id:'hemorragica',t:'Hemorrágica digestiva'},
+ {id:'abdagudo',t:'Abdome agudo'},
+ {id:'pancreatica',t:'Pancreática'},
+ {id:'diarreica',t:'Diarreica'},
+ {id:'constipacao',t:'Constipação'},
+ {id:'disfagica',t:'Disfágica (esôfago)'}
 ];
 // Manobras especiais (exame do coração e da pressão). Ficam em G.examined como 'manobra:id'.
 const MANOBRAS=[
- {id:'pachon',t:'Decúbito lateral esquerdo (Pachon)'},
- {id:'frente',t:'Tronco inclinado para a frente'},
- {id:'apneia',t:'Prender a respiração'},
- {id:'handgrip',t:'Handgrip'},
- {id:'rivero',t:'Rivero-Carvallo (inspiração profunda)'},
- {id:'valsalva',t:'Valsalva'},
- {id:'cocoras',t:'Cócoras / elevar as pernas'},
- {id:'ortostase',t:'PA deitado e em pé'},
- {id:'pa3',t:'PA com técnica completa'}
+ {id:'pachon',g:'cor',t:'Decúbito lateral esquerdo (Pachon)'},
+ {id:'frente',g:'cor',t:'Tronco inclinado para a frente'},
+ {id:'apneia',g:'cor',t:'Prender a respiração'},
+ {id:'handgrip',g:'cor',t:'Handgrip'},
+ {id:'rivero',g:'cor',t:'Rivero-Carvallo (inspiração profunda)'},
+ {id:'valsalva',g:'cor',t:'Valsalva'},
+ {id:'cocoras',g:'cor',t:'Cócoras / elevar as pernas'},
+ {id:'ortostase',g:'cor',t:'PA deitado e em pé'},
+ {id:'pa3',g:'cor',t:'PA com técnica completa'},
+ {id:'murphy',g:'abd',t:'Murphy'},{id:'blumberg',g:'abd',t:'Blumberg (McBurney)'},{id:'rovsing',g:'abd',t:'Rovsing'},
+ {id:'psoas',g:'abd',t:'Psoas'},{id:'obturador',g:'abd',t:'Obturador'},{id:'lemos',g:'abd',t:'Palpar o fígado (Lemos-Torres)'},
+ {id:'hepatimetria',g:'abd',t:'Hepatimetria'},{id:'schuster',g:'abd',t:'Palpar o baço (Schuster)'},{id:'traube',g:'abd',t:'Percutir o espaço de Traube'},
+ {id:'skoda',g:'abd',t:'Semicírculo de Skoda'},{id:'macicezmovel',g:'abd',t:'Macicez móvel'},{id:'piparote',g:'abd',t:'Piparote'},
+ {id:'rechaco',g:'abd',t:'Rechaço'},{id:'jobert',g:'abd',t:'Percutir a loja hepática (Jobert)'},{id:'vascolejo',g:'abd',t:'Vascolejo'},
+ {id:'gersuny',g:'abd',t:'Gersuny'},{id:'doisdedos',g:'abd',t:'Direção do fluxo das veias (dois dedos)'}
 ];
 const LOOKS={
  doctor:{skin:'#d9a27a',hair:'#3a2618',style:'short',top:'#eef3f4',pants:'#2c3f63',steth:1},
@@ -148,9 +192,13 @@ const LOOKS={
  marcos:{skin:'#a8744e',hair:'#1b1310',style:'short',top:'#c9b38a'},
  theo:{skin:'#e8b890',hair:'#5a3a1a',style:'short',top:'#f2d24a'},
  ines:{skin:'#d9a27a',hair:'#d8d4cf',style:'bun',top:'#7fb39a'},
- jose:{skin:'#c99a76',hair:'#d8d4cf',style:'bald',top:'#b98a8a',glasses:1}
+ jose:{skin:'#c99a76',hair:'#d8d4cf',style:'bald',top:'#b98a8a',glasses:1},
+ sueli:{skin:'#c68a5e',hair:'#3a2618',style:'bun',top:'#e2c46a'},
+ josue:{skin:'#7a4a30',hair:'#2a1d17',style:'short',top:'#9fc0a0',must:1},
+ mario:{skin:'#e6b896',hair:'#9b958e',style:'short',top:'#c47a6a'}
 };
 const FOCOS=['focoAo','focoP','focoAc','focoT','focoM'],PULSOS=['pulsoCar','pulsoRad','pulsoFem','pulsoPed'];
+const REGIOES=['hcd','epi','hce','fld','meso','fle','fid','hipo','fie'],LOMBAR=['lombD','lombE'];
 
 // Achados do exame para várias regiões de uma vez: achados(TORAX,{palpar:'...',auscultar:'...'})
 const TORAX=['apiceE','apiceD','medioE','medioD','baseE','baseD'];
@@ -158,3 +206,11 @@ function achados(zonas,porManobra){const o={};zonas.forEach(z=>Object.entries(po
 
 // Cada arquivo em js/casos/ adiciona um paciente a esta lista.
 const CASES=[];
+
+// Respostas neutras para os casos novos: cada caso troca as que importam (o teste cobra resposta para todas as perguntas).
+const RESP_PADRAO={dor:'Não sinto dor.',febre:'Não.',tosse:'Não.',escarro:'Não.',chiado:'Não.',dispneia:'Não.',esforco:'Não.',palpitacao:'Não.',sincope:'Não.',
+ posicao:'Não.',edema:'Não.',refeicao:'Não.',engolir:'Não.',vomito:'Não.',fezes:'Normais, uma vez por dia.',urinacor:'Não, normal.',urina:'Não.',peso:'Não.',
+ tratou:'Nada.',meds:'Nenhum.',doencas:'Nenhuma.',alergia:'Não.',passado:'Não.',infancia:'Não.',transfusao:'Não.',habitos:'Não fumo, não bebo.',contato:'Não.',
+ imob:'Não.',familia:'Nada importante.',moradia:'Moro com minha família, aqui na cidade.',rio:'Não.',sal:'Normal.',emocional:'Normal.',estimulantes:'Só café.',hiv:'Nunca fiz.'};
+const respostas=o=>Object.assign({},RESP_PADRAO,o);
+const FONTE_DIG='Semiologia do Aparelho Digestório: material de estudo do André (apostila de Semiologia Especializada p. 23–42, aulas e monitoria)';

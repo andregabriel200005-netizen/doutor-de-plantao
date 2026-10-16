@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Raimundo, 67 anos. Cansado, respirando com esforço.',
  vitals:'PA 138/86 mmHg · FC 100 bpm · FR 26 irpm · T 37,0 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Qualquer esforço. Parado melhora um pouco.",
   palpitacao:"Não.",
   sincope:"Não.",

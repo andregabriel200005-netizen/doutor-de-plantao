@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Caio, 17 anos. Desmaiou no meio do jogo de futsal. O técnico trouxe.',
  vitals:'PA 118/72 mmHg · FC 78 bpm · FR 16 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei no jogo.',
   tempo:'Hoje, faz uma hora.',
   inicio:'Tava correndo no contra-ataque e apaguei.',

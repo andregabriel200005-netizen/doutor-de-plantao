@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Ana, 19 anos. Chegou com falta de ar, falando com dificuldade.',
  vitals:'PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 36,6 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Correr piora, mas agora é parada mesmo.",
   palpitacao:"Tá disparado depois de tanta bombinha.",
   sincope:"Não.",

@@ -13,6 +13,13 @@ CASES.push({
  "briefing": "Doutor, leito 3: João, 28 anos. Veio do ambulatório por tosse e dor no peito.",
  "vitals": "PA 110/70 mmHg · FC 98 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 95% em ar ambiente",
  "answers": {
+  "refeicao": "Não.",
+  "engolir": "Não.",
+  "vomito": "Não.",
+  "fezes": "Normais, uma vez por dia.",
+  "urinacor": "Não, normal.",
+  "transfusao": "Não.",
+  "rio": "Não.",
   "esforco": "Não, a dor é a mesma parado ou andando.",
   "palpitacao": "Não.",
   "sincope": "Não.",

@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Wellington, 49 anos. Mediram a pressão na farmácia e deu alta. Medi na triagem logo que ele chegou.',
  vitals:'PA 168/102 mmHg (triagem, logo ao chegar) · FC 96 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Nada. Mediram minha pressão na farmácia, deu 17 por 10, e mandaram eu vir.',
   tempo:'Foi hoje, faz uma hora.',
   inicio:'Não sinto nada.',

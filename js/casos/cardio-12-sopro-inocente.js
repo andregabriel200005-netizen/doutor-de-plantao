@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Gabriel, 18 anos. Febre alta e dor de garganta. Na UPA disseram que ele tem um sopro.',
  vitals:'PA 116/68 mmHg · FC 112 bpm · FR 18 irpm · T 38,9 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Febre e uma dor de garganta que não deixa engolir. E falaram que eu tenho sopro.',
   tempo:'Dois dias.',
   inicio:'Começou com dor de garganta e depois a febre.',

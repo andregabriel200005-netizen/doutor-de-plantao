@@ -13,6 +13,13 @@ CASES.push({
  "briefing": "Doutor, leito 3: seu Carlos, 45 anos. Chegou com febre e dor no peito. Tá cansadinho.",
  "vitals": "PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 38,9 °C · SpO₂ 92% em ar ambiente",
  "answers": {
+  "refeicao": "Não.",
+  "engolir": "Não.",
+  "vomito": "Não.",
+  "fezes": "Normais, uma vez por dia.",
+  "urinacor": "Não, normal.",
+  "transfusao": "Não.",
+  "rio": "Não.",
   "esforco": "Não. Só cansa quando ando mais.",
   "palpitacao": "Não.",
   "sincope": "Não.",

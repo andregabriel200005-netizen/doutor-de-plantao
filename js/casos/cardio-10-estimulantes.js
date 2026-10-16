@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Lívia, 22 anos. Diz que o coração está disparado.',
  vitals:'PA 132/80 mmHg · FC 122 bpm · FR 18 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Meu coração tá disparado e não para.',
   tempo:'Uns três dias. Piorou hoje.',
   inicio:'Foi piorando nesses dias.',

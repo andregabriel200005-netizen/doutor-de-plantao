@@ -13,11 +13,11 @@ Há dois tipos de caso:
 | `look`, `pname` | Personagem (chave de `LOOKS` em `js/dados.js`) e como o paciente é chamado |
 | `briefing` | O que a enfermeira fala ao começar |
 | `vitals` | Texto dos sinais vitais, entregue quando o aluno pede |
-| `answers` | Resposta em linguagem leiga para **cada** pergunta de `QUESTIONS` |
+| `answers` | Resposta em linguagem leiga para **cada** pergunta de `QUESTIONS`. `respostas({...})` completa as não citadas com respostas neutras (`RESP_PADRAO`) |
 | `keyQ` | Perguntas que valem ponto. Cada item: `{ids:[...], l:'rótulo'}`; qualquer id da lista conta |
 | `geral` | Resultado da inspeção geral |
 | `effSides` | Lados com derrame: `['D']`, `['E']` ou `['D','E']`. Gera macicez e murmúrio abolido na base |
-| `exam` | Achados diferentes do padrão, com chave `manobra:região` (ex.: `"auscultar:coracao"`). Regiões: tórax (`apiceE`...`baseD`), `boca`, `pescoco`, `coracao` (precórdio/ictus), `abdome`, `maos`, `pernas`, focos (`focoAo`, `focoP`, `focoAc`, `focoT`, `focoM`) e pulsos (`pulsoCar`, `pulsoRad`, `pulsoFem`, `pulsoPed`). Manobras especiais usam `manobra:id` (lista `MANOBRAS`: pachon, frente, apneia, handgrip, rivero, valsalva, cocoras, ortostase, pa3). Escreva o efeito de cada manobra que mudaria a ausculta; a que não estiver no caso responde "Nenhuma mudança". Para várias regiões de uma vez: `achados(TORAX,{percutir:'...'})` |
+| `exam` | Achados diferentes do padrão, com chave `manobra:região` (ex.: `"auscultar:coracao"`). Regiões: tórax (`apiceE`...`baseD`), `boca`, `pescoco`, `coracao` (precórdio/ictus), `abdome`, `maos`, `pernas`, focos (`focoAo`, `focoP`, `focoAc`, `focoT`, `focoM`) pulsos (`pulsoCar`, `pulsoRad`, `pulsoFem`, `pulsoPed`), abdome em 9 regiões (`REGIOES`: hcd, epi, hce, fld, meso, fle, fid, hipo, fie) e lombar (`lombD`, `lombE`). No abdome, auscultar antes de palpar ou percutir gera `ordem:abdome`, que pode valer ponto em `keyExam`. Manobras especiais usam `manobra:id` (lista `MANOBRAS`: coração e PA, e do abdome: murphy, blumberg, rovsing, psoas, obturador, lemos, hepatimetria, schuster, traube, skoda, macicezmovel, piparote, rechaco, jobert, vascolejo, gersuny, doisdedos). Escreva o efeito de cada manobra que mudaria a ausculta; a que não estiver no caso responde "Nenhuma mudança". Para várias regiões de uma vez: `achados(TORAX,{percutir:'...'})` |
 | `keyExam` | Manobras que valem ponto (`vitals` = pedir sinais vitais) |
 | `res` | Resultados de exames diferentes do padrão (`DEF_RES` em `js/jogo.js`) |
 | `keyEx` | Exames que valem ponto. Pode ficar vazio: aí a nota de exames é cheia se o aluno não pedir nada à toa |

@@ -204,6 +204,11 @@ const QUESTIONS=[
  {id:'sincope',cat:'História atual',t:'Já desmaiou ou quase desmaiou?'},
  {id:'posicao',cat:'História atual',t:'Tem alguma posição que alivia ou piora a falta de ar?'},
  {id:'edema',cat:'História atual',t:'As pernas incham?'},
+ {id:'refeicao',cat:'História atual',t:'A dor tem relação com a comida?'},
+ {id:'engolir',cat:'História atual',t:'Tem dificuldade ou dor para engolir?'},
+ {id:'vomito',cat:'História atual',t:'Teve vômito? Como era?'},
+ {id:'fezes',cat:'História atual',t:'Como estão as fezes? Cor, consistência, quantas vezes?'},
+ {id:'urinacor',cat:'História atual',t:'A urina mudou de cor?'},
  {id:'urina',cat:'História atual',t:'Tem sentido muita sede ou urinado muito?'},
  {id:'peso',cat:'História atual',t:'Perdeu peso? Sua à noite?'},
  {id:'tratou',cat:'Medicamentos',t:'Já tomou algum remédio para isso?'},
@@ -212,12 +217,14 @@ const QUESTIONS=[
  {id:'alergia',cat:'Antecedentes',t:'Tem rinite, alergia ou asma desde criança?'},
  {id:'passado',cat:'Antecedentes',t:'Já teve pneumonia ou tuberculose antes?'},
  {id:'infancia',cat:'Antecedentes',t:'Teve alguma doença séria quando era criança?'},
+ {id:'transfusao',cat:'Antecedentes',t:'Já recebeu transfusão de sangue?'},
  {id:'habitos',cat:'Antecedentes',t:'Bebe ou fuma?'},
  {id:'contato',cat:'Antecedentes',t:'Alguém perto de você está doente ou tossindo?'},
  {id:'imob',cat:'Antecedentes',t:'Fez cirurgia, viagem longa ou ficou muito tempo de cama?'},
  {id:'familia',cat:'Antecedentes',t:'Tem alguma doença na família?'},
  {id:'trabalho',cat:'Vida e hábitos',t:'Trabalha com quê?'},
  {id:'moradia',cat:'Vida e hábitos',t:'Onde você mora? Quantas pessoas moram com você?'},
+ {id:'rio',cat:'Vida e hábitos',t:'Já tomou banho de rio, lagoa ou açude?'},
  {id:'sal',cat:'Vida e hábitos',t:'Como anda a alimentação?'},
  {id:'emocional',cat:'Vida e hábitos',t:'Tem passado por estresse? Anda ansioso(a)?'},
  {id:'estimulantes',cat:'Vida e hábitos',t:'Toma café, energético ou algum remédio estimulante ou para emagrecer?'},
@@ -235,9 +242,13 @@ const EXAMS=[
  {id:'angio',t:'Angiotomografia de tórax',d:60},{id:'eco',t:'Ecocardiograma',d:90},
  {id:'escarro',t:'Escarro: BAAR e teste molecular',d:90},
  {id:'gaso',t:'Gasometria arterial',d:20},{id:'ecg',t:'Eletrocardiograma',d:15},
- {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60}
+ {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60},
+ {id:'fagt',t:'Fosfatase alcalina e GGT',d:30},{id:'amil',t:'Amilase e lipase séricas',d:30},{id:'coag',t:'Coagulograma (TP)',d:30},
+ {id:'usgabd',t:'Ultrassonografia de abdome',d:40},{id:'eda',t:'Endoscopia digestiva alta',d:90},
+ {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40}
 ];
-const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
+const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',fagt:'Fosfatase alcalina 88 U/L · GGT 32 U/L',amil:'Amilase 64 U/L · Lipase 38 U/L',coag:'TP 12 s (controle 12 s)',
+ usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
 const FLUID_TESTS=[
  {id:'ph',t:'pH'},{id:'gli',t:'Glicose'},{id:'dhl',t:'DHL'},{id:'prot',t:'Proteínas totais'},{id:'alb',t:'Albumina'},
  {id:'cel',t:'Celularidade total e diferencial'},{id:'cito',t:'Citologia oncótica'},{id:'ada',t:'ADA'},
@@ -248,7 +259,9 @@ const FLUID_DEF={tg:'Triglicerídeos 28 mg/dL',amil:'Amilase 45 U/L',ht:'Hemató
 const TOOLS=[{id:'inspecionar',t:'Inspecionar'},{id:'palpar',t:'Palpar'},{id:'percutir',t:'Percutir'},{id:'auscultar',t:'Auscultar'}];
 const ZNAME={apiceE:'ápice esquerdo',apiceD:'ápice direito',medioE:'terço médio esquerdo',medioD:'terço médio direito',baseE:'base esquerda',baseD:'base direita',pescoco:'pescoço',coracao:'precórdio (ictus)',boca:'boca e língua',maos:'mãos e unhas',
  focoAo:'foco aórtico (2º EIC direito)',focoP:'foco pulmonar (2º EIC esquerdo)',focoAc:'foco aórtico acessório (3º EIC esquerdo)',focoT:'foco tricúspide (4º–5º EIC paraesternal esquerdo)',focoM:'foco mitral (5º EIC, linha hemiclavicular)',
- pulsoCar:'pulso carotídeo',pulsoRad:'pulso radial',pulsoFem:'pulso femoral',pulsoPed:'pulso pedioso',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
+ pulsoCar:'pulso carotídeo',pulsoRad:'pulso radial',pulsoFem:'pulso femoral',pulsoPed:'pulso pedioso',
+ hcd:'hipocôndrio direito',epi:'epigástrio',hce:'hipocôndrio esquerdo',fld:'flanco direito',meso:'mesogástrio',fle:'flanco esquerdo',fid:'fossa ilíaca direita',hipo:'hipogástrio',fie:'fossa ilíaca esquerda',
+ lombD:'região lombar direita',lombE:'região lombar esquerda',abdome:'abdome',pernas:'pernas',geral:'paciente (geral)'};
 const DX=[
  {id:'empiema',t:'Derrame parapneumônico complicado / empiema'},
  {id:'simples',t:'Derrame parapneumônico não complicado'},
@@ -285,11 +298,28 @@ const DX=[
  {id:'ortostatica',t:'Síncope por hipotensão ortostática (medicamentosa)'},
  {id:'estimulantes',t:'Palpitações por uso de estimulantes'},
  {id:'mch',t:'Miocardiopatia hipertrófica'},
- {id:'inocente',t:'Sopro funcional (inocente)'}
+ {id:'inocente',t:'Sopro funcional (inocente)'},
+ {id:'apendicite',t:'Apendicite aguda'},
+ {id:'colecistite',t:'Colecistite aguda'},
+ {id:'coledoco',t:'Icterícia obstrutiva por coledocolitíase'},
+ {id:'esquisto',t:'Hipertensão portal por esquistossomose, com hemorragia por varizes'},
+ {id:'cirrose',t:'Cirrose descompensada com ascite'},
+ {id:'mixedema',t:'Ascite por hipotireoidismo grave (mixedema)'},
+ {id:'pancreatite',t:'Pancreatite aguda'},
+ {id:'pancrcron',t:'Pancreatite crônica'},
+ {id:'perfuracao',t:'Úlcera péptica perfurada'},
+ {id:'neopanc',t:'Neoplasia de cabeça de pâncreas'},
+ {id:'hepviral',t:'Hepatite viral aguda'},
+ {id:'hemolise',t:'Icterícia por hemólise'},
+ {id:'obstrucao',t:'Obstrução intestinal por bridas'},
+ {id:'pielo',t:'Pielonefrite aguda'},
+ {id:'lactose',t:'Intolerância à lactose'},
+ {id:'neoesof',t:'Neoplasia de esôfago'},
+ {id:'fecaloma',t:'Fecaloma'}
 ];
 // Síndrome que o exame do tórax mostra (pergunta do prontuário em todos os casos).
 const SINDROMES=[
- {id:'normal',t:'Sem síndrome pulmonar, pleural ou cardíaca ao exame'},
+ {id:'normal',t:'Nenhuma síndrome da lista'},
  {id:'broncoesp',t:'Brônquica obstrutiva (broncoespasmo)'},
  {id:'bronqcron',t:'Brônquica crônica com hiperaeração'},
  {id:'bronqx',t:'Bronquiectasia'},
@@ -306,19 +336,33 @@ const SINDROMES=[
  {id:'ic',t:'Insuficiência cardíaca'},
  {id:'has',t:'Hipertensiva'},
  {id:'pericardica',t:'Pericárdica'},
- {id:'miocardio',t:'Miocardiopatia'}
+ {id:'miocardio',t:'Miocardiopatia'},
+ {id:'ascite',t:'Ascite / hipertensão portal'},
+ {id:'ictericia',t:'Ictérica'},
+ {id:'hemorragica',t:'Hemorrágica digestiva'},
+ {id:'abdagudo',t:'Abdome agudo'},
+ {id:'pancreatica',t:'Pancreática'},
+ {id:'diarreica',t:'Diarreica'},
+ {id:'constipacao',t:'Constipação'},
+ {id:'disfagica',t:'Disfágica (esôfago)'}
 ];
 // Manobras especiais (exame do coração e da pressão). Ficam em G.examined como 'manobra:id'.
 const MANOBRAS=[
- {id:'pachon',t:'Decúbito lateral esquerdo (Pachon)'},
- {id:'frente',t:'Tronco inclinado para a frente'},
- {id:'apneia',t:'Prender a respiração'},
- {id:'handgrip',t:'Handgrip'},
- {id:'rivero',t:'Rivero-Carvallo (inspiração profunda)'},
- {id:'valsalva',t:'Valsalva'},
- {id:'cocoras',t:'Cócoras / elevar as pernas'},
- {id:'ortostase',t:'PA deitado e em pé'},
- {id:'pa3',t:'PA com técnica completa'}
+ {id:'pachon',g:'cor',t:'Decúbito lateral esquerdo (Pachon)'},
+ {id:'frente',g:'cor',t:'Tronco inclinado para a frente'},
+ {id:'apneia',g:'cor',t:'Prender a respiração'},
+ {id:'handgrip',g:'cor',t:'Handgrip'},
+ {id:'rivero',g:'cor',t:'Rivero-Carvallo (inspiração profunda)'},
+ {id:'valsalva',g:'cor',t:'Valsalva'},
+ {id:'cocoras',g:'cor',t:'Cócoras / elevar as pernas'},
+ {id:'ortostase',g:'cor',t:'PA deitado e em pé'},
+ {id:'pa3',g:'cor',t:'PA com técnica completa'},
+ {id:'murphy',g:'abd',t:'Murphy'},{id:'blumberg',g:'abd',t:'Blumberg (McBurney)'},{id:'rovsing',g:'abd',t:'Rovsing'},
+ {id:'psoas',g:'abd',t:'Psoas'},{id:'obturador',g:'abd',t:'Obturador'},{id:'lemos',g:'abd',t:'Palpar o fígado (Lemos-Torres)'},
+ {id:'hepatimetria',g:'abd',t:'Hepatimetria'},{id:'schuster',g:'abd',t:'Palpar o baço (Schuster)'},{id:'traube',g:'abd',t:'Percutir o espaço de Traube'},
+ {id:'skoda',g:'abd',t:'Semicírculo de Skoda'},{id:'macicezmovel',g:'abd',t:'Macicez móvel'},{id:'piparote',g:'abd',t:'Piparote'},
+ {id:'rechaco',g:'abd',t:'Rechaço'},{id:'jobert',g:'abd',t:'Percutir a loja hepática (Jobert)'},{id:'vascolejo',g:'abd',t:'Vascolejo'},
+ {id:'gersuny',g:'abd',t:'Gersuny'},{id:'doisdedos',g:'abd',t:'Direção do fluxo das veias (dois dedos)'}
 ];
 const LOOKS={
  doctor:{skin:'#d9a27a',hair:'#3a2618',style:'short',top:'#eef3f4',pants:'#2c3f63',steth:1},
@@ -338,9 +382,13 @@ const LOOKS={
  marcos:{skin:'#a8744e',hair:'#1b1310',style:'short',top:'#c9b38a'},
  theo:{skin:'#e8b890',hair:'#5a3a1a',style:'short',top:'#f2d24a'},
  ines:{skin:'#d9a27a',hair:'#d8d4cf',style:'bun',top:'#7fb39a'},
- jose:{skin:'#c99a76',hair:'#d8d4cf',style:'bald',top:'#b98a8a',glasses:1}
+ jose:{skin:'#c99a76',hair:'#d8d4cf',style:'bald',top:'#b98a8a',glasses:1},
+ sueli:{skin:'#c68a5e',hair:'#3a2618',style:'bun',top:'#e2c46a'},
+ josue:{skin:'#7a4a30',hair:'#2a1d17',style:'short',top:'#9fc0a0',must:1},
+ mario:{skin:'#e6b896',hair:'#9b958e',style:'short',top:'#c47a6a'}
 };
 const FOCOS=['focoAo','focoP','focoAc','focoT','focoM'],PULSOS=['pulsoCar','pulsoRad','pulsoFem','pulsoPed'];
+const REGIOES=['hcd','epi','hce','fld','meso','fle','fid','hipo','fie'],LOMBAR=['lombD','lombE'];
 
 // Achados do exame para várias regiões de uma vez: achados(TORAX,{palpar:'...',auscultar:'...'})
 const TORAX=['apiceE','apiceD','medioE','medioD','baseE','baseD'];
@@ -348,6 +396,14 @@ function achados(zonas,porManobra){const o={};zonas.forEach(z=>Object.entries(po
 
 // Cada arquivo em js/casos/ adiciona um paciente a esta lista.
 const CASES=[];
+
+// Respostas neutras para os casos novos: cada caso troca as que importam (o teste cobra resposta para todas as perguntas).
+const RESP_PADRAO={dor:'Não sinto dor.',febre:'Não.',tosse:'Não.',escarro:'Não.',chiado:'Não.',dispneia:'Não.',esforco:'Não.',palpitacao:'Não.',sincope:'Não.',
+ posicao:'Não.',edema:'Não.',refeicao:'Não.',engolir:'Não.',vomito:'Não.',fezes:'Normais, uma vez por dia.',urinacor:'Não, normal.',urina:'Não.',peso:'Não.',
+ tratou:'Nada.',meds:'Nenhum.',doencas:'Nenhuma.',alergia:'Não.',passado:'Não.',infancia:'Não.',transfusao:'Não.',habitos:'Não fumo, não bebo.',contato:'Não.',
+ imob:'Não.',familia:'Nada importante.',moradia:'Moro com minha família, aqui na cidade.',rio:'Não.',sal:'Normal.',emocional:'Normal.',estimulantes:'Só café.',hiv:'Nunca fiz.'};
+const respostas=o=>Object.assign({},RESP_PADRAO,o);
+const FONTE_DIG='Semiologia do Aparelho Digestório: material de estudo do André (apostila de Semiologia Especializada p. 23–42, aulas e monitoria)';
 
 // ---- js/casos/caso-01-empiema.js ----
 // Caso 1: A febre que voltou. Fonte: Resumos Estratégicos, Derrame Pleural (Estratégia MED).
@@ -365,6 +421,13 @@ CASES.push({
  "briefing": "Doutor, leito 3: seu Carlos, 45 anos. Chegou com febre e dor no peito. Tá cansadinho.",
  "vitals": "PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 38,9 °C · SpO₂ 92% em ar ambiente",
  "answers": {
+  "refeicao": "Não.",
+  "engolir": "Não.",
+  "vomito": "Não.",
+  "fezes": "Normais, uma vez por dia.",
+  "urinacor": "Não, normal.",
+  "transfusao": "Não.",
+  "rio": "Não.",
   "esforco": "Não. Só cansa quando ando mais.",
   "palpitacao": "Não.",
   "sincope": "Não.",
@@ -725,6 +788,13 @@ CASES.push({
  "briefing": "Doutor, leito 3: Dona Maria, 72 anos. Diz que tá com falta de ar faz uns dias.",
  "vitals": "PA 150/90 mmHg · FC 96 bpm · FR 24 irpm · T 36,4 °C · SpO₂ 91% em ar ambiente",
  "answers": {
+  "refeicao": "Não.",
+  "engolir": "Não.",
+  "vomito": "Não.",
+  "fezes": "Normais, uma vez por dia.",
+  "urinacor": "Normal, mas urino pouco.",
+  "transfusao": "Não.",
+  "rio": "Não.",
   "esforco": "Qualquer esforço me cansa. Parada eu melhoro um pouco.",
   "palpitacao": "Às vezes, de noite.",
   "sincope": "Não.",
@@ -811,7 +881,9 @@ CASES.push({
   "palpar:pernas": "Edema 3+/4+ com cacifo, simétrico, até os joelhos.",
   "auscultar:medioD": "Estertores finos.",
   "auscultar:medioE": "Estertores finos.",
-  "palpar:abdome": "Fígado palpável a 3 cm do rebordo costal, levemente doloroso."
+  "palpar:abdome": "Fígado palpável a 3 cm do rebordo costal, levemente doloroso.",
+  "palpar:hcd": "Fígado palpável a 3 cm do rebordo costal, levemente doloroso.",
+  "manobra:lemos": "Fígado a 3 cm do rebordo costal, borda lisa, levemente doloroso."
  },
  "keyExam": [
   {
@@ -1080,6 +1152,13 @@ CASES.push({
  "briefing": "Doutor, leito 3: João, 28 anos. Veio do ambulatório por tosse e dor no peito.",
  "vitals": "PA 110/70 mmHg · FC 98 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 95% em ar ambiente",
  "answers": {
+  "refeicao": "Não.",
+  "engolir": "Não.",
+  "vomito": "Não.",
+  "fezes": "Normais, uma vez por dia.",
+  "urinacor": "Não, normal.",
+  "transfusao": "Não.",
+  "rio": "Não.",
   "esforco": "Não, a dor é a mesma parado ou andando.",
   "palpitacao": "Não.",
   "sincope": "Não.",
@@ -1413,6 +1492,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Arlindo, 71 anos. Chegou com febre alta e dor no peito, respirando rápido.',
  vitals:'PA 130/80 mmHg · FC 108 bpm · FR 26 irpm · T 39,2 °C · SpO₂ 89% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não. Tá ruim parado também.",
   palpitacao:"Tá batendo rápido desde a febre.",
   sincope:"Não.",
@@ -1502,6 +1588,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Bruno, 22 anos. Chegou com dor no peito e falta de ar.',
  vitals:'PA 122/76 mmHg · FC 98 bpm · FR 22 irpm · T 36,7 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não, começou parado.",
   palpitacao:"Tá acelerado desde a dor.",
   sincope:"Não.",
@@ -1592,6 +1685,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Ana, 19 anos. Chegou com falta de ar, falando com dificuldade.',
  vitals:'PA 118/72 mmHg · FC 112 bpm · FR 28 irpm · T 36,6 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Correr piora, mas agora é parada mesmo.",
   palpitacao:"Tá disparado depois de tanta bombinha.",
   sincope:"Não.",
@@ -1678,6 +1778,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Valdemar, 63 anos. Veio por tosse e cansaço que não melhoram.',
  vitals:'PA 136/84 mmHg · FC 96 bpm · FR 24 irpm · T 37,1 °C · SpO₂ 92% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não. Só ando sem fome.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Cansa mais quando ando. Parado melhora.",
   palpitacao:"Não.",
   sincope:"Não.",
@@ -1771,6 +1878,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Damião, 68 anos, veio do sítio. Falta de ar, não consegue deitar.',
  vitals:'PA 150/94 mmHg · FC 104 bpm · FR 26 irpm · T 36,4 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Tá mais escura e pouca.",
+  transfusao:"Não.",
+  rio:"Quando menino tomava banho no açude do sítio.",
   esforco:"Antes era só no esforço. Agora até parado.",
   palpitacao:"Às vezes sinto o coração batendo forte.",
   sincope:"Não.",
@@ -1869,6 +1983,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Raimundo, 67 anos. Cansado, respirando com esforço.',
  vitals:'PA 138/86 mmHg · FC 100 bpm · FR 26 irpm · T 37,0 °C · SpO₂ 88% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Qualquer esforço. Parado melhora um pouco.",
   palpitacao:"Não.",
   sincope:"Não.",
@@ -1960,6 +2081,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Rosa, 52 anos. Veio por febre e tosse com muito catarro.',
  vitals:'PA 120/78 mmHg · FC 96 bpm · FR 22 irpm · T 38,0 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Ladeira me cansa.",
   palpitacao:"Não.",
   sincope:"Não.",
@@ -2050,6 +2178,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Carla, 24 anos. Diz que está com falta de ar desde a tarde.',
  vitals:'PA 116/74 mmHg · FC 92 bpm · FR 18 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não tem a ver com esforço. Parada também.",
   palpitacao:"Às vezes sinto o coração acelerar quando fico nervosa.",
   sincope:"Não.",
@@ -2127,6 +2262,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Davi, 19 anos. A mãe trouxe porque ele está respirando estranho e vomitando.',
  vitals:'PA 104/62 mmHg · FC 118 bpm · FR 30 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Vomitei várias vezes. Primeiro comida, depois um líquido amarelo.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Tá clara, de tanto que urino.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não.",
   palpitacao:"Tá batendo rápido.",
   sincope:"Fiquei tonto quando levantei, mas não desmaiei.",
@@ -2165,7 +2307,8 @@ CASES.push({
  effSides:[],
  exam:{
   'inspecionar:boca':'Mucosas secas. Língua rósea.',
-  'palpar:abdome':'Dor difusa leve à palpação, sem endurecimento da parede.'
+  'palpar:abdome':'Dor difusa leve à palpação, sem endurecimento da parede.',
+  ...achados(REGIOES,{palpar:'Dor leve à palpação, sem endurecimento da parede.'})
  },
  keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['inspecionar:geral'],l:'Inspeção geral (ritmo respiratório)'},
   {ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax (pulmões limpos)'},{ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax'},
@@ -2211,6 +2354,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Marcos, 34 anos. Tosse há mais de um mês e febre no fim da tarde.',
  vitals:'PA 112/70 mmHg · FC 100 bpm · FR 22 irpm · T 37,9 °C · SpO₂ 94% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Na infância, no interior, no rio.",
   esforco:"Cansa um pouco mais na obra.",
   palpitacao:"Não.",
   sincope:"Não.",
@@ -2300,6 +2450,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Lúcia, 30 anos. Dor no peito do lado esquerdo há dois dias.',
  vitals:'PA 118/76 mmHg · FC 96 bpm · FR 22 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não tem a ver com esforço. É com a respiração.",
   palpitacao:"Não.",
   sincope:"Não.",
@@ -2388,6 +2545,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Gilberto, 58 anos. Dor no peito que começou há uns 40 minutos. Tá suando muito.',
  vitals:'PA 150/92 mmHg · FC 96 bpm · FR 20 irpm · T 36,4 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Fiquei enjoado, mas não vomitei.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Uma dor no meio do peito, um aperto muito forte.',
   tempo:'Uns 40 minutos. Não passa.',
   inicio:'Do nada. Eu tava sentado no sofá vendo o jornal.',
@@ -2474,6 +2638,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Rafael, 26 anos. Dor no peito desde ontem.',
  vitals:'PA 124/78 mmHg · FC 104 bpm · FR 20 irpm · T 37,9 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Uma dor no meio do peito que não me deixa deitar.',
   tempo:'Desde ontem.',
   inicio:'Começou uns dias depois de uma gripe forte.',
@@ -2561,6 +2732,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Otávio, 79 anos. A filha trouxe porque ele desmaiou hoje à tarde.',
  vitals:'PA 112/90 mmHg · FC 72 bpm · FR 18 irpm · T 36,3 °C · SpO₂ 96% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei hoje subindo a escada com as compras.',
   tempo:'Hoje foi o desmaio. Mas faz uns meses que canso e sinto um aperto no peito quando ando mais.',
   inicio:'O desmaio foi de repente, no meio da escada.',
@@ -2653,6 +2831,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Leandro, 38 anos. Veio por cansaço e diz que sente o coração no pescoço.',
  vitals:'PA 148/56 mmHg · FC 88 bpm · FR 20 irpm · T 36,5 °C · SpO₂ 97% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Ando muito cansado e sinto o coração batendo forte, até no pescoço.',
   tempo:'Uns seis meses, e tá piorando.',
   inicio:'Aos poucos.',
@@ -2749,6 +2934,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Joana, 26 anos, grávida de 28 semanas. Falta de ar e tossiu sangue hoje.',
  vitals:'PA 112/70 mmHg · FC 112 bpm · FR 26 irpm · T 36,7 °C · SpO₂ 92% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Só no começo da gravidez.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Falta de ar que piorou muito, e hoje tossi sangue.',
   tempo:'O cansaço começou com a gravidez. Piorou nas últimas duas semanas.',
   inicio:'Aos poucos.',
@@ -2838,6 +3030,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Cleide, 61 anos. Cansaço e coração acelerado.',
  vitals:'PA 128/78 mmHg · FC 92 bpm · FR 22 irpm · T 36,4 °C · SpO₂ 95% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Cansaço e o coração acelerado.',
   tempo:'Desde o infarto, faz dois anos, vem piorando.',
   inicio:'Aos poucos.',
@@ -2928,6 +3127,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Benedito, 74 anos. Inchado e com falta de ar.',
  vitals:'PA 146/88 mmHg · FC 104 bpm · FR 26 irpm · T 36,5 °C · SpO₂ 89% em ar ambiente',
  answers:{
+  refeicao:"Depois de comer a barriga pesa mais.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Escura e pouca.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Tô inchado, a barriga cresceu e falta o ar.',
   tempo:'Uns dez dias.',
   inicio:'Foi inchando aos poucos.',
@@ -2972,6 +3178,11 @@ CASES.push({
   'palpar:pescoco':'Comprimindo o hipocôndrio direito por 15 segundos, a jugular sobe e fica cheia.',
   'palpar:abdome':'Fígado aumentado, doloroso, de borda lisa.',
   'percutir:abdome':'Macicez nos flancos que muda de lugar quando ele vira de lado.',
+  'palpar:hcd':'Fígado aumentado, doloroso, de borda lisa, a 4 cm do rebordo.',
+  'inspecionar:meso':'Abdome globoso.',
+  'percutir:fld':'Som maciço.','percutir:fle':'Som maciço.',
+  'manobra:macicezmovel':'A macicez dos flancos muda de lugar quando ele vira de lado.',
+  'manobra:lemos':'Fígado a 4 cm do rebordo, borda lisa, doloroso.',
   'inspecionar:pernas':'Edema nas duas pernas até os joelhos.',
   'palpar:pernas':'Edema mole, frio, que deixa a marca do dedo e demora a voltar (+++/4+).',
   'inspecionar:maos':'Mãos quentes, sem cianose.',
@@ -2979,7 +3190,7 @@ CASES.push({
  }),
  keyExam:[{ids:['vitals'],l:'Pedir sinais vitais'},{ids:['auscultar:focoM'],l:'Auscultar o foco mitral (B3)'},
   {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugular e refluxo hepatojugular'},
-  {ids:['palpar:abdome','percutir:abdome'],l:'Fígado e ascite'},{ids:['palpar:pernas'],l:'Graduar o edema'},
+  {ids:['palpar:abdome','percutir:abdome','palpar:hcd','manobra:lemos','manobra:macicezmovel','percutir:fld','percutir:fle'],l:'Fígado e ascite'},{ids:['palpar:pernas'],l:'Graduar o edema'},
   {ids:['palpar:maos','inspecionar:maos'],l:'Perfusão (mãos quentes ou frias)'}],
  res:{
   bnp:'NT-proBNP 6.200 pg/mL',
@@ -3023,6 +3234,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Seu Wellington, 49 anos. Mediram a pressão na farmácia e deu alta. Medi na triagem logo que ele chegou.',
  vitals:'PA 168/102 mmHg (triagem, logo ao chegar) · FC 96 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Nada. Mediram minha pressão na farmácia, deu 17 por 10, e mandaram eu vir.',
   tempo:'Foi hoje, faz uma hora.',
   inicio:'Não sinto nada.',
@@ -3106,6 +3324,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Celeste, 81 anos. A neta trouxe porque ela desmaiou de madrugada.',
  vitals:'PA 128/76 mmHg (sentada) · FC 78 bpm · FR 16 irpm · T 36,2 °C · SpO₂ 97% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Normal. Levanto de noite pra urinar.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei quando levantei pra ir ao banheiro.',
   tempo:'Foi hoje de madrugada. Mas faz umas semanas que fico tonta quando levanto rápido.',
   inicio:'Levantei da cama de uma vez, a vista escureceu e eu caí.',
@@ -3188,6 +3413,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Lívia, 22 anos. Diz que o coração está disparado.',
  vitals:'PA 132/80 mmHg · FC 122 bpm · FR 18 irpm · T 36,8 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Meu coração tá disparado e não para.',
   tempo:'Uns três dias. Piorou hoje.',
   inicio:'Foi piorando nesses dias.',
@@ -3270,6 +3502,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Caio, 17 anos. Desmaiou no meio do jogo de futsal. O técnico trouxe.',
  vitals:'PA 118/72 mmHg · FC 78 bpm · FR 16 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei no jogo.',
   tempo:'Hoje, faz uma hora.',
   inicio:'Tava correndo no contra-ataque e apaguei.',
@@ -3359,6 +3598,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Gabriel, 18 anos. Febre alta e dor de garganta. Na UPA disseram que ele tem um sopro.',
  vitals:'PA 116/68 mmHg · FC 112 bpm · FR 18 irpm · T 38,9 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Febre e uma dor de garganta que não deixa engolir. E falaram que eu tenho sopro.',
   tempo:'Dois dias.',
   inicio:'Começou com dor de garganta e depois a febre.',
@@ -3445,6 +3691,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Théo, 4 anos, com a mãe. Veio por gripe, mas a mãe tá preocupada porque ele cansa muito brincando.',
  vitals:'PA 96/60 mmHg · FC 108 bpm · FR 26 irpm · T 37,4 °C · SpO₂ 98% em ar ambiente',
  answers:{
+  refeicao:"(A mãe) Não.",
+  engolir:"(A mãe) Não.",
+  vomito:"(A mãe) Não.",
+  fezes:"(A mãe) Normais, uma vez por dia.",
+  urinacor:"(A mãe) Não, normal.",
+  transfusao:"(A mãe) Não.",
+  rio:"(A mãe) Não.",
   queixa:'(A mãe responde) Tá gripado, com tosse e nariz escorrendo. E ele cansa muito quando corre.',
   tempo:'A gripe faz dois dias. O cansaço eu reparo faz um ano.',
   inicio:'O cansaço foi aparecendo quando ele começou a correr mais.',
@@ -3523,6 +3776,1108 @@ CASES.push({
  ]
 });
 
+// ---- js/casos/dig-01-apendicite.js ----
+// Digestório 1: A dor que mudou de lugar. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// dor visceral × somática e migração (1.4), ordem do exame (2.2), palpação e defesa (2.7), apêndice (3.4), abdome agudo (4.5).
+CASES.push({
+ id:'d-apend',modulo:'Semiologia do digestório',n:'Caso 1',title:'A dor que mudou de lugar',look:'joao',pname:'Lucas',fonte:FONTE_DIG,
+ card:'Lucas, 21 anos. Dor na barriga desde ontem.',
+ briefing:'Doutor, leito 3: Lucas, 21 anos. Dor na barriga desde ontem à tarde.',
+ vitals:'PA 122/76 mmHg · FC 104 bpm · FR 20 irpm · T 38,1 °C · SpO₂ 98% em ar ambiente',
+ answers:respostas({
+  queixa:'Dor na barriga, do lado direito, embaixo.',
+  tempo:'Desde ontem à tarde.',
+  inicio:'Começou em volta do umbigo, uma dor chata, difícil de dizer onde. De madrugada foi pro lado direito, embaixo, e ficou num ponto só.',
+  dor:'Agora é forte, aqui (aponta com o dedo a fossa ilíaca direita). Piora quando ando, quando tusso e no buraco da rua.',
+  febre:'Uma febrinha desde a madrugada.',
+  vomito:'Enjoei e vomitei uma vez, comida.',
+  refeicao:'Não tenho fome nenhuma desde ontem.',
+  fezes:'Normais. A última foi ontem de manhã.',
+  urinacor:'Normal. Sem ardor pra urinar.',
+  habitos:'Não fumo. Bebo no fim de semana.',
+  trabalho:'Estudo e trabalho de garçom.',
+  sal:'Não consigo comer nada.'
+ }),
+ keyQ:[{ids:['inicio'],l:'Migração da dor (umbigo → fossa ilíaca direita)'},{ids:['dor'],l:'Localizar a dor e o que piora'},{ids:['refeicao','sal'],l:'Falta de apetite'},{ids:['vomito'],l:'Náusea e vômito'},{ids:['febre'],l:'Febre'},{ids:['urinacor','fezes'],l:'Urina e fezes (diferenciais)'}],
+ geral:'Jovem deitado quieto, evitando se mexer. Andou curvado, segurando o lado direito da barriga.',
+ effSides:[],
+ exam:{
+  'palpar:fid':'Dor forte. A parede fica dura nessa região, mesmo quando ele tenta relaxar.',
+  'palpar:hipo':'Dor leve.','palpar:meso':'Dor leve.',
+  'percutir:fid':'Som timpânico. A percussão dói.',
+  'manobra:blumberg':'Dor intensa quando a mão é retirada de repente no ponto de McBurney.',
+  'manobra:rovsing':'Comprimindo a fossa ilíaca esquerda, ele sente dor na fossa ilíaca direita.',
+  'manobra:psoas':'Deitado sobre o lado esquerdo, a extensão da coxa direita causa dor na fossa ilíaca direita.',
+  'manobra:obturador':'Sem dor no hipogástrio.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['vitals'],l:'Pedir sinais vitais'},
+  {ids:['palpar:fid'],l:'Palpar a fossa ilíaca direita (defesa)'},{ids:['manobra:blumberg'],l:'Blumberg'},{ids:['manobra:rovsing'],l:'Rovsing'},
+  {ids:['manobra:psoas','manobra:obturador'],l:'Psoas ou obturador'},{ids:['percutir:lombD','palpar:lombD'],l:'Afastar dor renal (lombar direita)'}],
+ res:{
+  hemo:'Hb 14,9 g/dL · Leucócitos 15.800/mm³ (84% neutrófilos) · Plaquetas 260.000/mm³',
+  pcr:'PCR 86 mg/L (ref. < 5)',
+  usgabd:'Apêndice com 9 mm, que não se deixa comprimir, com gordura inflamada em volta.'
+ },
+ keyEx:[],
+ neutral:['hemo','pcr','usgabd','eas','amil'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'abdagudo',
+ sindWhy:'Dor de início recente que exige decisão rápida, com irritação peritoneal (defesa, Blumberg): abdome agudo inflamatório.',
+ correctDx:'apendicite',
+ dxWhy:'Dor visceral em volta do umbigo, com náusea e falta de apetite, que migrou para a fossa ilíaca direita e virou somática (ele aponta com o dedo). Febre, defesa, Blumberg, Rovsing e psoas positivos (o psoas aponta apêndice retrocecal).',
+ conduta:[
+  {id:'c1',t:'Avaliação cirúrgica de urgência',ok:1,why:'Abdome agudo exige diagnóstico rápido e muitas vezes cirurgia de emergência.'},
+  {id:'c2',t:'Analgésico e alta, voltando se piorar',ok:0,why:'Há irritação peritoneal: não é caso de alta.'},
+  {id:'c3',t:'Laxante: deve ser intestino preso',ok:0,why:'As fezes estão normais, e há defesa e Blumberg.'},
+  {id:'c4',t:'Tratar como pielonefrite',ok:0,why:'Urina normal, sem dor lombar. A dor é na fossa ilíaca, com Blumberg.'}
+ ],
+ teaching:[
+  {t:'A dor que migra',p:'Começa visceral (difusa, em volta do umbigo, com náusea) e vira somática quando inflama o peritônio parietal: o paciente aponta com o dedo o ponto de McBurney.'},
+  {t:'Manobras do apêndice',p:'Blumberg: dor à descompressão brusca em McBurney. Rovsing: comprimir a fossa ilíaca esquerda dói na direita. Psoas: apêndice retrocecal. Obturador: apêndice pélvico.'},
+  {t:'Defesa',p:'Contratura involuntária, abdome em tábua: peritonite.'},
+  {t:'Ordem do exame do abdome',p:'Inspeção, ausculta, percussão e palpação. Palpe a região que dói por último, começando pelo lado oposto.'}
+ ]
+});
+
+// ---- js/casos/dig-02-colecistite.js ----
+// Digestório 2: Depois da feijoada. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// dor referida (1.4), pontos dolorosos (2.7), vesícula e Murphy (3.3), colecistite aguda (4.5), caso clínico 1 (5).
+CASES.push({
+ id:'d-colec',modulo:'Semiologia do digestório',n:'Caso 2',title:'Depois da feijoada',look:'lucia',pname:'Dona Rita',fonte:FONTE_DIG,
+ card:'Rita, 46 anos. Dor embaixo das costelas do lado direito.',
+ briefing:'Doutor, leito 3: Dona Rita, 46 anos. Dor do lado direito da barriga desde ontem.',
+ vitals:'PA 132/84 mmHg · FC 100 bpm · FR 20 irpm · T 38,3 °C · SpO₂ 97% em ar ambiente',
+ answers:respostas({
+  queixa:'Dor do lado direito, embaixo das costelas.',
+  tempo:'Desde ontem à noite.',
+  inicio:'Começou umas duas horas depois da feijoada.',
+  dor:'Forte e constante, embaixo da costela direita. Vai pras costas, pro ombro direito.',
+  refeicao:'Sempre que como gordura sinto um incômodo aí. Ontem foi forte.',
+  vomito:'Vomitei duas vezes, comida.',
+  febre:'Febre desde a madrugada.',
+  passado:'Já tive essas dores antes, mais fracas, que passavam sozinhas.',
+  familia:'Minha mãe tirou a vesícula.',
+  habitos:'Não fumo. Não bebo.',
+  trabalho:'Cozinheira de restaurante.',
+  sal:'Como muita comida gordurosa.'
+ }),
+ keyQ:[{ids:['refeicao','inicio'],l:'Relação com comida gordurosa'},{ids:['dor'],l:'Caracterizar a dor e a irradiação (ombro direito)'},{ids:['passado'],l:'Episódios anteriores'},{ids:['febre'],l:'Febre'},{ids:['urinacor','fezes'],l:'Urina e fezes (afastar obstrução)'}],
+ geral:'Mulher com sobrepeso, febril, com fácies de dor. Escleras brancas.',
+ effSides:[],
+ exam:{
+  'palpar:hcd':'Dor forte no ponto entre o rebordo costal direito e a borda do músculo reto, com defesa.',
+  'palpar:epi':'Dor leve.',
+  'manobra:murphy':'Com os dedos no ponto cístico, na inspiração profunda ela sente dor forte e para de respirar de repente.',
+  'manobra:lemos':'Borda do fígado fina, lisa, no rebordo. Dor na região da vesícula.',
+  'inspecionar:boca':'Embaixo da língua, sem cor amarelada.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['vitals'],l:'Pedir sinais vitais'},
+  {ids:['palpar:hcd'],l:'Palpar o hipocôndrio direito'},{ids:['manobra:murphy'],l:'Murphy'},
+  {ids:['inspecionar:geral','inspecionar:boca'],l:'Procurar icterícia (escleras, frênulo)'},{ids:['manobra:blumberg','palpar:fid'],l:'Afastar apendicite'}],
+ res:{
+  hemo:'Hb 13,4 g/dL · Leucócitos 14.200/mm³ (80% neutrófilos) · Plaquetas 300.000/mm³',
+  hep:'TGO 38 U/L · TGP 42 U/L · Bilirrubina total 1,0 mg/dL',
+  usgabd:'Vesícula com parede espessada (6 mm) e vários cálculos. Colédoco de calibre normal. Pâncreas normal.'
+ },
+ keyEx:[{ids:['usgabd'],l:'Ultrassonografia de abdome'}],
+ neutral:['hemo','hep','fagt','amil','pcr','eas'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'abdagudo',
+ sindWhy:'Dor aguda no hipocôndrio direito com febre e Murphy positivo: abdome agudo inflamatório.',
+ correctDx:'colecistite',
+ dxWhy:'Dor no hipocôndrio direito depois de comida gordurosa, irradiando para o ombro direito (dor referida), febre, náusea, episódios anteriores e Murphy positivo (parada inspiratória). Sem icterícia e com colédoco normal.',
+ conduta:[
+  // CONFERIR: o material classifica a colecistite como abdome agudo inflamatório, mas não detalha o tratamento.
+  {id:'c1',t:'Internar, hidratar e analgesia',ok:1,why:'É o início do cuidado no abdome agudo de origem biliar (como no caso do professor).'},
+  {id:'c2',t:'Avaliação cirúrgica',ok:1,why:'Abdome agudo inflamatório da vesícula.'},
+  {id:'c3',t:'CPRE para retirar cálculo do colédoco',ok:0,why:'Sem icterícia e com colédoco normal: não há cálculo no colédoco.'},
+  {id:'c4',t:'Alta com antiácido: é gastrite',ok:0,why:'Febre, dor no hipocôndrio direito e Murphy positivo apontam colecistite.'}
+ ],
+ teaching:[
+  {t:'Sinal de Murphy',p:'Dedos no ponto cístico; na inspiração profunda o diafragma empurra a vesícula contra os dedos. Positivo: dor com parada inspiratória (colecistite aguda).'},
+  {t:'Dor referida',p:'Colecistite dói no ombro e na escápula direita.'},
+  {t:'Murphy × Courvoisier',p:'Vesícula inflamada dói (Murphy). Vesícula palpável, indolor, com icterícia progressiva: Courvoisier, neoplasia.'}
+ ]
+});
+
+// ---- js/casos/dig-03-coledocolitiase.js ----
+// Digestório 3: Urina cor de café. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// icterícia, colúria e acolia (1.8), síndrome ictérica (4.7), caso clínico 1 do professor (5). Paciente inventada, inspirada no caso.
+CASES.push({
+ id:'d-coled',modulo:'Semiologia do digestório',n:'Caso 3',title:'Urina cor de café',look:'sueli',pname:'Dona Sueli',fonte:FONTE_DIG,
+ card:'Sueli, 52 anos. Olhos amarelos e dor na barriga.',
+ briefing:'Doutor, leito 3: Dona Sueli, 52 anos. Ficou amarela e está com dor na barriga.',
+ vitals:'PA 120/80 mmHg · FC 80 bpm · FR 24 irpm · T 36,6 °C · SpO₂ 98% em ar ambiente',
+ answers:respostas({
+  queixa:'Os olhos e a pele ficaram amarelos, e tô com dor na barriga.',
+  tempo:'A dor começou faz 5 dias. O amarelo, faz 3.',
+  inicio:'Começou com uma cólica do lado direito.',
+  dor:'Cólica embaixo das costelas do lado direito, que vai pro meio da barriga.',
+  vomito:'Enjoo. Vomitei duas vezes, comida.',
+  urinacor:'Ficou escura, cor de café.',
+  fezes:'Tão bem claras, parecendo massa de vidraceiro.',
+  passado:'Ano passado tive uma dor parecida depois de uma comida gordurosa, mais fraca.',
+  refeicao:'Piora depois de comida gordurosa.',
+  rio:'Não. Sempre morei na cidade.',
+  meds:'Nenhum.',
+  trabalho:'Professora.'
+ }),
+ keyQ:[{ids:['urinacor'],l:'Colúria'},{ids:['fezes'],l:'Acolia fecal'},{ids:['passado'],l:'Cólica biliar anterior'},{ids:['dor'],l:'Caracterizar a dor'},{ids:['meds'],l:'Remédios que agridem o fígado'},{ids:['habitos','transfusao'],l:'Álcool e fatores de risco para hepatite'}],
+ geral:'Bom estado geral, fácies de dor. Pele e escleras bem amarelas. Sem marcas de coceira. Sem aranhas vasculares.',
+ effSides:[],
+ exam:{
+  'inspecionar:boca':'Mucosa embaixo da língua amarelada.',
+  'palpar:hcd':'Dor à palpação, sem defesa. Fígado no rebordo.',
+  'palpar:epi':'Dor leve.',
+  'manobra:murphy':'Incomoda, mas ela completa a inspiração.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (icterícia, estigmas)'},
+  {ids:['inspecionar:boca'],l:'Olhar o frênulo da língua'},{ids:['palpar:hcd'],l:'Palpar o hipocôndrio direito'},
+  {ids:['manobra:murphy'],l:'Murphy'},{ids:['manobra:lemos','manobra:hepatimetria'],l:'Avaliar o fígado e a vesícula'},{ids:['manobra:traube','manobra:schuster'],l:'Avaliar o baço'}],
+ res:{
+  hep:'Bilirrubina total 8,5 mg/dL (direta 7,2 · indireta 1,3) · TGO 74 U/L · TGP 92 U/L',
+  fagt:'Fosfatase alcalina e GGT 3 vezes o limite superior',
+  hemo:'Hb 13,1 g/dL · Leucócitos 8.200/mm³ · Plaquetas 240.000/mm³',
+  usgabd:'Vesícula de paredes finas com microcálculos. Colédoco dilatado, com uma imagem que brilha e faz sombra acústica na parte final.',
+  eas:'Bilirrubina +++ · Sem outras alterações'
+ },
+ keyEx:[{ids:['hep'],l:'Bilirrubinas e transaminases'},{ids:['fagt'],l:'FA e GGT'},{ids:['usgabd'],l:'Ultrassonografia de abdome'}],
+ neutral:['hemo','eas','amil','coag'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ictericia',
+ sindWhy:'Icterícia com colúria e acolia: síndrome ictérica, do tipo obstrutivo (pós-hepática).',
+ correctDx:'coledoco',
+ dxWhy:'Cólica no hipocôndrio direito, episódio parecido depois de comida gordurosa, icterícia com colúria e acolia (juntas confirmam fluxo de bile interrompido). Bilirrubina direta alta, FA e GGT altas e transaminases pouco alteradas. Hemograma normal e sem febre: sem colangite.',
+ conduta:[
+  {id:'c1',t:'Internar, hidratar e analgesia',ok:1,why:'Conduta inicial do caso do professor.'},
+  {id:'c2',t:'CPRE com papilotomia e retirada do cálculo',ok:1,why:'Desobstrui o colédoco.'},
+  {id:'c3',t:'Depois, colecistectomia por videolaparoscopia',ok:1,why:'Tira a fonte dos cálculos.'},
+  {id:'c4',t:'Tratar como hepatite viral e só acompanhar',ok:0,why:'Colúria com acolia e FA/GGT altas indicam obstrução, não lesão do hepatócito.'},
+  {id:'c5',t:'Investigar hemólise',ok:0,why:'Na hemólise sobe a bilirrubina indireta, sem colúria e com fezes normais.'}
+ ],
+ teaching:[
+  {t:'Colúria e acolia',p:'Colúria: urina cor de Coca-Cola, pela bilirrubina direta no sangue. Acolia: fezes cor de massa de vidraceiro, sem estercobilina. Juntas: obstrução biliar.'},
+  {t:'Três tipos de icterícia',p:'Pré-hepática: BI alta, sem colúria, fezes normais (hemólise). Hepática: lesão do hepatócito, colúria. Pós-hepática: BD muito alta, FA e GGT altas, colúria, acolia e prurido.'},
+  {t:'Onde procurar',p:'Frênulo da língua é o local mais sensível; depois a esclera. A icterícia aparece nas escleras com BT de 2,0–2,5 mg/dL e na pele acima de 3–4.'},
+  {t:'O que não pode faltar',p:'Caracterizar o vômito, o que melhora e piora a dor, remédios que agridem o fígado e perda de peso.'}
+ ]
+});
+
+// ---- js/casos/dig-04-esquistossomose.js ----
+// Digestório 4: Banho de rio. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// hemorragia digestiva e gravidade (1.6, 4.4), anamnese dirigida (1.9), baço e Traube (3.2), ascite, hipertensão portal e circulação colateral (4.1),
+// caso clínico 2 do professor (5). Paciente inventado, inspirado no caso.
+CASES.push({
+ id:'d-esq',modulo:'Semiologia do digestório',n:'Caso 4',title:'Banho de rio',look:'josue',pname:'Seu Josué',fonte:FONTE_DIG,
+ card:'Josué, 52 anos. Barriga crescendo e fezes pretas.',
+ briefing:'Doutor, leito 3: Seu Josué, 52 anos. Fezes pretas, fraqueza e a barriga crescendo.',
+ vitals:'PA 105/65 mmHg (deitado) · FC 104 bpm · FR 20 irpm · T 36,4 °C · SpO₂ 97% em ar ambiente',
+ answers:respostas({
+  queixa:'A barriga cresceu, tô fraco e as fezes ficaram pretas.',
+  tempo:'A barriga vem crescendo faz umas 3 semanas. As fezes pretas foram 2 vezes nos últimos 4 dias.',
+  inicio:'Foi aos poucos, sem dor.',
+  dor:'Não dói.',
+  edema:'Os tornozelos incham no fim do dia.',
+  fezes:'Duas vezes vieram pretas, grudentas, igual piche, com um cheiro muito forte.',
+  vomito:'Não vomitei sangue.',
+  sincope:'Fico tonto quando levanto.',
+  peso:'Emagreci.',
+  rio:'Quando menino, no interior de Alagoas, vivia no rio. Tive xistose e tomei remédio, mas não terminei.',
+  habitos:'Bebo só em festa. Não fumo.',
+  trabalho:'Pedreiro.',
+  moradia:'Moro em Recife faz 15 anos, com minha esposa.'
+ }),
+ keyQ:[{ids:['rio'],l:'Banho de rio e esquistossomose'},{ids:['fezes'],l:'Melena'},{ids:['sincope'],l:'Tontura ao levantar'},{ids:['habitos'],l:'Quantificar o álcool'},{ids:['vomito'],l:'Hematêmese'},{ids:['tempo'],l:'Evolução do aumento do abdome'}],
+ geral:'Regular estado geral, desidratado e descorado. Escleras brancas. Sem tremor nas mãos.',
+ effSides:[],
+ exam:{
+  'inspecionar:meso':'Abdome globoso. Veias saltadas que saem do umbigo como raios.',
+  'inspecionar:epi':'Veias saltadas partindo do umbigo para cima.',
+  'inspecionar:hipo':'Veias saltadas partindo do umbigo para baixo.',
+  'manobra:doisdedos':'Esvaziando a veia e soltando um dedo de cada vez: o sangue corre do umbigo para fora, para cima e para baixo.',
+  'percutir:fld':'Som maciço.','percutir:fle':'Som maciço.','percutir:meso':'Som timpânico.',
+  'manobra:skoda':'Timpanismo no centro e macicez na periferia, em semicírculo com a concavidade para cima.',
+  'manobra:macicezmovel':'A macicez dos flancos muda de lugar quando ele vira de lado.',
+  'manobra:lemos':'Fígado a 2 cm do rebordo, firme, de borda romba.',
+  'palpar:hcd':'Fígado a 2 cm do rebordo, firme.',
+  'palpar:hce':'Massa firme descendo do rebordo esquerdo em direção ao umbigo.',
+  'manobra:schuster':'Baço palpável a 7 cm do rebordo costal esquerdo.',
+  'manobra:traube':'Espaço de Traube maciço.',
+  'manobra:ortostase':'Deitado: 105/65 mmHg, FC 104 bpm. Em pé: 95/60 mmHg, FC 116 bpm, e ele fica tonto.',
+  'palpar:pernas':'Edema de tornozelos (+/4+), mole, deixa marca.',
+  'inspecionar:maos':'Palmas pálidas, sem vermelhidão.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['vitals'],l:'Pedir sinais vitais'},
+  {ids:['inspecionar:meso','inspecionar:epi','inspecionar:hipo'],l:'Inspecionar o abdome (circulação colateral)'},{ids:['manobra:doisdedos'],l:'Direção do fluxo das veias'},
+  {ids:['manobra:schuster','palpar:hce'],l:'Palpar o baço'},{ids:['manobra:traube'],l:'Percutir o espaço de Traube'},
+  {ids:['manobra:macicezmovel','manobra:skoda','manobra:piparote'],l:'Pesquisar ascite'},{ids:['manobra:ortostase'],l:'PA deitado e em pé (gravidade do sangramento)'}],
+ res:{
+  hemo:'Hb 8,4 g/dL · Leucócitos 2.900/mm³ · Plaquetas 48.000/mm³',
+  hep:'Bilirrubina total 1,1 mg/dL · TGO 30 U/L · TGP 28 U/L',
+  sprot:'Proteínas totais 6,8 g/dL · Albumina 3,4 g/dL',
+  coag:'TP 13 s (controle 12 s)',
+  usgabd:'Espessamento fibroso em volta dos ramos portais do fígado. Baço de 21 cm. Veia porta dilatada, com fluxo saindo do fígado. Trombose parcial da veia esplênica. Ascite.',
+  eda:'Varizes de esôfago de grosso calibre, com pontos vermelhos. Varizes no fundo gástrico.',
+  // CONFERIR: o material não dá o GASA da esquistossomose (a tabela só traz a hipertensão portal sinusoidal); por isso o líquido vem sem números.
+  paracent:'Líquido citrino, límpido.'
+ },
+ keyEx:[{ids:['hemo'],l:'Hemograma'},{ids:['eda'],l:'Endoscopia digestiva alta'},{ids:['usgabd'],l:'Ultrassonografia de abdome'}],
+ neutral:['hep','sprot','coag','paracent','renal'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:['hemorragica','ascite'],
+ sindWhy:'Melena (hemorragia digestiva alta) em paciente com hipertensão portal: cabeça de medusa, esplenomegalia com Traube maciço e ascite.',
+ correctDx:'esquisto',
+ dxWhy:'Banho de rio na infância e esquistossomose mal tratada. Hipertensão portal com varizes que sangraram (melena), esplenomegalia com pancitopenia (hiperesplenismo) e ascite. Bilirrubina, albumina, TP e transaminases normais: função do fígado preservada, porque a fibrose é periportal, antes do sinusoide (diferente da cirrose). Queda da PA em pé e FC > 100: sangramento moderado (grau 3).',
+ conduta:[
+  {id:'c1',t:'Estabilizar: internar e repor volume',ok:1,why:'FC > 100 e variação postural da PA: sangramento grau 3, internar e repor ou transfundir.'},
+  {id:'c2',t:'Ligadura elástica ou escleroterapia das varizes',ok:1,why:'Trata a fonte do sangramento.'},
+  {id:'c3',t:'Propranolol, restrição de sal e diurético',ok:1,why:'Conduta do caso do professor para a hipertensão portal e a ascite.'},
+  {id:'c4',t:'Praziquantel',ok:1,why:'Trata a esquistossomose.'},
+  {id:'c5',t:'Tratar como cirrose alcoólica',ok:0,why:'Função do fígado preservada e álcool só social: é a fibrose de Symmers da esquistossomose.'},
+  {id:'c6',t:'Alta com sulfato ferroso',ok:0,why:'Sangramento por varizes com instabilidade postural.'}
+ ],
+ teaching:[
+  {t:'Melena',p:'Fezes pretas, pegajosas, como piche, muito fétidas: sangue digerido, sangramento acima do ângulo de Treitz.'},
+  {t:'Gravidade',p:'Grau 3: FC > 100, variação postural da PA, queda de Hb: internar e repor. Grau 4: choque.'},
+  {t:'Circulação colateral',p:'Tipo portal (cabeça de medusa): radiada a partir do umbigo. Cava inferior: de baixo para cima. Cava superior: de cima para baixo. Descubra com a técnica dos dois dedos.'},
+  {t:'Baço',p:'Só é palpável quando dobra de tamanho. Traube maciço: esplenomegalia.'},
+  {t:'Hipertensão portal',p:'Pré-hepática (trombose), intra-hepática pré-sinusoidal (esquistossomose), sinusoidal (cirrose), pós-sinusoidal e pós-hepática (IC direita, Budd-Chiari).'}
+ ]
+});
+
+// ---- js/casos/dig-05-cirrose.js ----
+// Digestório 5: A barriga enorme. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// ascite, paracentese e GASA, pesquisa de ascite, estigmas da cirrose, Child-Pugh (4.1), fígado (3.1), questão 4 da monitoria (6).
+CASES.push({
+ id:'d-cirr',modulo:'Semiologia do digestório',n:'Caso 5',title:'A barriga enorme',look:'mario',pname:'Seu Mário',fonte:FONTE_DIG,
+ card:'Mário, 58 anos. A barriga cresceu e aperta a respiração.',
+ briefing:'Doutor, leito 3: Seu Mário, 58 anos. A barriga está enorme e ele está com falta de ar.',
+ vitals:'PA 104/62 mmHg · FC 92 bpm · FR 22 irpm · T 36,8 °C · SpO₂ 95% em ar ambiente',
+ answers:respostas({
+  queixa:'A barriga tá enorme e tô sem ar por causa dela.',
+  tempo:'Vem crescendo faz uns dois meses.',
+  inicio:'Aos poucos.',
+  dispneia:'A barriga aperta e falta o ar.',
+  habitos:'Bebo cachaça todo dia, meio litro, há uns 20 anos. Fumo também.',
+  urinacor:'Tá escura.',
+  edema:'As pernas incham.',
+  peso:'Perdi músculo, mas a barriga cresceu.',
+  emocional:'A esposa diz que ando esquecido e dormindo de dia.',
+  trabalho:'Era mecânico. Parei faz um ano.',
+  sal:'Como mal.'
+ }),
+ keyQ:[{ids:['habitos'],l:'Quantificar o álcool'},{ids:['emocional'],l:'Sonolência e esquecimento (encefalopatia)'},{ids:['tempo'],l:'Evolução da ascite'},{ids:['fezes','vomito'],l:'Sangramento digestivo (afastar)'},{ids:['transfusao','rio'],l:'Outras causas de hepatopatia (transfusão, rio)'}],
+ geral:'Emagrecido nos braços, com o abdome muito grande. Escleras amareladas. Pequenas aranhas vermelhas no tórax e no rosto. Mamas aumentadas. Sonolento, mas responde.',
+ effSides:[],
+ exam:{
+  'inspecionar:meso':'Abdome globoso, tenso. Umbigo saltado (hérnia). Veias saltadas saindo do umbigo como raios.',
+  'percutir:fld':'Som maciço.','percutir:fle':'Som maciço.','percutir:meso':'Som timpânico.',
+  'manobra:piparote':'Com a mão de um ajudante na linha média, o peteleco num flanco faz uma onda que chega ao outro flanco.',
+  'manobra:macicezmovel':'A macicez dos flancos muda de lugar quando ele vira de lado.',
+  'manobra:skoda':'Timpanismo no centro e macicez na periferia, em semicírculo com a concavidade para cima.',
+  'manobra:lemos':'Fígado não palpável.',
+  'manobra:rechaco':'Não se sente o fígado voltar.',
+  'manobra:hepatimetria':'Lobo direito 5 cm na linha hemiclavicular.',
+  'manobra:schuster':'Baço palpável a 3 cm do rebordo costal esquerdo.',
+  'manobra:traube':'Espaço de Traube maciço.',
+  'manobra:doisdedos':'O sangue corre do umbigo para fora.',
+  'inspecionar:maos':'Palmas vermelhas nas eminências tenar e hipotenar. Unhas esbranquiçadas. Com os braços estendidos e as mãos para cima, as mãos caem e voltam em batidas rápidas.',
+  'inspecionar:boca':'Hálito adocicado. Embaixo da língua, cor amarelada.',
+  'palpar:pernas':'Edema mole nas duas pernas, até o meio da perna.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (estigmas)'},
+  {ids:['inspecionar:maos'],l:'Mãos (eritema palmar, flapping)'},{ids:['manobra:piparote'],l:'Piparote'},
+  {ids:['manobra:traube','manobra:schuster'],l:'Baço (Traube, Schuster)'},{ids:['manobra:lemos','manobra:hepatimetria','manobra:rechaco'],l:'Tamanho do fígado'},
+  {ids:['inspecionar:meso','manobra:doisdedos'],l:'Circulação colateral'}],
+ res:{
+  hep:'Bilirrubina total 2,6 mg/dL (direta 1,5 · indireta 1,1) · TGO 96 U/L · TGP 48 U/L',
+  sprot:'Proteínas totais 6,0 g/dL · Albumina 2,6 g/dL',
+  coag:'TP 17 s (controle 12 s)',
+  hemo:'Hb 10,8 g/dL · Leucócitos 4.100/mm³ · Plaquetas 82.000/mm³',
+  paracent:'Líquido citrino, límpido. Albumina 0,9 g/dL · Proteínas 1,2 g/dL',
+  usgabd:'Fígado pequeno, de contornos irregulares. Baço de 15 cm. Ascite volumosa.',
+  eda:'Varizes de esôfago de médio calibre.'
+ },
+ keyEx:[{ids:['paracent'],l:'Paracentese diagnóstica'},{ids:['sprot'],l:'Albumina sérica (para o GASA e o Child)'},{ids:['hep'],l:'Bilirrubinas'},{ids:['coag'],l:'TP'}],
+ neutral:['hemo','usgabd','eda','renal','glic','fagt'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ascite',
+ sindWhy:'Ascite de grande volume (piparote positivo) com circulação colateral tipo portal e esplenomegalia: síndrome de ascite com hipertensão portal.',
+ correctDx:'cirrose',
+ dxWhy:'Etilista pesado com estigmas de cirrose: aranhas vasculares, ginecomastia, eritema palmar, unhas brancas, flapping, hálito hepático, icterícia, cabeça de medusa, fígado pequeno e Traube maciço. GASA = 2,6 − 0,9 = 1,7 g/dL (> 1,1) com proteína de 1,2 g/dL (< 3,0): hipertensão portal sinusoidal, cirrose. Child-Pugh: bilirrubina 2,6 (2) + albumina 2,6 (3) + TP 5 s prolongado (2) + ascite moderada a grande (3) + encefalopatia grau 1–2 (2) = 12 pontos, Child C.',
+ conduta:[
+  {id:'c1',t:'Paracentese diagnóstica e cálculo do GASA',ok:1,why:'Diz de onde vem a ascite.'},
+  {id:'c2',t:'Endoscopia para procurar varizes',ok:1,why:'GASA > 1,1 com proteína < 3: hipertensão portal sinusoidal, segue com USG ou endoscopia.'},
+  {id:'c3',t:'Classificar como Child-Pugh C',ok:1,why:'12 pontos (10 a 15 = C).'},
+  {id:'c4',t:'Classificar como Child-Pugh A',ok:0,why:'Child A é 5 a 6 pontos. Ele tem 12.'},
+  {id:'c5',t:'Investigar doença do peritônio (TB, carcinomatose)',ok:0,why:'Doença peritoneal dá GASA < 1,1 com proteína > 3.'},
+  {id:'c6',t:'Procurar fígado grande: é o esperado',ok:0,why:'No cirrótico avançado o fígado é pequeno (atrófico).'}
+ ],
+ teaching:[
+  {t:'Estigmas da cirrose',p:'Aranhas vasculares, eritema palmar, ginecomastia e atrofia testicular, unhas brancas, baqueteamento, flapping, hálito hepático, circulação colateral, esplenomegalia, ascite, icterícia e hérnia umbilical.'},
+  {t:'GASA',p:'Albumina do soro − albumina da ascite. > 1,1 com proteína < 3,0: hipertensão portal sinusoidal (cirrose). > 1,1 com proteína > 3,0: pós-sinusoidal ou IC. < 1,1 com proteína > 3,0: peritônio (carcinomatose, TB).'},
+  {t:'Achar a ascite',p:'Pequena: só na USG. Média: semicírculo de Skoda e macicez móvel (~1–1,5 L). Grande: piparote (> 3–5 L).'},
+  {t:'Child-Pugh',p:'Bilirrubina, albumina, TP, ascite e encefalopatia. A 5–6, B 7–9, C 10–15.'}
+ ]
+});
+
+// ---- js/casos/dig-06-mixedema.js ----
+// Digestório 6: Parou o remédio da tireoide. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// ascite e o caso real da professora (mixedema), pesquisa de ascite (4.1), questão 2 da monitoria (6). IC direita e refluxo hepatojugular: Semiologia Cardiovascular (7.3).
+CASES.push({
+ id:'d-mix',modulo:'Semiologia do digestório',n:'Caso 6',title:'Parou o remédio da tireoide',look:'ines',pname:'Dona Glória',fonte:FONTE_DIG+'; Semiologia Cardiovascular (IC direita)',
+ card:'Glória, 73 anos. A barriga inchou e ela anda muito cansada.',
+ briefing:'Doutor, leito 3: Dona Glória, 73 anos. Barriga inchada e muito cansaço.',
+ vitals:'PA 136/88 mmHg · FC 54 bpm · FR 16 irpm · T 35,8 °C · SpO₂ 96% em ar ambiente',
+ answers:respostas({
+  queixa:'A barriga inchou e tô muito cansada.',
+  tempo:'Uns três meses.',
+  inicio:'Aos poucos.',
+  meds:'Tomava remédio da tireoide, levotiroxina. Parei faz uns seis meses porque acabou.',
+  doencas:'Tireoide. Mais nada.',
+  edema:'Inchada toda, até o rosto.',
+  fezes:'Presas. Passo dias sem ir.',
+  peso:'Engordei, mesmo comendo pouco.',
+  emocional:'Desanimada, com sono o dia todo. Sinto muito frio.',
+  dispneia:'Cansaço, mas deitada não piora.',
+  posicao:'Não.',
+  habitos:'Não bebo, não fumo.',
+  trabalho:'Aposentada, era costureira.',
+  moradia:'Moro sozinha.'
+ }),
+ keyQ:[{ids:['meds'],l:'Levotiroxina suspensa'},{ids:['emocional'],l:'Sono, desânimo e frio'},{ids:['habitos'],l:'Álcool (afastar cirrose)'},{ids:['posicao','dispneia'],l:'Ortopneia (afastar IC)'},{ids:['fezes'],l:'Constipação'}],
+ geral:'Idosa lenta, de fala arrastada e rouca. Rosto inchado e sem expressão. Pele seca e áspera, cabelo ralo e quebradiço. Sem icterícia, sem aranhas vasculares.',
+ effSides:[],
+ exam:{
+  'inspecionar:meso':'Abdome globoso, sem veias visíveis.',
+  'percutir:fld':'Som maciço.','percutir:fle':'Som maciço.','percutir:meso':'Som timpânico.',
+  'manobra:piparote':'Com a mão de um ajudante na linha média, o peteleco num flanco faz uma onda que chega ao outro flanco.',
+  'manobra:macicezmovel':'A macicez dos flancos muda de lugar com o decúbito.',
+  'manobra:skoda':'Timpanismo no centro e macicez na periferia, em semicírculo com a concavidade para cima.',
+  'inspecionar:pescoco':'Jugulares sem turgência a 45°.',
+  'palpar:pescoco':'Comprimindo o hipocôndrio direito, a jugular não sobe.',
+  'palpar:pernas':'Pernas inchadas dos dois lados.',
+  'manobra:traube':'Espaço de Traube timpânico.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (fácies, pele, cabelo)'},
+  {ids:['manobra:piparote','manobra:macicezmovel','manobra:skoda'],l:'Pesquisar ascite'},{ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugular e refluxo hepatojugular (afastar IC)'},
+  {ids:['vitals'],l:'Pedir sinais vitais (bradicardia, temperatura baixa)'}],
+ res:{
+  tsh:'TSH 86 mUI/L · T4 livre 0,2 ng/dL',
+  bnp:'NT-proBNP 140 pg/mL',
+  // CONFERIR: o material não traz o GASA do mixedema; o líquido vem sem números.
+  paracent:'Líquido citrino, límpido. Citologia sem células malignas.',
+  renal:'Ureia 38 mg/dL · Creatinina 0,9 mg/dL',
+  sprot:'Proteínas totais 6,6 g/dL · Albumina 3,7 g/dL'
+ },
+ keyEx:[{ids:['tsh'],l:'TSH e T4 livre'}],
+ neutral:['paracent','eco','bnp','hep','sprot','renal','usgabd','ecg'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ascite',
+ sindWhy:'Ascite de grande volume (piparote positivo), sem circulação colateral nem esplenomegalia.',
+ correctDx:'mixedema',
+ dxWhy:'Levotiroxina parada há seis meses, sono, frio, constipação, fala arrastada, fácies inchada e sem expressão, pele seca, cabelo ralo, bradicardia e temperatura baixa. TSH muito alto. Jugulares normais e refluxo hepatojugular negativo afastam IC direita; sem álcool nem estigmas, não é cirrose. É o caso da professora: pense em mixedema na ascite.',
+ conduta:[
+  {id:'c1',t:'Repor o hormônio da tireoide',ok:1,why:'No caso da professora, com a reposição a paciente melhorou em 2 dias.'},
+  {id:'c2',t:'Furosemida em dose alta para secar a barriga',ok:0,why:'No caso real, a furosemida em dose alta levou à insuficiência renal pré-renal. A causa era o mixedema.'},
+  {id:'c3',t:'Tratar como insuficiência cardíaca direita',ok:0,why:'Jugulares sem turgência e refluxo hepatojugular negativo.'},
+  {id:'c4',t:'Tratar como cirrose',ok:0,why:'Sem álcool, sem estigmas, baço normal.'}
+ ],
+ teaching:[
+  {t:'Causas de ascite',p:'Hepáticas (cirrose, esquistossomose), cardíacas (IC), renais (síndrome nefrótica), infecciosas (TB peritoneal), neoplásicas e hipotireoidismo (mixedema).'},
+  {t:'Lição da professora',p:'Ascite com anasarca, fácies inchada, fala arrastada: dose o TSH antes de encher de diurético.'},
+  {t:'IC direita × outras causas',p:'Na IC direita há jugular túrgida e refluxo hepatojugular positivo, com fígado aumentado.'}
+ ]
+});
+
+// ---- js/casos/dig-07-pancreatite-aguda.js ----
+// Digestório 7: A dor em faixa. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// pancreatite aguda, sinais de Cullen, Grey-Turner e Gobiet (4.6), questão 3 da monitoria (6).
+CASES.push({
+ id:'d-pancag',modulo:'Semiologia do digestório',n:'Caso 7',title:'A dor em faixa',look:'pedro',pname:'Seu Edson',fonte:FONTE_DIG,
+ card:'Edson, 44 anos. Dor fortíssima no alto da barriga depois de uma festa.',
+ briefing:'Doutor, leito 3: Seu Edson, 44 anos. Dor muito forte na barriga desde ontem à noite.',
+ vitals:'PA 96/58 mmHg · FC 118 bpm · FR 26 irpm · T 38,2 °C · SpO₂ 94% em ar ambiente',
+ answers:respostas({
+  queixa:'Uma dor muito forte no alto da barriga.',
+  tempo:'Desde ontem à noite.',
+  inicio:'Começou umas horas depois de beber muito e comer churrasco numa festa.',
+  dor:'Forte, contínua, no meio de cima da barriga. Dá a volta como uma faixa e vai pras costas.',
+  vomito:'Vomitei várias vezes. Não alivia.',
+  refeicao:'Piorou depois de comer.',
+  febre:'Tô quente.',
+  habitos:'Bebo muito todo fim de semana. Fumo.',
+  passado:'Nunca tive isso.',
+  trabalho:'Vendedor.'
+ }),
+ keyQ:[{ids:['dor'],l:'Dor em faixa irradiando para o dorso'},{ids:['habitos'],l:'Álcool'},{ids:['inicio','refeicao'],l:'Depois de bebida e comida'},{ids:['vomito'],l:'Vômitos'},{ids:['passado'],l:'Crises anteriores (aguda × crônica)'}],
+ geral:'Agitado de dor, suado, desidratado, com mãos frias. Um pouco confuso.',
+ effSides:[],
+ exam:Object.assign(achados(REGIOES,{auscultar:'Ruídos hidroaéreos diminuídos.'}),{
+  'inspecionar:meso':'Mancha arroxeada em volta do umbigo.',
+  'inspecionar:fld':'Mancha arroxeada no flanco.','inspecionar:fle':'Mancha arroxeada no flanco.',
+  'palpar:epi':'Dor forte, com a parede dura.','palpar:hcd':'Dor à palpação.','palpar:hce':'Dor à palpação.','palpar:meso':'Dor à palpação.',
+  'percutir:epi':'Som timpânico aumentado, com o abdome superior distendido.','percutir:hce':'Som timpânico aumentado.',
+  'manobra:blumberg':'Dor à descompressão em quase todo o abdome.',
+  'manobra:murphy':'Dói, mas ele completa a inspiração.',
+  'inspecionar:lombD':'Manchas arroxeadas na região lombar.','inspecionar:lombE':'Manchas arroxeadas na região lombar.'
+ }),
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['vitals'],l:'Pedir sinais vitais (gravidade)'},
+  {ids:['inspecionar:meso'],l:'Inspecionar o umbigo (Cullen)'},{ids:['inspecionar:fld','inspecionar:fle','inspecionar:lombD','inspecionar:lombE'],l:'Inspecionar flancos e lombar (Grey-Turner)'},
+  {ids:['palpar:epi'],l:'Palpar o epigástrio'},{ids:['manobra:blumberg'],l:'Irritação peritoneal'},{ids:['manobra:jobert'],l:'Afastar perfuração (Jobert)'}],
+ res:{
+  // CONFERIR: o material não traz valores de amilase e lipase; os números foram construídos.
+  amil:'Amilase 1.850 U/L · Lipase 3.400 U/L',
+  hemo:'Hb 16,2 g/dL · Leucócitos 17.000/mm³ · Plaquetas 280.000/mm³',
+  glic:'Glicemia 186 mg/dL',
+  usgabd:'Pâncreas aumentado, com líquido em volta. Vesícula sem cálculos.',
+  hep:'Bilirrubina total 1,0 mg/dL · TGO 60 U/L · TGP 48 U/L'
+ },
+ keyEx:[{ids:['amil'],l:'Amilase e lipase'},{ids:['usgabd'],l:'Imagem (USG)'}],
+ neutral:['hemo','glic','hep','fagt','renal','gaso','rx','coag'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:['pancreatica','abdagudo'],
+ sindWhy:'Dor epigástrica em faixa com irritação peritoneal, Cullen, Grey-Turner e timpanismo do abdome superior (Gobiet): pancreatite aguda grave.',
+ correctDx:'pancreatite',
+ dxWhy:'Dor em faixa no epigástrio irradiando para os flancos e o dorso, depois de álcool e comida, com vômitos e febre. Hipotensão, taquipneia e confusão indicam gravidade; Cullen (umbigo) e Grey-Turner (flancos) mostram a forma hemorrágica. Jobert negativo afasta perfuração.',
+ conduta:[
+  // CONFERIR: o material não traz o tratamento da pancreatite; ficou a conduta geral do abdome agudo.
+  {id:'c1',t:'Internar, hidratar e analgesia',ok:1,why:'Desidratado, hipotenso e com dor intensa.'},
+  {id:'c2',t:'Tratar como forma grave e vigiar de perto',ok:1,why:'Hipotensão, confusão, Cullen e Grey-Turner: pancreatite necro-hemorrágica.'},
+  {id:'c3',t:'Cirurgia por úlcera perfurada',ok:0,why:'Jobert negativo: a macicez do fígado está preservada, sem ar livre.'},
+  {id:'c4',t:'Tratar como pancreatite crônica',ok:0,why:'Esteatorreia, diabetes e carências são da crônica. Cullen, febre, hipotensão e confusão são da aguda.'},
+  {id:'c5',t:'Alta com antiácido',ok:0,why:'Instável e com sinais de gravidade.'}
+ ],
+ teaching:[
+  {t:'Dor da pancreatite',p:'Epigástrica, em faixa ou cinturão, irradiando para flancos e dorso, contínua, com náusea, vômito e febre.'},
+  {t:'Sinais',p:'Cullen: equimose em volta do umbigo. Grey-Turner: equimose nos flancos e na lombar. Gobiet: timpanismo do abdome superior pela distensão do transverso.'},
+  {t:'Aguda × crônica',p:'Aguda: dor em cinturão com irritação, Cullen, febre, hipotensão, confusão. Crônica: esteatorreia, diabetes, carências vitamínicas.'},
+  {t:'Causas principais',p:'Cálculo biliar bloqueando a ampola de Vater e álcool.'}
+ ]
+});
+
+// ---- js/casos/dig-08-pancreatite-cronica.js ----
+// Digestório 8: As fezes que boiam. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// hábito intestinal (1.7), pancreatite crônica (4.6), diarreia crônica (4.3), questão 3 da monitoria (6).
+CASES.push({
+ id:'d-pancron',modulo:'Semiologia do digestório',n:'Caso 8',title:'As fezes que boiam',look:'raimundo',pname:'Seu Ivo',fonte:FONTE_DIG,
+ card:'Ivo, 52 anos. Emagrecendo e com diarreia diferente.',
+ briefing:'Doutor, leito 3: Seu Ivo, 52 anos. Emagreceu muito e está com dor na barriga.',
+ vitals:'PA 118/74 mmHg · FC 86 bpm · FR 16 irpm · T 36,5 °C · SpO₂ 98% em ar ambiente',
+ answers:respostas({
+  queixa:'Emagreci muito e tenho dor na boca do estômago.',
+  tempo:'A dor vai e volta há uns três anos. A diarreia, há uns seis meses.',
+  inicio:'Aos poucos.',
+  dor:'Dor no alto da barriga que vai pras costas. Vem em crises, principalmente depois de beber.',
+  refeicao:'Comer gordura piora a dor e a diarreia.',
+  fezes:'Amareladas, brilhantes, muito volumosas. Boiam no vaso e fedem muito. Duas ou três vezes por dia.',
+  peso:'Perdi 12 quilos em um ano.',
+  urina:'Tenho sentido muita sede e urino muito.',
+  doencas:'O posto disse que fiquei diabético esse ano.',
+  habitos:'Bebo há 25 anos, todo dia. Fumo.',
+  emocional:'Fraco, sem ânimo.',
+  trabalho:'Porteiro.'
+ }),
+ keyQ:[{ids:['fezes'],l:'Esteatorreia'},{ids:['habitos'],l:'Etilismo crônico'},{ids:['peso'],l:'Emagrecimento'},{ids:['urina','doencas'],l:'Diabetes recente'},{ids:['tempo','dor'],l:'Dor em crises há anos'}],
+ geral:'Homem emagrecido, com manchas roxas nos braços e pernas que aparecem fácil. Escleras brancas.',
+ effSides:[],
+ exam:{
+  'inspecionar:meso':'Abdome escavado: arcos das costelas e ossos da bacia aparecendo.',
+  'palpar:epi':'Dor leve à palpação profunda.',
+  'auscultar:meso':'Ruídos hidroaéreos um pouco aumentados.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (emagrecimento, equimoses)'},
+  {ids:['inspecionar:meso'],l:'Tipo de abdome'},{ids:['palpar:epi'],l:'Palpar o epigástrio'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  glic:'Glicemia 248 mg/dL',
+  amil:'Amilase 70 U/L · Lipase 42 U/L',
+  usgabd:'Pâncreas pequeno, com várias calcificações.',
+  hemo:'Hb 11,0 g/dL · Leucócitos 6.800/mm³ · Plaquetas 210.000/mm³',
+  sprot:'Proteínas totais 5,8 g/dL · Albumina 3,0 g/dL',
+  coag:'TP 15 s (controle 12 s)'
+ },
+ keyEx:[{ids:['glic'],l:'Glicemia'},{ids:['usgabd'],l:'Imagem do pâncreas'}],
+ neutral:['amil','hemo','hep','sprot','eas','coag','fagt'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:['pancreatica','diarreica'],
+ sindWhy:'Falta das funções do pâncreas: exócrina (esteatorreia, emagrecimento, carências) e endócrina (diabetes).',
+ correctDx:'pancrcron',
+ dxWhy:'Etilismo crônico, dor epigástrica em crises há anos, esteatorreia (fezes amareladas, brilhantes, volumosas, fétidas, que boiam), emagrecimento, diabetes recente e equimoses fáceis (falta de vitamina K). Amilase e lipase normais não afastam: o pâncreas já está destruído.',
+ conduta:[
+  // CONFERIR: o material aponta o álcool como fator de risco, mas não traz o tratamento.
+  {id:'c1',t:'Parar de beber',ok:1,why:'Etilismo crônico é o principal fator de risco.'},
+  // CONFERIR: tratamento da diabetes e da má absorção não está no material.
+  {id:'c2',t:'Tratar a diabetes e a má absorção',ok:1,why:'Função endócrina e exócrina perdidas.'},
+  {id:'c3',t:'Tratar como pancreatite aguda',ok:0,why:'Sem dor aguda em cinturão, febre, hipotensão ou Cullen.'},
+  {id:'c4',t:'Diarreia infecciosa: antibiótico',ok:0,why:'Diarreia de seis meses (crônica, > 30 dias), sem febre: não é infecção aguda.'}
+ ],
+ teaching:[
+  {t:'Pancreatite crônica',p:'Álcool. Dor em crises ou contínua. Insuficiência exócrina: esteatorreia, emagrecimento, carências de A, D, E e K. Endócrina: diabetes.'},
+  {t:'Esteatorreia',p:'Fezes amareladas, brilhantes, volumosas, fétidas, que boiam. Falta de lipase.'},
+  {t:'Diarreia crônica',p:'Mais de 30 dias: pense em má absorção, parasitoses, doença inflamatória, intestino irritável e neoplasia.'}
+ ]
+});
+
+// ---- js/casos/dig-09-perfuracao.js ----
+// Digestório 9: Barriga de tábua. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// fármacos e AINEs (1.9), ausculta e silêncio abdominal (2.3), defesa (2.7), sinal de Jobert (3.1), abdome agudo perfurativo (4.5).
+CASES.push({
+ id:'d-perf',modulo:'Semiologia do digestório',n:'Caso 9',title:'Barriga de tábua',look:'tonho',pname:'Seu Aurélio',fonte:FONTE_DIG,
+ card:'Aurélio, 63 anos. Dor súbita como uma facada na barriga.',
+ briefing:'Doutor, leito 3: Seu Aurélio, 63 anos. Dor de repente na barriga, muito forte, há três horas.',
+ vitals:'PA 108/70 mmHg · FC 112 bpm · FR 24 irpm · T 37,8 °C · SpO₂ 96% em ar ambiente',
+ answers:respostas({
+  queixa:'Uma dor horrível na barriga.',
+  tempo:'Faz umas três horas.',
+  inicio:'De repente, como uma facada na boca do estômago. Depois espalhou pra barriga toda.',
+  dor:'A barriga toda dói. Não consigo me mexer nem respirar fundo.',
+  refeicao:'Faz meses que tinha uma queimação no estômago que melhorava quando eu comia.',
+  vomito:'Vomitei uma vez, comida.',
+  fezes:'Normais. Nunca vi fezes pretas.',
+  meds:'Diclofenaco todo dia há dois meses, pro joelho.',
+  passado:'Queimação no estômago há meses.',
+  habitos:'Fumo um maço por dia. Bebo no fim de semana.',
+  trabalho:'Aposentado, era motorista.'
+ }),
+ keyQ:[{ids:['inicio'],l:'Início súbito, como facada'},{ids:['meds'],l:'Uso de anti-inflamatório (AINE)'},{ids:['refeicao','passado'],l:'Queimação epigástrica anterior'},{ids:['dor'],l:'Dor que se espalhou'},{ids:['fezes','vomito'],l:'Sangramento (afastar)'}],
+ geral:'Deitado imóvel, com os joelhos dobrados, respirando curto. A barriga não se mexe com a respiração.',
+ effSides:[],
+ exam:Object.assign(achados(REGIOES,{auscultar:'Nenhum ruído hidroaéreo depois de vários minutos de ausculta.',palpar:'Abdome duro como tábua, com dor intensa.'}),{
+  'percutir:hcd':'Som hipertimpânico.',
+  'manobra:jobert':'Na linha hemiclavicular direita, sobre a loja do fígado, o som é hipertimpânico, onde deveria ser maciço.',
+  'manobra:blumberg':'Dor à descompressão em todo o abdome.',
+  'manobra:murphy':'Não dá para fazer: dor em todo o abdome.'
+ }),
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (imóvel, sem movimento abdominal)'},
+  {ids:REGIOES.map(z=>'palpar:'+z),l:'Palpar (defesa, abdome em tábua)'},{ids:['manobra:jobert','percutir:hcd'],l:'Percutir a loja hepática (Jobert)'},
+  {ids:['manobra:blumberg'],l:'Irritação peritoneal'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 14,1 g/dL · Leucócitos 16.400/mm³ · Plaquetas 250.000/mm³',
+  rx:'Imagem no negatoscópio. Radiografia de tórax em pé. Sem laudo: a leitura é sua.',
+  usgabd:'Exame dificultado por muito gás. Pouco líquido livre.'
+ },
+ keyEx:[{ids:['rx'],l:'Radiografia em pé (ar embaixo do diafragma)'}],
+ neutral:['hemo','amil','usgabd','ecg','renal','coag'],
+ rx:{pneumop:1},
+ tap:{sides:[],spaces:[]},
+ correctSind:'abdagudo',
+ sindWhy:'Dor súbita difusa, abdome em tábua, silêncio abdominal e descompressão dolorosa em todo o abdome: peritonite difusa, abdome agudo perfurativo.',
+ correctDx:'perfuracao',
+ dxWhy:'Usuário de diclofenaco (AINE causa úlcera), com queimação epigástrica que melhorava com comida, e dor súbita como facada que se espalhou. Abdome em tábua, sem ruídos (peritonite), Jobert positivo: ar livre na cavidade. A radiografia em pé mostra ar embaixo do diafragma.',
+ conduta:[
+  {id:'c1',t:'Cirurgia de urgência',ok:1,why:'Abdome agudo perfurativo: diagnóstico rápido e cirurgia de emergência.'},
+  {id:'c2',t:'Confirmar o ar livre na radiografia em pé',ok:1,why:'Jobert positivo se confirma com ar embaixo do diafragma.'},
+  {id:'c3',t:'Antiácido e observação',ok:0,why:'Há peritonite e ar livre na cavidade.'},
+  {id:'c4',t:'Tratar como pancreatite',ok:0,why:'Início em facada, Jobert positivo e ar livre: perfuração.'},
+  {id:'c5',t:'Continuar o diclofenaco',ok:0,why:'AINEs causam úlcera, gastrite erosiva e sangramento.'}
+ ],
+ teaching:[
+  {t:'Sinal de Jobert',p:'Timpanismo onde deveria haver a macicez do fígado (linha hemiclavicular direita): pneumoperitônio, perfuração de víscera oca. Confirma-se com ar embaixo do diafragma na radiografia.'},
+  {t:'Silêncio abdominal',p:'Ausência de ruídos: íleo paralítico, peritonite difusa, obstrução avançada. Para afirmar, ausculte por tempo prolongado.'},
+  {t:'Tipos de abdome agudo',p:'Inflamatório, perfurativo, obstrutivo, vascular e hemorrágico.'},
+  {t:'Remédios',p:'AINEs: úlcera, gastrite erosiva, sangramento. Opioides: constipação e íleo paralítico.'}
+ ]
+});
+
+// ---- js/casos/dig-10-courvoisier.js ----
+// Digestório 10: Amarelo sem dor. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// vesícula e regra de Courvoisier (3.3), síndrome ictérica e pistas da história (4.7).
+CASES.push({
+ id:'d-courv',modulo:'Semiologia do digestório',n:'Caso 10',title:'Amarelo sem dor',look:'severino',pname:'Seu Armando',fonte:FONTE_DIG,
+ card:'Armando, 68 anos. Cada vez mais amarelo, e coçando muito.',
+ briefing:'Doutor, leito 3: Seu Armando, 68 anos. A família diz que ele está cada vez mais amarelo.',
+ vitals:'PA 128/80 mmHg · FC 78 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 97% em ar ambiente',
+ answers:respostas({
+  queixa:'Tô ficando amarelo e o corpo coça demais.',
+  tempo:'Uns dois meses. Só piora.',
+  inicio:'Foi aos poucos, sem dor nenhuma.',
+  dor:'Não dói nada.',
+  urinacor:'Escura, cor de Coca-Cola.',
+  fezes:'Bem claras, quase brancas.',
+  peso:'Perdi 9 quilos sem querer.',
+  refeicao:'Ando sem fome.',
+  febre:'Não.',
+  passado:'Nunca tive cólica de vesícula.',
+  habitos:'Fumei 40 anos. Bebo pouco.',
+  familia:'Meu irmão teve câncer de pâncreas.',
+  trabalho:'Aposentado, fui bancário.'
+ }),
+ keyQ:[{ids:['dor','inicio'],l:'Icterícia sem dor, progressiva'},{ids:['peso'],l:'Perda de peso'},{ids:['urinacor'],l:'Colúria'},{ids:['fezes'],l:'Acolia'},{ids:['familia'],l:'Câncer na família'},{ids:['passado'],l:'Cólica biliar (afastar litíase)'}],
+ geral:'Emagrecido, pele e escleras amarelo-esverdeadas, marcas de coceira nos braços e nas costas.',
+ effSides:[],
+ exam:{
+  'palpar:hcd':'Massa arredondada, lisa e indolor abaixo do rebordo costal direito, que desce com a respiração.',
+  'manobra:murphy':'Inspiração completa, sem dor.',
+  'manobra:lemos':'Borda do fígado lisa, no rebordo. Abaixo dela, uma massa arredondada, lisa e indolor.',
+  'inspecionar:boca':'Embaixo da língua, cor amarelada.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (icterícia, coceira)'},
+  {ids:['palpar:hcd','manobra:lemos'],l:'Palpar o hipocôndrio direito (vesícula)'},{ids:['manobra:murphy'],l:'Murphy'},{ids:['inspecionar:boca'],l:'Frênulo da língua'}],
+ res:{
+  hep:'Bilirrubina total 14,2 mg/dL (direta 12,1 · indireta 2,1) · TGO 88 U/L · TGP 104 U/L',
+  fagt:'Fosfatase alcalina 5 vezes e GGT 6 vezes o limite superior',
+  usgabd:'Vesícula muito distendida, sem cálculos. Vias biliares dilatadas. Massa na cabeça do pâncreas.',
+  glic:'Glicemia 142 mg/dL',
+  hemo:'Hb 11,8 g/dL · Leucócitos 7.400/mm³ · Plaquetas 260.000/mm³'
+ },
+ keyEx:[{ids:['hep'],l:'Bilirrubinas'},{ids:['fagt'],l:'FA e GGT'},{ids:['usgabd'],l:'Ultrassonografia de abdome'}],
+ neutral:['hemo','amil','coag','eas','glic'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ictericia',
+ sindWhy:'Icterícia com colúria, acolia e prurido intenso: síndrome ictérica obstrutiva.',
+ correctDx:'neopanc',
+ dxWhy:'Icterícia progressiva e indolor, com vesícula palpável, distendida e indolor (Courvoisier-Terrier), prurido intenso, colúria, acolia e emagrecimento: obstrução lenta do colédoco por neoplasia da cabeça do pâncreas, sem inflamação.',
+ conduta:[
+  // CONFERIR: o material aponta neoplasia, mas não diz como investigar.
+  {id:'c1',t:'Investigar neoplasia da cabeça do pâncreas',ok:1,why:'Courvoisier-Terrier: icterícia progressiva + vesícula palpável e indolor.'},
+  {id:'c2',t:'Tratar como colecistite',ok:0,why:'Vesícula indolor e Murphy negativo, sem febre.'},
+  {id:'c3',t:'Tratar como hepatite viral',ok:0,why:'Acolia, prurido intenso e FA/GGT muito altas: obstrução.'},
+  {id:'c4',t:'Tratar como cálculo no colédoco',ok:0,why:'Cálculo dá icterícia que vai e volta, com cólica. Aqui é progressiva e indolor.'}
+ ],
+ teaching:[
+  {t:'Courvoisier-Terrier',p:'Icterícia + vesícula palpável e indolor, sem irritação peritoneal: neoplasia (cabeça de pâncreas, ampola, vias biliares).'},
+  {t:'Tríade de Charcot',p:'Icterícia + dor no hipocôndrio direito + febre com calafrios: colangite.'},
+  {t:'Pistas da história',p:'Litíase: icterícia que vai e volta, com cólica. Obstrução: acolia e urina escura. Hepatite viral: a febre some quando a icterícia chega. Ampola de Vater: icterícia recorrente.'}
+ ]
+});
+
+// ---- js/casos/dig-11-hepatite.js ----
+// Digestório 11: A febre que sumiu. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// icterícia (1.8), síndrome ictérica e pistas da história (4.7), questão 5 da monitoria (6).
+CASES.push({
+ id:'d-hep',modulo:'Semiologia do digestório',n:'Caso 11',title:'A febre que sumiu',look:'carla',pname:'Bianca',fonte:FONTE_DIG,
+ card:'Bianca, 24 anos. Ficou amarela depois de uma semana de febre.',
+ briefing:'Doutor, leito 3: Bianca, 24 anos. Está amarela e enjoada.',
+ vitals:'PA 112/72 mmHg · FC 84 bpm · FR 16 irpm · T 36,9 °C · SpO₂ 99% em ar ambiente',
+ answers:respostas({
+  queixa:'Fiquei amarela e tô muito enjoada.',
+  tempo:'Uns dez dias de mal-estar. O amarelo apareceu faz 3 dias.',
+  inicio:'Começou como uma gripe: febre, cansaço, dor no corpo.',
+  dor:'Um peso do lado direito, mas dor mesmo não.',
+  febre:'Tive febre a semana toda. Quando fiquei amarela, a febre passou.',
+  vomito:'Enjoo o tempo todo. Vomitei duas vezes.',
+  refeicao:'Não tenho fome. O cheiro de comida me enjoa.',
+  urinacor:'Tá escura, cor de chá preto.',
+  fezes:'Normais. Talvez um pouco mais claras num dia.',
+  emocional:'Muito cansada.',
+  contato:'Duas amigas que viajaram comigo pra praia, e comeram no mesmo quiosque, também ficaram doentes.',
+  transfusao:'Não.',
+  habitos:'Não fumo. Bebo pouco.',
+  meds:'Só dipirona na febre.',
+  trabalho:'Estudante de enfermagem.'
+ }),
+ keyQ:[{ids:['febre'],l:'Febre que sumiu quando veio a icterícia'},{ids:['contato'],l:'Amigas com o mesmo quadro'},{ids:['urinacor'],l:'Colúria'},{ids:['fezes'],l:'Fezes (sem acolia)'},{ids:['meds','habitos'],l:'Remédios e álcool'},{ids:['transfusao'],l:'Transfusão'}],
+ geral:'Jovem abatida, escleras e pele amarelas. Sem marcas de coceira, sem aranhas vasculares.',
+ effSides:[],
+ exam:{
+  'palpar:hcd':'Fígado palpável a 2 cm do rebordo, de borda fina, um pouco doloroso.',
+  'manobra:lemos':'Fígado a 2 cm do rebordo, borda fina e lisa, um pouco doloroso.',
+  'manobra:hepatimetria':'Lobo direito 13 cm na linha hemiclavicular.',
+  'manobra:murphy':'Inspiração completa, sem dor.',
+  'inspecionar:boca':'Embaixo da língua, cor amarelada.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral'},
+  {ids:['manobra:lemos','palpar:hcd','manobra:hepatimetria'],l:'Avaliar o fígado'},{ids:['manobra:murphy'],l:'Murphy'},{ids:['manobra:traube','manobra:schuster'],l:'Avaliar o baço'}],
+ res:{
+  hep:'Bilirrubina total 6,4 mg/dL (direta 3,9 · indireta 2,5) · TGO 1.240 U/L · TGP 1.860 U/L',
+  fagt:'Fosfatase alcalina 160 U/L · GGT 140 U/L',
+  usgabd:'Fígado um pouco aumentado, homogêneo. Vias biliares sem dilatação. Vesícula normal.',
+  coag:'TP 13 s (controle 12 s)',
+  hemo:'Hb 13,0 g/dL · Leucócitos 5.200/mm³ (48% linfócitos) · Plaquetas 210.000/mm³'
+ },
+ keyEx:[{ids:['hep'],l:'Bilirrubinas e transaminases'},{ids:['usgabd'],l:'USG (afastar obstrução)'}],
+ neutral:['fagt','coag','hemo','eas'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ictericia',
+ sindWhy:'Icterícia com colúria e fezes quase normais: síndrome ictérica de causa hepática (lesão do hepatócito).',
+ correctDx:'hepviral',
+ dxWhy:'Pródromo de gripe com febre que desapareceu quando a icterícia chegou, sem dor, náusea e enjoo de comida, colúria sem acolia, transaminases acima de mil, vias biliares normais, e amigas com o mesmo quadro depois de comer no mesmo lugar: hepatite viral aguda.',
+ conduta:[
+  // CONFERIR: o material não traz a conduta da hepatite viral.
+  {id:'c1',t:'Acompanhar com repouso e repetir os exames',ok:1,why:'Hepatite viral aguda sem sinais de gravidade (TP normal).'},
+  {id:'c2',t:'CPRE para desobstruir a via biliar',ok:0,why:'Vias biliares normais: não há obstrução.'},
+  {id:'c3',t:'Investigar hemólise',ok:0,why:'Transaminases muito altas e colúria: o problema é o hepatócito.'},
+  {id:'c4',t:'Cirurgia da vesícula',ok:0,why:'Vesícula normal e Murphy negativo.'}
+ ],
+ teaching:[
+  {t:'Icterícia hepática',p:'Lesão do hepatócito: sobe bilirrubina direta e indireta, há colúria e as fezes variam. Náusea, vômito, prurido variável.'},
+  {t:'Pista da hepatite viral',p:'A febre desaparece quando a icterícia chega, sem dor.'},
+  {t:'Associações da monitoria',p:'Náusea e vômito: hepática. Colúria: bilirrubina direta alta. Acolia: pós-hepática. Hemólise: bilirrubina indireta.'}
+ ]
+});
+
+// ---- js/casos/dig-12-hemolise.js ----
+// Digestório 12: Amarelo e pálido. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// metabolismo da bilirrubina, icterícia pré-hepática, anemia falciforme e hemólise (4.7).
+CASES.push({
+ id:'d-hemol',modulo:'Semiologia do digestório',n:'Caso 12',title:'Amarelo e pálido',look:'marcos',pname:'Kelvin',fonte:FONTE_DIG,
+ card:'Kelvin, 19 anos. Dor nos ossos, cansaço e olhos amarelos.',
+ briefing:'Doutor, leito 3: Kelvin, 19 anos. Tem anemia falciforme. Está com dor no corpo e os olhos amarelos.',
+ vitals:'PA 112/64 mmHg · FC 108 bpm · FR 20 irpm · T 37,4 °C · SpO₂ 96% em ar ambiente',
+ answers:respostas({
+  queixa:'Dor nos ossos, cansaço e os olhos ficaram amarelos.',
+  tempo:'Três dias.',
+  inicio:'Começou depois de uns dias de calor forte, bebendo pouca água.',
+  dor:'Dor nas pernas, nos braços e nas costas, nos ossos. E nas juntas.',
+  urinacor:'Normal. Não escureceu.',
+  fezes:'Normais, cor de sempre.',
+  esforco:'Qualquer esforço cansa.',
+  doencas:'Anemia falciforme desde bebê.',
+  transfusao:'Já recebi sangue umas três vezes.',
+  meds:'Ácido fólico.',
+  emocional:'Cansado dessas crises.',
+  trabalho:'Estudo, terceiro ano.'
+ }),
+ keyQ:[{ids:['doencas'],l:'Anemia falciforme'},{ids:['urinacor'],l:'Urina sem colúria'},{ids:['fezes'],l:'Fezes normais'},{ids:['dor'],l:'Dor óssea e nas juntas'},{ids:['transfusao'],l:'Transfusões'}],
+ geral:'Jovem pálido, com escleras amarelas. Sem marcas de coceira, sem aranhas vasculares.',
+ effSides:[],
+ exam:{
+  'inspecionar:boca':'Mucosas pálidas. Embaixo da língua, leve cor amarelada.',
+  'inspecionar:maos':'Palmas pálidas.',
+  'auscultar:focoP':'Sopro sistólico suave, 2+/6, sem frêmito.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:geral'],l:'Inspeção geral (palidez, icterícia)'},
+  {ids:['inspecionar:boca','inspecionar:maos'],l:'Mucosas e palmas (anemia)'},{ids:['manobra:lemos','palpar:hcd'],l:'Avaliar o fígado'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 6,9 g/dL · Leucócitos 13.200/mm³ · Plaquetas 410.000/mm³ · Reticulócitos aumentados',
+  hep:'Bilirrubina total 4,8 mg/dL (direta 0,6 · indireta 4,2) · TGO 52 U/L · TGP 30 U/L',
+  eas:'Bilirrubina negativa · Urobilinogênio aumentado',
+  fagt:'Fosfatase alcalina 96 U/L · GGT 28 U/L',
+  usgabd:'Vesícula com microcálculos. Vias biliares sem dilatação. Baço pequeno.'
+ },
+ keyEx:[{ids:['hemo'],l:'Hemograma'},{ids:['hep'],l:'Bilirrubinas (predomina a indireta)'}],
+ neutral:['eas','fagt','usgabd','coag','renal'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'ictericia',
+ sindWhy:'Icterícia sem colúria e com fezes normais: síndrome ictérica pré-hepática.',
+ correctDx:'hemolise',
+ dxWhy:'Anemia falciforme com dor óssea e nas juntas, anemia importante e icterícia "pura": bilirrubina indireta alta (insolúvel, não sai na urina), sem colúria e com fezes normais. Hemácias destruídas liberam mais bilirrubina do que o fígado consegue conjugar.',
+ conduta:[
+  // CONFERIR: o tratamento da crise falciforme não está no material.
+  {id:'c1',t:'Tratar a crise da anemia falciforme',ok:1,why:'A icterícia vem da hemólise.'},
+  {id:'c2',t:'CPRE',ok:0,why:'Sem colúria nem acolia, vias biliares normais: não há obstrução.'},
+  {id:'c3',t:'Tratar como hepatite',ok:0,why:'Transaminases quase normais e bilirrubina indireta predominando.'}
+ ],
+ teaching:[
+  {t:'Caminho da bilirrubina',p:'Hemácia destruída → bilirrubina indireta (insolúvel) → fígado conjuga → direta (solúvel) → bile → intestino (estercobilina, cor das fezes). Se a direta vai para o sangue, sai na urina: colúria.'},
+  {t:'Pré-hepática',p:'Bilirrubina indireta alta, sem colúria, fezes normais, anemia. Hemólise, esferocitose, malária, reação transfusional.'},
+  {t:'Anemia falciforme',p:'Artralgia e dor óssea, com icterícia e anemia.'}
+ ]
+});
+
+// ---- js/casos/dig-13-obstrucao.js ----
+// Digestório 13: Sem soltar gases. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// vômitos e obstrução (1.5), ausculta: peristaltismo de luta (2.3), inspeção: cicatrizes e peristaltismo visível (2.4), percussão (2.8), abdome agudo obstrutivo (4.5).
+CASES.push({
+ id:'d-obst',modulo:'Semiologia do digestório',n:'Caso 13',title:'Sem soltar gases',look:'maria',pname:'Dona Nair',fonte:FONTE_DIG,
+ card:'Nair, 66 anos. Barriga estufada, cólica e vômitos.',
+ briefing:'Doutor, leito 3: Dona Nair, 66 anos. Barriga muito estufada e vômitos.',
+ vitals:'PA 110/70 mmHg · FC 108 bpm · FR 22 irpm · T 36,9 °C · SpO₂ 96% em ar ambiente',
+ answers:respostas({
+  queixa:'A barriga tá estufada, dói em cólica e não paro de vomitar.',
+  tempo:'Dois dias.',
+  inicio:'Começou com cólica no meio da barriga, que vem e vai.',
+  dor:'Cólica forte no meio da barriga, vem em ondas.',
+  vomito:'Vomitei muito. Primeiro comida, depois amarelo, e hoje veio com cheiro de fezes.',
+  fezes:'Não evacuo nem solto gases faz dois dias.',
+  passado:'Tirei o útero há 10 anos.',
+  meds:'Remédio de pressão.',
+  doencas:'Pressão alta.',
+  urinacor:'Escura e pouca.',
+  trabalho:'Dona de casa.'
+ }),
+ keyQ:[{ids:['fezes'],l:'Parada de gases e fezes'},{ids:['vomito'],l:'Caracterizar o vômito (fecaloide)'},{ids:['passado'],l:'Cirurgia abdominal prévia'},{ids:['dor'],l:'Dor em cólica'},{ids:['tempo'],l:'Evolução'}],
+ geral:'Idosa desidratada, com o abdome muito distendido, contorcendo-se nas cólicas.',
+ effSides:[],
+ exam:Object.assign(achados(REGIOES,{
+   auscultar:'Ruídos hidroaéreos aumentados, em salvas, com timbre metálico.',
+   percutir:'Som hipertimpânico.',
+   palpar:'Abdome distendido e tenso, com dor difusa em cólica, sem endurecimento da parede.'}),{
+  'inspecionar:hipo':'Cicatriz cirúrgica antiga na linha média, abaixo do umbigo.',
+  'inspecionar:meso':'Abdome globoso, distendido. Ondas de movimento das alças visíveis sob a pele.',
+  'manobra:blumberg':'Descompressão sem dor.',
+  'manobra:gersuny':'Sem crepitação.',
+  'inspecionar:boca':'Mucosas secas.'
+ }),
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['inspecionar:hipo','inspecionar:meso'],l:'Inspecionar (cicatriz, peristaltismo visível)'},
+  {ids:REGIOES.map(z=>'auscultar:'+z),l:'Auscultar o abdome'},{ids:REGIOES.map(z=>'percutir:'+z),l:'Percutir o abdome'},
+  {ids:['manobra:blumberg'],l:'Irritação peritoneal'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 14,8 g/dL · Leucócitos 11.800/mm³ · Plaquetas 300.000/mm³',
+  renal:'Ureia 68 mg/dL · Creatinina 1,4 mg/dL',
+  usgabd:'Alças de delgado dilatadas, cheias de líquido, com movimento de vai e vem.'
+ },
+ keyEx:[],
+ neutral:['hemo','renal','usgabd','rx','amil','eas'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'abdagudo',
+ sindWhy:'Dor em cólica, distensão, vômitos e parada de gases e fezes: abdome agudo obstrutivo.',
+ correctDx:'obstrucao',
+ dxWhy:'Cirurgia abdominal antiga (bridas), cólica, distensão, vômito que virou fecaloide e parada de gases e fezes. Ruídos aumentados e metálicos (peristaltismo de luta), ondas das alças visíveis e hipertimpanismo.',
+ conduta:[
+  {id:'c1',t:'Avaliação cirúrgica de urgência',ok:1,why:'Abdome agudo obstrutivo: diagnóstico rápido e muitas vezes cirurgia.'},
+  // CONFERIR: hidratação na obstrução não está escrita no material.
+  {id:'c2',t:'Hidratar',ok:1,why:'Desidratada, com ureia e creatinina subindo.'},
+  {id:'c3',t:'Laxante',ok:0,why:'Não é constipação simples: há obstrução mecânica, com vômito fecaloide.'},
+  {id:'c4',t:'Antiemético e alta',ok:0,why:'Obstrução com desidratação.'}
+ ],
+ teaching:[
+  {t:'Vômito + dor = obstrução',p:'Alta: vômitos precoces, volumosos, biliosos. Baixa: vômitos tardios, muita distensão, parada de gases e fezes. Fecaloide: estase no delgado ou fístula gastrocólica.'},
+  {t:'Peristaltismo de luta',p:'No início da obstrução mecânica o intestino contrai mais forte: ruídos aumentados e metálicos, ondas visíveis.'},
+  {t:'Bridas',p:'Cicatriz cirúrgica antiga é pista de aderências, causa clássica de obstrução.'}
+ ]
+});
+
+// ---- js/casos/dig-14-pielonefrite.js ----
+// Digestório 14: Dor nas costas e febre. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// dor referida (1.4), pontos ureterais (2.7), rins e sinal de Giordano (3.5), apêndice (3.4, para o diferencial).
+CASES.push({
+ id:'d-pielo',modulo:'Semiologia do digestório',n:'Caso 14',title:'Dor nas costas e febre',look:'ana',pname:'Tainá',fonte:FONTE_DIG,
+ card:'Tainá, 27 anos. Febre com calafrio e dor do lado direito.',
+ briefing:'Doutor, leito 3: Tainá, 27 anos. Febre alta e dor do lado direito.',
+ vitals:'PA 116/72 mmHg · FC 110 bpm · FR 20 irpm · T 39,0 °C · SpO₂ 98% em ar ambiente',
+ answers:respostas({
+  queixa:'Febre com calafrio e dor do lado direito.',
+  tempo:'Dois dias.',
+  inicio:'Começou com ardor pra urinar, depois veio a febre e a dor.',
+  dor:'Dor nas costas, do lado direito, embaixo das costelas. Às vezes vai pra frente.',
+  febre:'Febre alta com calafrio, de tremer.',
+  vomito:'Enjoei, vomitei uma vez.',
+  urina:'Ardendo pra urinar e indo toda hora ao banheiro.',
+  urinacor:'Tá turva e com cheiro forte.',
+  fezes:'Normais.',
+  refeicao:'Sem fome.',
+  passado:'Já tive infecção de urina antes.',
+  trabalho:'Recepcionista.'
+ }),
+ keyQ:[{ids:['urina'],l:'Ardor e urgência urinária'},{ids:['urinacor'],l:'Urina turva'},{ids:['febre'],l:'Febre com calafrios'},{ids:['dor'],l:'Localizar a dor (lombar)'},{ids:['fezes','vomito'],l:'Sintomas digestivos (diferencial)'}],
+ geral:'Jovem febril, com calafrios, desconfortável.',
+ effSides:[],
+ exam:{
+  'percutir:lombD':'Punho-percussão com dor forte.',
+  'palpar:lombD':'Dor à palpação.',
+  'palpar:fld':'Dor leve à palpação profunda, sem endurecimento da parede.',
+  'manobra:blumberg':'Descompressão sem dor.',
+  'manobra:rovsing':'Sem dor na fossa ilíaca direita.',
+  'manobra:psoas':'Sem dor.',
+  'manobra:murphy':'Inspiração completa, sem dor.'
+ },
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['percutir:lombD'],l:'Giordano à direita'},{ids:['percutir:lombE'],l:'Comparar com o lado esquerdo'},
+  {ids:['manobra:blumberg','manobra:rovsing','manobra:psoas'],l:'Afastar apendicite'},{ids:['manobra:murphy'],l:'Afastar colecistite'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  eas:'Leucócitos incontáveis · Nitrito positivo · Muitas bactérias · Hemácias 10 por campo',
+  hemo:'Hb 13,2 g/dL · Leucócitos 17.600/mm³ (88% neutrófilos) · Plaquetas 240.000/mm³',
+  pcr:'PCR 160 mg/L (ref. < 5)',
+  usgabd:'Rim direito um pouco aumentado. Sem dilatação das vias urinárias, sem cálculos. Apêndice não visto.'
+ },
+ keyEx:[{ids:['eas'],l:'Urina tipo 1'}],
+ neutral:['hemo','pcr','usgabd','renal','hemoc'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'normal',
+ sindWhy:'Abdome sem defesa nem descompressão dolorosa: nenhuma das síndromes digestivas da lista. O achado é lombar e urinário.',
+ correctDx:'pielo',
+ dxWhy:'Ardor para urinar, urina turva, febre alta com calafrios e dor lombar direita com Giordano positivo. Blumberg, Rovsing, psoas e Murphy negativos afastam apendicite e colecistite.',
+ conduta:[
+  // CONFERIR: o tratamento da pielonefrite não está no material.
+  {id:'c1',t:'Tratar a infecção urinária alta',ok:1,why:'Pielonefrite aguda.'},
+  {id:'c2',t:'Apendicectomia',ok:0,why:'Sem irritação peritoneal; a dor é lombar, com Giordano e urina infectada.'},
+  {id:'c3',t:'Tratar como colecistite',ok:0,why:'Murphy negativo.'}
+ ],
+ teaching:[
+  {t:'Sinal de Giordano',p:'Punho-percussão das regiões lombares com a borda ulnar da mão. Dor: pielonefrite, obstrução urinária ou litíase.'},
+  {t:'Rins',p:'Normalmente não são palpáveis. Palpação bimanual e balotamento com as mãos em oposição.'},
+  {t:'Dor referida',p:'Cólica renal pode doer na região genital.'}
+ ]
+});
+
+// ---- js/casos/dig-15-lactose.js ----
+// Digestório 15: Melhora no jejum. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// hábito intestinal e Bristol (1.7), ausculta (2.3), diarreia: duração e mecanismos (4.3).
+CASES.push({
+ id:'d-lact',modulo:'Semiologia do digestório',n:'Caso 15',title:'Melhora no jejum',look:'joao',pname:'Felipe',fonte:FONTE_DIG,
+ card:'Felipe, 30 anos. Diarreia e gases há dois meses.',
+ briefing:'Doutor, leito 3: Felipe, 30 anos. Diarreia e cólica que não passam.',
+ vitals:'PA 120/76 mmHg · FC 76 bpm · FR 14 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
+ answers:respostas({
+  queixa:'Diarreia, gases e cólica que não passam.',
+  tempo:'Uns dois meses.',
+  inicio:'Começou quando passei a tomar um copo grande de leite com café toda manhã.',
+  dor:'Cólica na barriga toda, e ela estufa.',
+  refeicao:'Piora depois do café com leite, da pizza e do sorvete.',
+  fezes:'Moles, quase líquidas, umas 4 vezes por dia. Sem sangue, sem catarro. Muitos gases.',
+  vomito:'Não.',
+  peso:'Não emagreci.',
+  febre:'Não.',
+  emocional:'Normal. Só incomodado.',
+  tratou:'Fiquei um dia só no soro e chá, sem comer, e a diarreia parou. Voltei a comer, voltou.',
+  trabalho:'Analista de sistemas.'
+ }),
+ keyQ:[{ids:['tratou'],l:'Melhora com jejum'},{ids:['refeicao','inicio'],l:'Relação com leite e derivados'},{ids:['fezes'],l:'Caracterizar as fezes (sem sangue)'},{ids:['tempo'],l:'Duração'},{ids:['peso','febre'],l:'Sinais de alarme (peso, febre)'}],
+ geral:'Bom estado geral, hidratado, corado.',
+ effSides:[],
+ exam:achados(REGIOES,{auscultar:'Ruídos hidroaéreos aumentados, com borborigmos.',palpar:'Indolor, sem massas, levemente distendido.'}),
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:REGIOES.map(z=>'palpar:'+z),l:'Palpar o abdome'},
+  {ids:['inspecionar:geral'],l:'Inspeção geral (hidratação)'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 14,6 g/dL · Leucócitos 6.900/mm³ · Plaquetas 230.000/mm³'
+ },
+ keyEx:[],
+ neutral:['hemo','pcr','glic','tsh','eas'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'diarreica',
+ sindWhy:'Fezes moles várias vezes ao dia há dois meses: síndrome diarreica, crônica (> 30 dias).',
+ correctDx:'lactose',
+ dxWhy:'Diarreia que melhora com jejum (osmótica), piora com leite e derivados, com gases, distensão e borborigmos, sem sangue, febre ou emagrecimento: intolerância à lactose.',
+ conduta:[
+  // CONFERIR: a retirada da lactose não está escrita como conduta no material.
+  {id:'c1',t:'Tirar leite e derivados e reavaliar',ok:1,why:'Na diarreia osmótica o soluto não absorvido puxa água; sem ele, melhora.'},
+  {id:'c2',t:'Antibiótico',ok:0,why:'Sem febre, sem sangue, dois meses: não é diarreia infecciosa aguda.'},
+  {id:'c3',t:'Tratar como disenteria',ok:0,why:'Disenteria tem sangue, muco ou pus.'},
+  {id:'c4',t:'Tratar como diarreia secretora',ok:0,why:'A secretora persiste no jejum. Esta melhora.'}
+ ],
+ teaching:[
+  {t:'Diarreia',p:'3 ou mais evacuações amolecidas em 24 h. Aguda até 14 dias; crônica mais de 30 dias.'},
+  {t:'Osmótica × secretora',p:'Osmótica melhora com jejum (lactose, adoçantes, laxantes). Secretora persiste no jejum (cólera).'},
+  {t:'Bristol',p:'1–2: constipação. 3–4: ideal. 5–7: diarreia.'}
+ ]
+});
+
+// ---- js/casos/dig-16-disfagia.js ----
+// Digestório 16: A comida parada no peito. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// odinofagia e disfagia: alta × baixa, progressiva × intermitente, alerta de neoplasia (1.2), sinais de alarme (1.3), tipos de abdome (2.5).
+CASES.push({
+ id:'d-disf',modulo:'Semiologia do digestório',n:'Caso 16',title:'A comida parada no peito',look:'pedro',pname:'Seu Cícero',fonte:FONTE_DIG,
+ card:'Cícero, 64 anos. A comida não desce.',
+ briefing:'Doutor, leito 3: Seu Cícero, 64 anos. Diz que a comida não desce mais.',
+ vitals:'PA 118/72 mmHg · FC 92 bpm · FR 16 irpm · T 36,4 °C · SpO₂ 97% em ar ambiente',
+ answers:respostas({
+  queixa:'A comida não desce. Fica parada aqui no peito (aponta o meio do peito).',
+  tempo:'Uns três meses, e piorando rápido.',
+  inicio:'Primeiro era carne e pão. Depois arroz, feijão. Agora até sopa e água custam a descer.',
+  engolir:'Engulo, mas a comida para no meio do peito. Às vezes volta, um tempo depois de comer. Não engasgo nem tusso ao engolir.',
+  dor:'Às vezes dói quando a comida para.',
+  vomito:'Volta a comida que não desceu, sem esforço, sem vômito de verdade.',
+  peso:'Perdi uns 10 quilos.',
+  fezes:'Normais, mas pouca coisa.',
+  habitos:'Fumo desde os 12 anos. Cachaça todo dia.',
+  emocional:'Fraco, sem forças.',
+  trabalho:'Pescador.',
+  sal:'Só tomo líquido agora.'
+ }),
+ keyQ:[{ids:['inicio'],l:'Progressão: sólidos → pastosos → líquidos'},{ids:['engolir'],l:'Onde para (baixa) e sem engasgo'},{ids:['peso'],l:'Perda de peso'},{ids:['habitos'],l:'Tabaco e álcool'},{ids:['tempo'],l:'Rápida progressão'}],
+ geral:'Homem emagrecido, descorado, com a pele frouxa. Fala normal, sem engasgos.',
+ effSides:[],
+ exam:{
+  'inspecionar:meso':'Abdome escavado: costelas e ossos da bacia aparecendo.',
+  'inspecionar:boca':'Mucosas pálidas.',
+  'inspecionar:maos':'Palmas pálidas.'
+ },
+ keyExam:[{ids:['inspecionar:geral'],l:'Inspeção geral (emagrecimento, palidez)'},{ids:['inspecionar:meso'],l:'Tipo de abdome'},
+  {ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['palpar:epi'],l:'Palpar o epigástrio (massa)'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 9,6 g/dL · Leucócitos 6.400/mm³ · Plaquetas 320.000/mm³',
+  eda:'Lesão vegetante no esôfago distal, estreitando bastante a luz.',
+  sprot:'Proteínas totais 5,6 g/dL · Albumina 2,9 g/dL'
+ },
+ keyEx:[{ids:['eda'],l:'Endoscopia digestiva alta'}],
+ neutral:['hemo','sprot','rx','hep','renal'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'disfagica',
+ sindWhy:'Dificuldade para engolir, com a comida parando no peito: disfagia baixa (esofágica).',
+ correctDx:'neoesof',
+ dxWhy:'Disfagia baixa ("comida parada no peito", regurgitação tardia), progressiva de sólidos para pastosos e líquidos, de rápida progressão, com perda de peso e anemia, em fumante e etilista: neoplasia de esôfago.',
+ conduta:[
+  // CONFERIR: o material diz "pensar em neoplasia", mas não como investigar.
+  {id:'c1',t:'Endoscopia para ver e biopsiar a lesão',ok:1,why:'Disfagia progressiva com perda de peso é sinal de alarme: investigar neoplasia.'},
+  {id:'c2',t:'Tratar como refluxo com omeprazol e alta',ok:0,why:'Disfagia progressiva, perda de peso e anemia são sinais de alarme.'},
+  {id:'c3',t:'Investigar causa neurológica (AVC, Parkinson)',ok:0,why:'Isso é da disfagia alta: engasgo, tosse ao engolir, voz molhada. Aqui a comida para no peito.'}
+ ],
+ teaching:[
+  {t:'Disfagia alta × baixa',p:'Alta (orofaríngea): engasgo imediato, tosse ao engolir, voz molhada, regurgitação nasal, causas neurológicas. Baixa (esofágica): comida parada no peito, regurgitação tardia.'},
+  {t:'Progressiva × intermitente',p:'Progressiva (sólidos → pastosos → líquidos): neoplasia, estenose. Intermitente: distúrbios motores.'},
+  {t:'Alarme',p:'Disfagia de rápida progressão + perda de peso: neoplasia de esôfago. Odinofagia com perda de peso, anemia e hematêmese: investigar neoplasia do TGI alto.'}
+ ]
+});
+
+// ---- js/casos/dig-17-fecaloma.js ----
+// Digestório 17: Oito dias sem evacuar. Fonte: Semiologia do Aparelho Digestório — Material de Estudo (André, UNINASSAU, 2026):
+// fármacos e opioides (1.9), ausculta (2.3), sinal de Gersuny (3.6), constipação (4.2).
+CASES.push({
+ id:'d-fecal',modulo:'Semiologia do digestório',n:'Caso 17',title:'Oito dias sem evacuar',look:'maria',pname:'Dona Zuleide',fonte:FONTE_DIG,
+ card:'Zuleide, 84 anos, acamada. Barriga dura e sem evacuar.',
+ briefing:'Doutor, leito 3: Dona Zuleide, 84 anos, acamada desde um AVC. A filha diz que ela não evacua há oito dias.',
+ vitals:'PA 132/78 mmHg · FC 88 bpm · FR 18 irpm · T 36,6 °C · SpO₂ 96% em ar ambiente',
+ answers:respostas({
+  queixa:'(A filha responde) Ela tá com a barriga dura e não evacua há oito dias.',
+  tempo:'(A filha) Oito dias sem evacuar. Antes já ia pouco, a cada três ou quatro dias.',
+  inicio:'(A filha) Piorou depois que começaram a morfina pra dor no quadril.',
+  dor:'(A filha) Ela geme quando mexe na barriga.',
+  fezes:'(A filha) As últimas vieram em bolinhas duras, com muito esforço. Agora às vezes sai um líquido sujando a fralda.',
+  vomito:'(A filha) Não.',
+  meds:'(A filha) Morfina, há duas semanas, e o remédio de pressão.',
+  doencas:'(A filha) AVC há dois anos. Pressão alta.',
+  imob:'(A filha) Acamada desde o AVC.',
+  refeicao:'(A filha) Come pouco, papinha.',
+  habitos:'(A filha) Nada.',
+  trabalho:'(A filha) Aposentada.',
+  moradia:'(A filha) Mora comigo.',
+  sal:'(A filha) Bebe pouca água.'
+ }),
+ keyQ:[{ids:['meds'],l:'Uso de opioide'},{ids:['fezes'],l:'Caracterizar as fezes (cíbalos, líquido em volta)'},{ids:['imob'],l:'Acamada'},{ids:['tempo'],l:'Ritmo intestinal de antes'},{ids:['vomito'],l:'Vômitos (afastar obstrução)'}],
+ geral:'Idosa acamada, emagrecida, sem febre, gemendo quando mexem na barriga.',
+ effSides:[],
+ exam:Object.assign(achados(REGIOES,{auscultar:'Ruídos hidroaéreos diminuídos.'}),{
+  'inspecionar:meso':'Abdome um pouco distendido.',
+  'palpar:fie':'Massa endurecida, como massa de modelar, na fossa ilíaca esquerda.',
+  'palpar:fle':'Massa endurecida que continua pelo flanco.',
+  'percutir:fie':'Som maciço.',
+  'manobra:gersuny':'Comprimindo a massa e soltando, sente-se uma crepitação, como velcro.',
+  'manobra:blumberg':'Descompressão sem dor.'
+ }),
+ keyExam:[{ids:['ordem:abdome'],l:'Auscultar o abdome antes de palpar e percutir'},{ids:['palpar:fie','palpar:fle'],l:'Palpar o lado esquerdo (massa)'},
+  {ids:['manobra:gersuny'],l:'Gersuny'},{ids:['manobra:blumberg'],l:'Irritação peritoneal (afastar)'},{ids:['vitals'],l:'Pedir sinais vitais'}],
+ res:{
+  hemo:'Hb 12,1 g/dL · Leucócitos 8.300/mm³ · Plaquetas 260.000/mm³',
+  renal:'Ureia 52 mg/dL · Creatinina 1,0 mg/dL',
+  usgabd:'Grande quantidade de fezes endurecidas no cólon esquerdo.'
+ },
+ keyEx:[],
+ neutral:['hemo','renal','usgabd','rx','eas'],
+ rx:{},
+ tap:{sides:[],spaces:[]},
+ correctSind:'constipacao',
+ sindWhy:'Menos de 3 evacuações por semana, fezes em cíbalos e esforço: constipação, agora com fecaloma.',
+ correctDx:'fecaloma',
+ dxWhy:'Idosa acamada, com pouca água e em uso de morfina (opioide constipa), oito dias sem evacuar, líquido sujando a fralda em volta das fezes duras, massa empastada à esquerda e Gersuny positivo (a mucosa descola do fecaloma).',
+ conduta:[
+  // CONFERIR: a retirada do fecaloma não está descrita no material.
+  {id:'c1',t:'Desfazer o fecaloma',ok:1,why:'É a causa da obstrução das fezes.'},
+  {id:'c2',t:'Rever o opioide e prevenir a constipação',ok:1,why:'Opioides causam constipação e íleo paralítico.'},
+  {id:'c3',t:'Antidiarreico pelo líquido na fralda',ok:0,why:'O líquido escapa em volta do fecaloma. Antidiarreico piora.'},
+  {id:'c4',t:'Cirurgia de urgência por tumor',ok:0,why:'Massa empastada que crepita (Gersuny) em idosa acamada: fecaloma.'}
+ ],
+ teaching:[
+  {t:'Constipação',p:'Menos de 3 evacuações por semana, fezes endurecidas (cíbalos), esforço, sensação de evacuação incompleta, manobras digitais. Compare com o padrão do próprio paciente.'},
+  {t:'Sinal de Gersuny',p:'Crepitação como velcro ao descomprimir o cólon: a mucosa descola do fecaloma. Acamados, UTI, mais à esquerda.'},
+  {t:'Remédios',p:'Opioides: constipação e íleo paralítico.'}
+ ]
+});
+
 // ---- js/ia.js ----
 /* Casos criados por IA a partir do material do aluno.
    Funciona só na versão publicada no Claude: usa o Claude da própria pessoa (claude.use("sample")).
@@ -3553,7 +4908,7 @@ function iaValidar(bruto,fonte){
  const num=v=>{const n=typeof v==='string'?parseFloat(v.replace(',','.')):v;return typeof n==='number'&&isFinite(n)&&n>0?n:null;};
  const ids=lista=>new Set(lista.map(x=>x.id));
  const qIds=ids(QUESTIONS),exIds=ids(EXAMS),flIds=ids(FLUID_TESTS),dxIds=ids(DX);
- const manobra=id=>id==='vitals'||id==='inspecionar:geral'||MANOBRAS.some(x=>'manobra:'+x.id===id)||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
+ const manobra=id=>id==='vitals'||id==='inspecionar:geral'||id==='ordem:abdome'||MANOBRAS.some(x=>'manobra:'+x.id===id)||(()=>{const[t,z]=String(id).split(':');return TOOLS.some(x=>x.id===t)&&IA_ZONAS.includes(z);})();
  const grupos=(lista,valido,nome)=>{const out=(Array.isArray(lista)?lista:[]).map(g=>({ids:(Array.isArray(g&&g.ids)?g.ids:[]).map(String).filter(valido),l:txt(g&&g.l)?g.l:''})).filter(g=>g.ids.length&&g.l);
   if(!out.length)graves.push('nenhum item que vale ponto em '+nome);return out;};
  const so=(obj,valido)=>Object.fromEntries(Object.entries(obj&&typeof obj==='object'?obj:{}).filter(([k,v])=>valido(k)&&txt(v)));
@@ -3892,6 +5247,8 @@ function drawRX(cnv,rx){
   g.fillStyle=gr;g.fillRect(cx-70,190,140,dia-190);g.restore();}
  if(rx.cav){const cx=sideX[rx.cav];g.filter='blur(2px)';g.fillStyle='rgba(200,204,208,.55)';g.beginPath();g.ellipse(cx,100,30,26,0,0,7);g.fill();
   g.fillStyle='#050607';g.beginPath();g.ellipse(cx,98,16,13,0,0,7);g.fill();}
+ if(rx.pneumop){g.filter='blur(1px)';g.fillStyle='#040505';g.beginPath();g.ellipse(92,dia+6,50,11,0,Math.PI,0);g.fill();
+  g.fillStyle='#a6aaad';g.beginPath();g.ellipse(92,dia+14,48,9,0,Math.PI,0);g.fill();}
  if(rx.ptx){const s=rx.ptx.lado,cx=sideX[s],lat=s==='D'?-1:1,tam=rx.ptx.tam||.3,w=56*tam*1.6;
   g.filter='blur(1px)';g.save();g.beginPath();g.ellipse(cx,175,58,ry+4,0,0,7);g.clip();
   g.fillStyle='#020303';g.beginPath();g.ellipse(cx+lat*56,175,w,ry+10,0,0,7);g.fill();
@@ -3905,7 +5262,7 @@ function drawRX(cnv,rx){
 let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
-  tool:'percutir',examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
+  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
   modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
@@ -3990,9 +5347,19 @@ function mPatient(m){
     ${z('focoAo',78,50,18,14)}${z('focoP',104,50,18,14)}${z('focoAc',104,64,18,14)}${z('focoT',104,86,18,14)}${z('focoM',124,90,18,14)}
     ${z('pulsoCar',84,30,14,12)}${z('pulsoRad',150,120,16,14)}${z('pulsoFem',76,136,16,14)}${z('pulsoPed',66,200,22,14)}
     <g class="zlbl">${[['Ao',87,60],['P',113,60],["Ao'",113,74],['T',113,96],['M',133,100],['carótida',126,30,1],['radial',176,118,1],['femoral',44,146,1],['pedioso',42,212,1]].map(([t,x,y,o])=>`<text x="${x}" y="${y}" text-anchor="middle"${o?' class="out"':''}>${t}</text>`).join('')}</g>
+   </svg></div>
+   <div class="fig"><h4>Abdome e lombar</h4><svg viewBox="0 0 200 220">
+    <path d="M44 10 Q100 0 156 10 L162 150 Q100 166 38 150 Z" fill="#d8ad88"/><circle cx="100" cy="80" r="3" fill="#b88a66"/>
+    <path d="M44 10 Q100 34 156 10" stroke="#b88a66" stroke-width="2" fill="none"/>
+    ${[['hcd',48,22],['epi',82,22],['hce',116,22],['fld',48,62],['meso',82,62],['fle',116,62],['fid',48,102],['hipo',82,102],['fie',116,102]].map(([id,x,y])=>z(id,x,y,34,38)).join('')}
+    <text x="20" y="90" fill="#94aab3" font-size="10" font-family="monospace">D</text><text x="172" y="90" fill="#94aab3" font-size="10" font-family="monospace">E</text>
+    <text x="100" y="180" fill="#94aab3" font-size="9" font-family="monospace" text-anchor="middle">costas</text>
+    <rect x="50" y="186" width="100" height="30" rx="6" fill="#d8ad88"/><line x1="100" y1="186" x2="100" y2="216" stroke="#b88a66" stroke-width="2"/>
+    ${z('lombE',54,189,42,24)}${z('lombD',104,189,42,24)}
+    <text x="40" y="206" fill="#94aab3" font-size="10" font-family="monospace">E</text><text x="154" y="206" fill="#94aab3" font-size="10" font-family="monospace">D</text>
    </svg></div></div>
-  <h4 class="mtit">Manobras (cada uma leva 1 minuto)</h4>
-  <div class="chips">${MANOBRAS.map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>
+  ${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
+  <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}
   <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
@@ -4116,8 +5483,14 @@ modal.addEventListener('click',e=>{
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}
  if(a==='ex'){const z=el.dataset.v,tool=z==='geral'?'inspecionar':G.tool,key=tool+':'+z;
   if(!G.examined.includes(key))G.examined.push(key);
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v:findExam(tool,z)});advance(1);renderM();return;}
+  let v=findExam(tool,z);
+  if(REGIOES.includes(z)){ // abdome: auscultar antes de palpar e percutir
+   if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
+    else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
+   if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
+  if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
   G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
@@ -4149,6 +5522,14 @@ function findExam(tool,z){
  const c=G.c;
  if(z==='geral')return c.geral;
  const k=tool+':'+z;if(c.exam[k])return c.exam[k];
+ if(REGIOES.includes(z))return {inspecionar:'Plano, simétrico, sem cicatrizes, abaulamentos ou veias visíveis.',
+  palpar:z==='hcd'?'Indolor, sem resistência. Fígado não palpável abaixo do rebordo.':z==='hce'?'Indolor, sem resistência. Baço não palpável.':'Indolor, sem resistência e sem massas.',
+  percutir:z==='hcd'?'Som maciço.':'Som timpânico.',auscultar:'Ruídos hidroaéreos presentes e normoaudíveis.'}[tool];
+ if(LOMBAR.includes(z))return {inspecionar:'Sem alterações.',palpar:'Rim não palpável, indolor.',percutir:'Punho-percussão sem dor.',auscultar:'Não se aplica.'}[tool];
+ if(tool==='manobra'){const ab={murphy:'Inspiração completa, sem dor.',blumberg:'Descompressão sem dor.',rovsing:'Sem dor na fossa ilíaca direita.',psoas:'Sem dor.',obturador:'Sem dor.',
+  lemos:'Borda do fígado fina, lisa, indolor, no rebordo costal.',hepatimetria:'Lobo direito 10 cm na linha hemiclavicular. Lobo esquerdo 6 cm.',schuster:'Baço não palpável.',
+  traube:'Espaço de Traube timpânico.',skoda:'Timpanismo em todo o abdome, sem semicírculo de macicez.',macicezmovel:'A transição de som não muda com o decúbito.',piparote:'Sem onda líquida.',
+  rechaco:'Nada rechaça.',jobert:'Som maciço na loja hepática.',vascolejo:'Sem ruído de chacoalhar.',gersuny:'Sem crepitação.',doisdedos:'Não há veias visíveis no abdome.'};if(ab[z])return ab[z];}
  if(tool==='manobra')return {ortostase:'Deitado e depois de 3 minutos em pé: PA e frequência praticamente iguais, sem sintomas.',
   pa3:'Depois de 5 minutos de repouso, três medidas nos dois braços: valores iguais aos dos sinais vitais. Diferença entre os braços menor que 15 mmHg.'}[z]||'Nenhuma mudança na ausculta.';
  if(FOCOS.includes(z))return {inspecionar:'Sem pulsações visíveis.',palpar:'Sem frêmito.',percutir:'A percussão não faz parte do exame do coração.',

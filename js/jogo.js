@@ -170,6 +170,8 @@ function drawRX(cnv,rx){
   g.fillStyle=gr;g.fillRect(cx-70,190,140,dia-190);g.restore();}
  if(rx.cav){const cx=sideX[rx.cav];g.filter='blur(2px)';g.fillStyle='rgba(200,204,208,.55)';g.beginPath();g.ellipse(cx,100,30,26,0,0,7);g.fill();
   g.fillStyle='#050607';g.beginPath();g.ellipse(cx,98,16,13,0,0,7);g.fill();}
+ if(rx.pneumop){g.filter='blur(1px)';g.fillStyle='#040505';g.beginPath();g.ellipse(92,dia+6,50,11,0,Math.PI,0);g.fill();
+  g.fillStyle='#a6aaad';g.beginPath();g.ellipse(92,dia+14,48,9,0,Math.PI,0);g.fill();}
  if(rx.ptx){const s=rx.ptx.lado,cx=sideX[s],lat=s==='D'?-1:1,tam=rx.ptx.tam||.3,w=56*tam*1.6;
   g.filter='blur(1px)';g.save();g.beginPath();g.ellipse(cx,175,58,ry+4,0,0,7);g.clip();
   g.fillStyle='#020303';g.beginPath();g.ellipse(cx+lat*56,175,w,ry+10,0,0,7);g.fill();
@@ -183,7 +185,7 @@ function drawRX(cnv,rx){
 let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
-  tool:'percutir',examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
+  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
   modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
@@ -268,9 +270,19 @@ function mPatient(m){
     ${z('focoAo',78,50,18,14)}${z('focoP',104,50,18,14)}${z('focoAc',104,64,18,14)}${z('focoT',104,86,18,14)}${z('focoM',124,90,18,14)}
     ${z('pulsoCar',84,30,14,12)}${z('pulsoRad',150,120,16,14)}${z('pulsoFem',76,136,16,14)}${z('pulsoPed',66,200,22,14)}
     <g class="zlbl">${[['Ao',87,60],['P',113,60],["Ao'",113,74],['T',113,96],['M',133,100],['carótida',126,30,1],['radial',176,118,1],['femoral',44,146,1],['pedioso',42,212,1]].map(([t,x,y,o])=>`<text x="${x}" y="${y}" text-anchor="middle"${o?' class="out"':''}>${t}</text>`).join('')}</g>
+   </svg></div>
+   <div class="fig"><h4>Abdome e lombar</h4><svg viewBox="0 0 200 220">
+    <path d="M44 10 Q100 0 156 10 L162 150 Q100 166 38 150 Z" fill="#d8ad88"/><circle cx="100" cy="80" r="3" fill="#b88a66"/>
+    <path d="M44 10 Q100 34 156 10" stroke="#b88a66" stroke-width="2" fill="none"/>
+    ${[['hcd',48,22],['epi',82,22],['hce',116,22],['fld',48,62],['meso',82,62],['fle',116,62],['fid',48,102],['hipo',82,102],['fie',116,102]].map(([id,x,y])=>z(id,x,y,34,38)).join('')}
+    <text x="20" y="90" fill="#94aab3" font-size="10" font-family="monospace">D</text><text x="172" y="90" fill="#94aab3" font-size="10" font-family="monospace">E</text>
+    <text x="100" y="180" fill="#94aab3" font-size="9" font-family="monospace" text-anchor="middle">costas</text>
+    <rect x="50" y="186" width="100" height="30" rx="6" fill="#d8ad88"/><line x1="100" y1="186" x2="100" y2="216" stroke="#b88a66" stroke-width="2"/>
+    ${z('lombE',54,189,42,24)}${z('lombD',104,189,42,24)}
+    <text x="40" y="206" fill="#94aab3" font-size="10" font-family="monospace">E</text><text x="154" y="206" fill="#94aab3" font-size="10" font-family="monospace">D</text>
    </svg></div></div>
-  <h4 class="mtit">Manobras (cada uma leva 1 minuto)</h4>
-  <div class="chips">${MANOBRAS.map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>
+  ${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
+  <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}
   <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
@@ -394,8 +406,14 @@ modal.addEventListener('click',e=>{
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}
  if(a==='ex'){const z=el.dataset.v,tool=z==='geral'?'inspecionar':G.tool,key=tool+':'+z;
   if(!G.examined.includes(key))G.examined.push(key);
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v:findExam(tool,z)});advance(1);renderM();return;}
+  let v=findExam(tool,z);
+  if(REGIOES.includes(z)){ // abdome: auscultar antes de palpar e percutir
+   if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
+    else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
+   if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
+  if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
   G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
@@ -427,6 +445,14 @@ function findExam(tool,z){
  const c=G.c;
  if(z==='geral')return c.geral;
  const k=tool+':'+z;if(c.exam[k])return c.exam[k];
+ if(REGIOES.includes(z))return {inspecionar:'Plano, simétrico, sem cicatrizes, abaulamentos ou veias visíveis.',
+  palpar:z==='hcd'?'Indolor, sem resistência. Fígado não palpável abaixo do rebordo.':z==='hce'?'Indolor, sem resistência. Baço não palpável.':'Indolor, sem resistência e sem massas.',
+  percutir:z==='hcd'?'Som maciço.':'Som timpânico.',auscultar:'Ruídos hidroaéreos presentes e normoaudíveis.'}[tool];
+ if(LOMBAR.includes(z))return {inspecionar:'Sem alterações.',palpar:'Rim não palpável, indolor.',percutir:'Punho-percussão sem dor.',auscultar:'Não se aplica.'}[tool];
+ if(tool==='manobra'){const ab={murphy:'Inspiração completa, sem dor.',blumberg:'Descompressão sem dor.',rovsing:'Sem dor na fossa ilíaca direita.',psoas:'Sem dor.',obturador:'Sem dor.',
+  lemos:'Borda do fígado fina, lisa, indolor, no rebordo costal.',hepatimetria:'Lobo direito 10 cm na linha hemiclavicular. Lobo esquerdo 6 cm.',schuster:'Baço não palpável.',
+  traube:'Espaço de Traube timpânico.',skoda:'Timpanismo em todo o abdome, sem semicírculo de macicez.',macicezmovel:'A transição de som não muda com o decúbito.',piparote:'Sem onda líquida.',
+  rechaco:'Nada rechaça.',jobert:'Som maciço na loja hepática.',vascolejo:'Sem ruído de chacoalhar.',gersuny:'Sem crepitação.',doisdedos:'Não há veias visíveis no abdome.'};if(ab[z])return ab[z];}
  if(tool==='manobra')return {ortostase:'Deitado e depois de 3 minutos em pé: PA e frequência praticamente iguais, sem sintomas.',
   pa3:'Depois de 5 minutos de repouso, três medidas nos dois braços: valores iguais aos dos sinais vitais. Diferença entre os braços menor que 15 mmHg.'}[z]||'Nenhuma mudança na ausculta.';
  if(FOCOS.includes(z))return {inspecionar:'Sem pulsações visíveis.',palpar:'Sem frêmito.',percutir:'A percussão não faz parte do exame do coração.',

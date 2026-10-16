@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Rosa, 52 anos. Veio por febre e tosse com muito catarro.',
  vitals:'PA 120/78 mmHg · FC 96 bpm · FR 22 irpm · T 38,0 °C · SpO₂ 93% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Ladeira me cansa.",
   palpitacao:"Não.",
   sincope:"Não.",

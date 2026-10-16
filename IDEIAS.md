@@ -10,9 +10,9 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 - Vender o jogo (out/2026). Antes: testar com colegas de graça, trocar o conteúdo do Estratégia MED por fontes que possam ser usadas comercialmente (diretrizes públicas, livros citados, revisão de um professor) e falar com um advogado/contador. Depois: login, pagamento (plataforma pronta tipo Hotmart/Kiwify) e servidor próprio da IA com limite de casos por assinante.
 
-## Próximos assuntos (PDFs já enviados)
+## Próximos assuntos
 
-- Semiologia do aparelho digestório: precisa do abdome em 9 regiões e das manobras (Murphy, Blumberg, Rovsing, Giordano...).
+- Os três PDFs enviados já viraram casos. Mande o próximo assunto.
 
 ## Próximas etapas da IA
 
@@ -31,6 +31,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Modo prova: sem a tela de explicação no final, só a nota.
 
 ## Feito
+
+- v6: Semiologia do digestório: 17 casos (apendicite, colecistite, coledocolitíase, esquistossomose com HDA, cirrose com ascite e Child, mixedema, pancreatite aguda e crônica, úlcera perfurada, Courvoisier, hepatite viral, hemólise, obstrução por bridas, pielonefrite, intolerância à lactose, neoplasia de esôfago, fecaloma), abdome em 9 regiões, 17 manobras abdominais, regra da ordem do exame, paracentese com GASA, pneumoperitônio na radiografia.
 
 - v5: Semiologia cardiovascular: 13 casos (infarto, pericardite, estenose aórtica, insuficiência aórtica, estenose mitral na gestante, insuficiência mitral, IC perfil B, HAS e técnica da PA, síncope ortostática, estimulantes, miocardiopatia hipertrófica, sopro inocente, estenose pulmonar na criança), focos de ausculta, pulsos e manobras especiais.
 

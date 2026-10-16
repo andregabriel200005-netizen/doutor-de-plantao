@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Dona Celeste, 81 anos. A neta trouxe porque ela desmaiou de madrugada.',
  vitals:'PA 128/76 mmHg (sentada) · FC 78 bpm · FR 16 irpm · T 36,2 °C · SpO₂ 97% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Normal. Levanto de noite pra urinar.",
+  transfusao:"Não.",
+  rio:"Não.",
   queixa:'Desmaiei quando levantei pra ir ao banheiro.',
   tempo:'Foi hoje de madrugada. Mas faz umas semanas que fico tonta quando levanto rápido.',
   inicio:'Levantei da cama de uma vez, a vista escureceu e eu caí.',

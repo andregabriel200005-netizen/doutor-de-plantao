@@ -7,6 +7,13 @@ CASES.push({
  briefing:'Doutor, leito 3: Carla, 24 anos. Diz que está com falta de ar desde a tarde.',
  vitals:'PA 116/74 mmHg · FC 92 bpm · FR 18 irpm · T 36,5 °C · SpO₂ 99% em ar ambiente',
  answers:{
+  refeicao:"Não.",
+  engolir:"Não.",
+  vomito:"Não.",
+  fezes:"Normais, uma vez por dia.",
+  urinacor:"Não, normal.",
+  transfusao:"Não.",
+  rio:"Não.",
   esforco:"Não tem a ver com esforço. Parada também.",
   palpitacao:"Às vezes sinto o coração acelerar quando fico nervosa.",
   sincope:"Não.",
