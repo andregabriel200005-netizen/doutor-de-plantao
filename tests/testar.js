@@ -120,8 +120,10 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('[data-m="ex"][data-v="baseD"]');
   ok((await page.textContent('.ultimo')).includes('maciço'), 'percussão da base direita mostra macicez');
   await page.screenshot({ path: path.join(PRINTS, '02-exame.png') });
-  await page.click('[data-m="fig"][data-v="tap"]');
+  await page.evaluate(() => { closeM(); openM('pc', { tab: 'tap' }); });
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
+  const pcTap = await page.evaluate(() => { const antes = !!document.querySelector('[data-m="space"]'); const g = { t: G.tapped, f: G.fluid }; G.tapped = true; G.fluid = { prot: 0 }; renderM(); const txt = document.querySelector('#mBody').textContent; G.tapped = g.t; G.fluid = g.f; renderM(); return antes && txt.includes('Líquido colhido') && txt.includes('Análises do líquido') && !!document.querySelector('[data-m="space"]'); });
+  ok(pcTap, 'toracocentese fica no computador, junto dos exames, e mostra o líquido depois de colher');
   await page.click('[data-m="close"]');
   await page.evaluate(() => { G.tapped = true; openM('close'); });
   await page.check('input[name=sind][value=derrame]');
