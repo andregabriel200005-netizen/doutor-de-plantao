@@ -35,6 +35,18 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Ranking da turma com as notas de cada caso.
 - Modo prova: sem a tela de explicação no final, só a nota.
 
+## Ideias de melhoria (out/2026, aguardando o André escolher)
+
+- Plantão surpresa: caso sorteado sem mostrar título nem assunto (o menu agrupa por módulo e entrega o sistema).
+- Caderno "Meus erros": junta o que faltou e os pontos para levar de todos os casos jogados.
+- ECG desenhado, sem laudo (hoje o resultado vem escrito, já interpretado).
+- Paciente que piora se a conduta demorar (sinais vitais mudando no monitor).
+- Modo prova / OSCE: tempo limitado e sem explicação até o fim da rodada.
+- Nível do médico (interno → residente → plantonista) com a soma dos recordes.
+- Refazer o caso dias depois quando a nota for baixa (repetição espaçada).
+- Botão "Mandar sugestão" no fim do caso, para os colegas testarem.
+- Publicar a versão nova no GitHub Pages (main ainda está na versão antiga).
+
 ## Feito
 
 - Espirometria com prova broncodilatadora em todos os casos (vale ponto na asma e na DPOC). Critérios da literatura: trocar pelos do material quando o André mandar a aula de função pulmonar.
