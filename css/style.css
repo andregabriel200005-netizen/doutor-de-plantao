@@ -158,3 +158,18 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 .ouvir{display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:var(--panel);border:1px solid var(--accent);color:var(--accent);border-radius:99px;padding:4px 12px;font:600 .8rem var(--f-body);min-height:32px}
 .ouvir:hover{background:var(--accent);color:var(--accent-ink)}
 .flog div .ouvir{display:flex;width:max-content}
+
+/* exame: último achado fixo no rodapé; no celular, uma figura por vez */
+.figtabs{display:none;gap:6px;flex-wrap:wrap;margin-top:10px}
+.figtabs button{background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:.85rem}
+.figtabs button.on{background:var(--warn);color:#2a1a00;border-color:var(--warn);font-weight:600}
+.ultimo{position:sticky;bottom:-18px;margin:12px -16px -18px;padding:10px 16px 14px;background:var(--panel);border-top:2px solid var(--accent);box-shadow:0 -10px 20px -12px #000;z-index:2}
+.ultimo>div{background:var(--panel2);border-left:3px solid var(--warn);border-radius:6px;padding:7px 10px;font-size:.92rem}
+.ultimo>div b{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);display:block;font-weight:500}
+.ultimo .ouvir{display:flex;width:max-content}
+@media(max-width:699px){
+ .figtabs{display:flex}
+ .examgrid{grid-template-columns:minmax(0,1fr)}
+ .examgrid [data-fig]:not(.fig-on),.manobras:not(.fig-on){display:none}
+ .fig svg{max-width:230px}
+}

@@ -241,25 +241,27 @@ function mPatient(m){
    else el.textContent=txt;};
  }
  if(tab==='exam'){
+  const fig=G.fig||'costas';
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
   h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta e na percussão, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
   <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
+  <div class="figtabs">${FIGS.map(([k,t])=>`<button class="${fig===k?'on':''}" data-m="fig" data-v="${k}">${t}</button>`).join('')}</div>
   <div class="examgrid">
-   <div class="fig"><h4>Costas</h4><svg viewBox="0 0 200 220">
+   <div class="fig ${fig==="costas"?"fig-on":""}" data-fig="costas"><h4>Costas</h4><svg viewBox="0 0 200 220">
     <circle cx="100" cy="24" r="18" fill="#c99a76"/><path d="M40 50 Q100 38 160 50 L166 200 Q100 212 34 200 Z" fill="#d8ad88"/>
     <line x1="100" y1="50" x2="100" y2="200" stroke="#b88a66" stroke-width="2"/>
     <text x="40" y="47" fill="#94aab3" font-size="11" font-family="monospace">E</text><text x="154" y="47" fill="#94aab3" font-size="11" font-family="monospace">D</text>
     ${z('apiceE',44,56,52,44)}${z('apiceD',104,56,52,44)}${z('medioE',42,104,54,44)}${z('medioD',104,104,54,44)}${z('baseE',40,152,56,44)}${z('baseD',104,152,56,44)}
    </svg></div>
-   <div class="fig"><h4>Frente</h4><svg viewBox="0 0 200 220">
+   <div class="fig ${fig==="frente"?"fig-on":""}" data-fig="frente"><h4>Frente</h4><svg viewBox="0 0 200 220">
     <circle cx="100" cy="22" r="16" fill="#c99a76"/><rect x="88" y="36" width="24" height="12" fill="#c99a76"/>
     <path d="M52 48 Q100 40 148 48 L150 140 L50 140 Z" fill="#d8ad88"/><rect x="66" y="140" width="68" height="16" fill="#d8ad88"/>
     <rect x="70" y="156" width="26" height="60" fill="#c99a76"/><rect x="104" y="156" width="26" height="60" fill="#c99a76"/>
     <rect x="34" y="52" width="16" height="78" rx="6" fill="#c99a76"/><rect x="150" y="52" width="16" height="78" rx="6" fill="#c99a76"/>
     ${z('boca',88,20,24,14)}${z('pescoco',80,36,40,14)}${z('coracao',96,62,44,40)}${z('abdome',62,108,76,46)}${z('pernas',66,160,68,54)}${z('maos',28,128,26,22)}${z('maos',146,128,26,22)}
    </svg></div>
-   <div class="fig"><h4>Coração e pulsos</h4><svg viewBox="0 0 200 220">
+   <div class="fig ${fig==="cor"?"fig-on":""}" data-fig="cor"><h4>Coração e pulsos</h4><svg viewBox="0 0 200 220">
     <circle cx="100" cy="18" r="13" fill="#c99a76"/><rect x="92" y="30" width="16" height="10" fill="#c99a76"/>
     <path d="M58 40 Q100 34 142 40 L144 128 L56 128 Z" fill="#d8ad88"/><rect x="62" y="128" width="76" height="22" fill="#d8ad88"/>
     <rect x="40" y="42" width="14" height="90" rx="6" fill="#c99a76"/><rect x="146" y="42" width="14" height="90" rx="6" fill="#c99a76"/>
@@ -271,7 +273,7 @@ function mPatient(m){
     ${z('pulsoCar',84,30,14,12)}${z('pulsoRad',150,120,16,14)}${z('pulsoFem',76,136,16,14)}${z('pulsoPed',66,200,22,14)}
     <g class="zlbl">${[['Ao',87,60],['P',113,60],["Ao'",113,74],['T',113,96],['M',133,100],['carótida',126,30,1],['radial',176,118,1],['femoral',44,146,1],['pedioso',42,212,1]].map(([t,x,y,o])=>`<text x="${x}" y="${y}" text-anchor="middle"${o?' class="out"':''}>${t}</text>`).join('')}</g>
    </svg></div>
-   <div class="fig"><h4>Abdome e lombar</h4><svg viewBox="0 0 200 220">
+   <div class="fig ${fig==="abd"?"fig-on":""}" data-fig="abd"><h4>Abdome e lombar</h4><svg viewBox="0 0 200 220">
     <path d="M44 10 Q100 0 156 10 L162 150 Q100 166 38 150 Z" fill="#d8ad88"/><circle cx="100" cy="80" r="3" fill="#b88a66"/>
     <path d="M44 10 Q100 34 156 10" stroke="#b88a66" stroke-width="2" fill="none"/>
     ${[['hcd',48,22],['epi',82,22],['hce',116,22],['fld',48,62],['meso',82,62],['fle',116,62],['fid',48,102],['hipo',82,102],['fie',116,102]].map(([id,x,y])=>z(id,x,y,34,38)).join('')}
@@ -281,9 +283,10 @@ function mPatient(m){
     ${z('lombE',54,189,42,24)}${z('lombD',104,189,42,24)}
     <text x="40" y="206" fill="#94aab3" font-size="10" font-family="monospace">E</text><text x="154" y="206" fill="#94aab3" font-size="10" font-family="monospace">D</text>
    </svg></div></div>
-  ${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
-  <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}
-  <div class="flog">${G.examLog.map((e,i)=>logItem(e,i)).reverse().join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
+  <div class="manobras ${fig==='man'?'fig-on':''}" data-fig="man">${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
+  <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}</div>
+  <div class="ultimo" aria-live="polite">${G.examLog.length?logItem(G.examLog[G.examLog.length-1],G.examLog.length-1):'<p class="muted">Toque numa região: o achado aparece aqui.</p>'}</div>
+  ${G.examLog.length>1?`<h4 class="mtit">Achados anteriores</h4><div class="flog">${G.examLog.slice(0,-1).map((e,i)=>logItem(e,i)).reverse().join('')}</div>`:''}`;
  }
  if(tab==='tap'){
   if(G.tapped){
@@ -316,6 +319,7 @@ function mPatient(m){
  }
  return [c.pname+' · leito 3',h,after];
 }
+const FIGS=[['costas','Costas'],['frente','Frente'],['cor','Coração'],['abd','Abdome'],['man','Manobras']];
 const logItem=(e,i)=>`<div><b>${e.k}</b>${e.v}${e.som?`<button class="ouvir" data-m="som" data-i="${i}">▶ Ouvir</button>`:''}</div>`;
 function syringe(){const col=G.c.fluidColor;return `<svg viewBox="0 0 240 50" style="width:100%;max-width:300px;margin-top:10px"><rect x="20" y="14" width="160" height="22" rx="4" fill="#e9f1f4" stroke="#9fb2bc"/><rect x="24" y="17" width="120" height="16" fill="${col}"/><rect x="180" y="21" width="44" height="8" fill="#9fb2bc"/><rect x="4" y="10" width="18" height="30" rx="3" fill="#6a7c86"/></svg>`;}
 function fluidForm(){
@@ -406,6 +410,7 @@ modal.addEventListener('click',e=>{
  if(a==='tab'){m.tab=el.dataset.v;G.tap.msg=null;renderM(true);return;}
  if(a==='ask'){const id=el.dataset.v;if(!G.asked.includes(id)){G.asked.push(id);G.talkLog.push({q:QUESTIONS.find(q=>q.id===id).t,a:c.answers[id]});}advance(2);G.lastAns=id;m.typeNow=true;renderM();return;}
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}
+ if(a==='fig'){G.fig=el.dataset.v;renderM();return;}
  if(a==='ex'){const z=el.dataset.v,tool=z==='geral'?'inspecionar':G.tool,key=tool+':'+z;
   if(!G.examined.includes(key))G.examined.push(key);
   let v=findExam(tool,z);

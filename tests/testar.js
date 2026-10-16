@@ -118,7 +118,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('[data-m="tab"][data-v="exam"]');
   await page.click('[data-m="tool"][data-v="percutir"]');
   await page.click('[data-m="ex"][data-v="baseD"]');
-  ok((await page.textContent('.flog')).includes('maciço'), 'percussão da base direita mostra macicez');
+  ok((await page.textContent('.ultimo')).includes('maciço'), 'percussão da base direita mostra macicez');
   await page.screenshot({ path: path.join(PRINTS, '02-exame.png') });
   await page.click('[data-m="tab"][data-v="tap"]');
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
@@ -142,6 +142,21 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   const larg = await cel.evaluate(() => document.documentElement.scrollWidth);
   ok(larg <= 390, `celular sem rolagem lateral (largura ${larg}px)`);
   await cel.screenshot({ path: path.join(PRINTS, '05-celular.png') });
+  // celular: no exame, uma figura por vez e o achado aparece na tela sem rolar
+  await cel.evaluate(() => { closeM(); startCase(CASES.findIndex(c => c.id === 'd-apend')); });
+  await cel.waitForTimeout(300);
+  await cel.evaluate(() => { closeM(); openM('patient', { tab: 'exam' }); });
+  await cel.click('[data-m="fig"][data-v="abd"]');
+  await cel.click('[data-m="tool"][data-v="palpar"]');
+  await cel.locator('[data-m="ex"][data-v="fid"]').dispatchEvent('click');
+  await cel.waitForTimeout(150);
+  const vis = await cel.evaluate(() => {
+    const u = document.querySelector('.ultimo').getBoundingClientRect();
+    const figs = [...document.querySelectorAll('.examgrid [data-fig]')].filter(f => getComputedStyle(f).display !== 'none').length;
+    return { naTela: u.top >= 0 && u.bottom <= innerHeight + 1, texto: document.querySelector('.ultimo').textContent, figs };
+  });
+  ok(vis.naTela && vis.texto.includes('parede fica dura') && vis.figs === 1, `celular: uma figura por vez e o achado aparece na tela (figuras visíveis: ${vis.figs})`);
+  await cel.screenshot({ path: path.join(PRINTS, '08-celular-exame.png') });
 
   // abdome: palpar antes de auscultar perde o ponto da ordem e a ausculta avisa
   const ordem = await page.evaluate(() => {
