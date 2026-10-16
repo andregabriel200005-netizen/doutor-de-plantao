@@ -585,7 +585,7 @@ function finish(){
 /* ================= TELAS ================= */
 function show(id){['home','game','debrief'].forEach(s=>$('#'+s).hidden=s!==id);window.scrollTo(0,0);}
 function renderHome(){
- $('#home').innerHTML=`<div class="hero"><h1>Plantão Pleural</h1>
+ $('#home').innerHTML=`<div class="hero"><h1>Doutor de Plantão</h1>
   <p>Noite de plantão na emergência. Você conversa, examina, pede exames, lê a radiografia sem laudo, punciona quando precisa e decide. Ninguém vai te dizer o que é importante.</p></div>
  ${[...new Set(CASES.map(c=>c.modulo))].map(mod=>`<h2 class="modh">${mod}</h2><div class="cases">${CASES.map((c,i)=>{if(c.modulo!==mod)return '';const b=store('best-'+c.id);return `<button class="ccard" data-go="start" data-i="${i}"><canvas data-por="${c.look}"></canvas><div><span class="n">${c.n.toUpperCase()}${c.ia?' · FEITO PELA IA':''}</span><h3>${c.title}</h3><p>${c.card}</p><span class="best">${b!==undefined?'Recorde: '+b+'/100':'Ainda não atendido'}</span></div></button>`;}).join('')}</div>`).join('')}
  <section class="iabox" id="iaBox"></section>

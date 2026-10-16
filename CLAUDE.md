@@ -1,6 +1,6 @@
-# Plantão Pleural
+# Doutor de Plantão (antigo Plantão Pleural)
 
-Jogo 2D em pixel art para estudar medicina: o aluno é o médico de plantão, anda pela sala, conversa com o paciente, examina, pede exames, faz procedimentos e decide diagnóstico e conduta. Começou com derrame pleural e vai crescer para outros assuntos.
+Jogo 2D em pixel art para estudar medicina (nome escolhido pelo André em 16/10/2026; a pasta e o arquivo `dist/plantao-pleural.html` mantêm o nome antigo para não quebrar o link e os recordes salvos): o aluno é o médico de plantão, anda pela sala, conversa com o paciente, examina, pede exames, faz procedimentos e decide diagnóstico e conduta. Começou com derrame pleural e vai crescer para outros assuntos.
 
 ## Quem é o dono
 

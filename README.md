@@ -1,6 +1,6 @@
-# Plantão Pleural
+# Doutor de Plantão
 
-Você é o médico de plantão. Converse com o paciente, examine, peça exames, leia a radiografia sem laudo, faça a toracocentese e decida o diagnóstico e a conduta. Ninguém vai te dizer o que é importante.
+Você é o médico de plantão. Converse com o paciente, examine, peça exames, leia a radiografia sem laudo, faça procedimentos e decida o diagnóstico e a conduta. Ninguém vai te dizer o que é importante.
 
 **Jogar:** abra `index.html` no navegador (ou o link do GitHub Pages, quando estiver publicado).
 
