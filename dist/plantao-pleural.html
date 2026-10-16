@@ -78,6 +78,15 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .bubble::before{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#f4efe2;border-left:0}
 .bubble .nm{display:block;font:700 .9rem var(--f-pixel);color:#3c6e68;margin-bottom:2px}
 .qcat{margin-top:12px}
+.talktop{position:sticky;top:-14px;margin:10px -16px 0;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);z-index:2}
+.qtabs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.qtabs button{background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:.84rem}
+.qtabs button small{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);margin-left:2px}
+.qtabs button.on{background:var(--warn);color:#2a1a00;border-color:var(--warn);font-weight:600}
+.qtabs button.on small{color:#5a3a00}
+.qlist{margin-top:12px;flex-direction:column;align-items:stretch}
+.qlist .chip{padding:10px 12px}
+@media(max-width:699px){.qtabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-16px;padding-right:16px}.qtabs button{flex:none}}
 .qcat h4{margin:0 0 6px;font:500 .7rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:.88rem;text-align:left}
@@ -208,45 +217,45 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 // ---- js/dados.js ----
 /* Dados compartilhados por todos os casos: perguntas, exames, análises do líquido, diagnósticos e personagens. */
 const QUESTIONS=[
- {id:'queixa',cat:'História atual',t:'O que trouxe você aqui hoje?'},
- {id:'tempo',cat:'História atual',t:'Desde quando está assim?'},
- {id:'dor',cat:'História atual',t:'Sente alguma dor? Como ela é?'},
- {id:'febre',cat:'História atual',t:'Teve febre? Em que horário?'},
- {id:'inicio',cat:'História atual',t:'Começou de repente ou foi aos poucos?'},
- {id:'tosse',cat:'História atual',t:'Tem tosse? Sai catarro?'},
- {id:'escarro',cat:'História atual',t:'O catarro tem alguma cor? Já saiu sangue?'},
- {id:'chiado',cat:'História atual',t:'Sente chiado no peito?'},
- {id:'dispneia',cat:'História atual',t:'Tem falta de ar? Piora quando deita?'},
- {id:'esforco',cat:'História atual',t:'Os sintomas vêm com esforço? Melhoram com repouso?'},
- {id:'palpitacao',cat:'História atual',t:'Sente o coração disparar ou bater falhando?'},
- {id:'sincope',cat:'História atual',t:'Já desmaiou ou quase desmaiou?'},
- {id:'posicao',cat:'História atual',t:'Tem alguma posição que alivia ou piora a falta de ar?'},
- {id:'edema',cat:'História atual',t:'As pernas incham?'},
- {id:'refeicao',cat:'História atual',t:'A dor tem relação com a comida?'},
- {id:'engolir',cat:'História atual',t:'Tem dificuldade ou dor para engolir?'},
- {id:'vomito',cat:'História atual',t:'Teve vômito? Como era?'},
- {id:'fezes',cat:'História atual',t:'Como estão as fezes? Cor, consistência, quantas vezes?'},
- {id:'urinacor',cat:'História atual',t:'A urina mudou de cor?'},
- {id:'urina',cat:'História atual',t:'Tem sentido muita sede ou urinado muito?'},
- {id:'peso',cat:'História atual',t:'Perdeu peso? Sua à noite?'},
- {id:'tratou',cat:'Medicamentos',t:'Já tomou algum remédio para isso?'},
- {id:'meds',cat:'Medicamentos',t:'Que remédios usa todo dia?'},
+ {id:'queixa',cat:'Queixa',t:'O que trouxe você aqui hoje?'},
+ {id:'tempo',cat:'Queixa',t:'Desde quando está assim?'},
+ {id:'inicio',cat:'Queixa',t:'Começou de repente ou foi aos poucos?'},
+ {id:'dor',cat:'Queixa',t:'Sente alguma dor? Como ela é?'},
+ {id:'tratou',cat:'Queixa',t:'Já tomou algum remédio para isso?'},
+ {id:'febre',cat:'Geral',t:'Teve febre? Em que horário?'},
+ {id:'peso',cat:'Geral',t:'Perdeu peso? Sua à noite?'},
+ {id:'edema',cat:'Geral',t:'As pernas incham?'},
+ {id:'tosse',cat:'Respiratório',t:'Tem tosse? Sai catarro?'},
+ {id:'escarro',cat:'Respiratório',t:'O catarro tem alguma cor? Já saiu sangue?'},
+ {id:'chiado',cat:'Respiratório',t:'Sente chiado no peito?'},
+ {id:'dispneia',cat:'Respiratório',t:'Tem falta de ar? Piora quando deita?'},
+ {id:'posicao',cat:'Respiratório',t:'Tem alguma posição que alivia ou piora a falta de ar?'},
+ {id:'esforco',cat:'Coração',t:'Os sintomas vêm com esforço? Melhoram com repouso?'},
+ {id:'palpitacao',cat:'Coração',t:'Sente o coração disparar ou bater falhando?'},
+ {id:'sincope',cat:'Coração',t:'Já desmaiou ou quase desmaiou?'},
+ {id:'refeicao',cat:'Digestório e urina',t:'A dor tem relação com a comida?'},
+ {id:'engolir',cat:'Digestório e urina',t:'Tem dificuldade ou dor para engolir?'},
+ {id:'vomito',cat:'Digestório e urina',t:'Teve vômito? Como era?'},
+ {id:'fezes',cat:'Digestório e urina',t:'Como estão as fezes? Cor, consistência, quantas vezes?'},
+ {id:'urinacor',cat:'Digestório e urina',t:'A urina mudou de cor?'},
+ {id:'urina',cat:'Digestório e urina',t:'Tem sentido muita sede ou urinado muito?'},
  {id:'doencas',cat:'Antecedentes',t:'Tem alguma doença? Coração, fígado, rim?'},
+ {id:'meds',cat:'Antecedentes',t:'Que remédios usa todo dia?'},
  {id:'alergia',cat:'Antecedentes',t:'Tem rinite, alergia ou asma desde criança?'},
  {id:'passado',cat:'Antecedentes',t:'Já teve pneumonia ou tuberculose antes?'},
  {id:'infancia',cat:'Antecedentes',t:'Teve alguma doença séria quando era criança?'},
  {id:'transfusao',cat:'Antecedentes',t:'Já recebeu transfusão de sangue?'},
- {id:'habitos',cat:'Antecedentes',t:'Bebe ou fuma?'},
- {id:'contato',cat:'Antecedentes',t:'Alguém perto de você está doente ou tossindo?'},
  {id:'imob',cat:'Antecedentes',t:'Fez cirurgia, viagem longa ou ficou muito tempo de cama?'},
  {id:'familia',cat:'Antecedentes',t:'Tem alguma doença na família?'},
- {id:'trabalho',cat:'Vida e hábitos',t:'Trabalha com quê?'},
- {id:'moradia',cat:'Vida e hábitos',t:'Onde você mora? Quantas pessoas moram com você?'},
- {id:'rio',cat:'Vida e hábitos',t:'Já tomou banho de rio, lagoa ou açude?'},
- {id:'sal',cat:'Vida e hábitos',t:'Como anda a alimentação?'},
- {id:'emocional',cat:'Vida e hábitos',t:'Tem passado por estresse? Anda ansioso(a)?'},
- {id:'estimulantes',cat:'Vida e hábitos',t:'Toma café, energético ou algum remédio estimulante ou para emagrecer?'},
- {id:'hiv',cat:'Vida e hábitos',t:'Já fez teste de HIV? Usa preservativo?'}
+ {id:'habitos',cat:'Hábitos e vida',t:'Bebe ou fuma?'},
+ {id:'contato',cat:'Hábitos e vida',t:'Alguém perto de você está doente ou tossindo?'},
+ {id:'trabalho',cat:'Hábitos e vida',t:'Trabalha com quê?'},
+ {id:'moradia',cat:'Hábitos e vida',t:'Onde você mora? Quantas pessoas moram com você?'},
+ {id:'rio',cat:'Hábitos e vida',t:'Já tomou banho de rio, lagoa ou açude?'},
+ {id:'sal',cat:'Hábitos e vida',t:'Como anda a alimentação?'},
+ {id:'emocional',cat:'Hábitos e vida',t:'Tem passado por estresse? Anda ansioso(a)?'},
+ {id:'estimulantes',cat:'Hábitos e vida',t:'Toma café, energético ou algum remédio estimulante ou para emagrecer?'},
+ {id:'hiv',cat:'Hábitos e vida',t:'Já fez teste de HIV? Usa preservativo?'}
 ];
 const EXAMS=[
  {id:'hemo',t:'Hemograma',d:30},{id:'pcr',t:'Proteína C reativa',d:30},
@@ -5532,7 +5541,7 @@ function drawRX(cnv,rx){
 let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
-  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
+  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,qcat:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
   modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
@@ -5578,10 +5587,14 @@ function mPatient(m){
  const c=G.c,tab=m.tab||'talk';
  let h=tabs([['talk','Conversar'],['exam','Examinar'],['tap','Toracocentese']],tab),after=null;
  if(tab==='talk'){
-  const cats=[...new Set(QUESTIONS.map(q=>q.cat))];
-  h+=`<div class="talk"><canvas id="por"></canvas><div class="bubble"><span class="nm">${c.pname}</span><span id="say"></span></div></div>`;
-  h+=cats.map(cat=>`<div class="qcat"><h4>${cat}</h4><div class="chips">${QUESTIONS.filter(q=>q.cat===cat).map(q=>`<button class="chip ${G.asked.includes(q.id)?'done':''}" data-m="ask" data-v="${q.id}">${q.t}</button>`).join('')}</div></div>`).join('');
+  const cats=[...new Set(QUESTIONS.map(q=>q.cat))],qc=G.qcat||cats[0];
+  const conta=cat=>{const l=QUESTIONS.filter(q=>q.cat===cat);return l.filter(q=>G.asked.includes(q.id)).length+'/'+l.length;};
+  h+=`<div class="talktop"><div class="talk"><canvas id="por"></canvas><div class="bubble"><span class="nm">${c.pname}</span><span id="say"></span></div></div>
+  <div class="qtabs">${cats.map(cat=>`<button class="${qc===cat?'on':''}" data-m="qcat" data-v="${cat}">${cat} <small>${conta(cat)}</small></button>`).join('')}<button class="${qc==='hist'?'on':''}" data-m="qcat" data-v="hist">Conversa <small>${G.talkLog.length}</small></button></div></div>`;
+  h+=qc==='hist'?(G.talkLog.length?`<div class="flog">${G.talkLog.map(e=>`<div><b>${e.q}</b>${e.a}</div>`).join('')}</div>`:'<p class="muted">Nada conversado ainda.</p>')
+   :`<div class="chips qlist">${QUESTIONS.filter(q=>q.cat===qc).map(q=>`<button class="chip ${G.asked.includes(q.id)?'done':''}" data-m="ask" data-v="${q.id}">${q.t}</button>`).join('')}</div>`;
   after=()=>{drawPortrait($('#por'),c.look,'sick');
+   const qt=$('.qtabs'),qo=$('.qtabs .on');if(qt&&qo)qt.scrollLeft=qo.offsetLeft-qt.offsetLeft-(qt.clientWidth-qo.offsetWidth)/2;
    const txt=G.lastAns?c.answers[G.lastAns]:'(olha para você, esperando a primeira pergunta)';
    const el=$('#say');if(typer)clearInterval(typer);
    if(m.typeNow&&G.lastAns){let i=0;typer=setInterval(()=>{i+=2;el.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(typer);},18);m.typeNow=false;}
@@ -5755,6 +5768,7 @@ modal.addEventListener('click',e=>{
  const a=el.dataset.m,m=G.modal,c=G.c;
  if(a==='close'){closeM();return;}
  if(a==='tab'){m.tab=el.dataset.v;G.tap.msg=null;renderM(true);return;}
+ if(a==='qcat'){G.qcat=el.dataset.v;renderM();return;}
  if(a==='ask'){const id=el.dataset.v;if(!G.asked.includes(id)){G.asked.push(id);G.talkLog.push({q:QUESTIONS.find(q=>q.id===id).t,a:c.answers[id]});}advance(2);G.lastAns=id;m.typeNow=true;renderM();return;}
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}
  if(a==='fig'){G.fig=el.dataset.v;renderM();return;}

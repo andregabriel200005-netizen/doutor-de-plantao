@@ -157,6 +157,19 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   });
   ok(vis.naTela && vis.texto.includes('parede fica dura') && vis.figs === 1, `celular: uma figura por vez e o achado aparece na tela (figuras visíveis: ${vis.figs})`);
   await cel.screenshot({ path: path.join(PRINTS, '08-celular-exame.png') });
+  // celular: anamnese em abas, a resposta fica visível e a conversa guarda o que foi dito
+  await cel.evaluate(() => { closeM(); openM('patient', { tab: 'talk' }); });
+  await cel.click('[data-m="qcat"][data-v="Digestório e urina"]');
+  await cel.click('[data-m="ask"][data-v="fezes"]');
+  await cel.waitForTimeout(900);
+  const conv = await cel.evaluate(() => {
+    const b = document.querySelector('.bubble').getBoundingClientRect();
+    return { naTela: b.top >= 0 && b.bottom <= innerHeight, chips: document.querySelectorAll('[data-m="ask"]').length, fala: document.querySelector('#say').textContent };
+  });
+  ok(conv.naTela && conv.chips === 6 && conv.fala.length > 3, `celular: anamnese mostra só uma aba (${conv.chips} perguntas) e a resposta aparece na tela`);
+  await cel.screenshot({ path: path.join(PRINTS, '09-celular-conversa.png') });
+  await cel.click('[data-m="qcat"][data-v="hist"]');
+  ok((await cel.textContent('.flog')).includes('fezes'), 'aba Conversa guarda as perguntas feitas');
 
   // abdome: palpar antes de auscultar perde o ponto da ordem e a ausculta avisa
   const ordem = await page.evaluate(() => {

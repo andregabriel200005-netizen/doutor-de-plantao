@@ -185,7 +185,7 @@ function drawRX(cnv,rx){
 let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
-  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
+  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,qcat:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
   modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
@@ -231,10 +231,14 @@ function mPatient(m){
  const c=G.c,tab=m.tab||'talk';
  let h=tabs([['talk','Conversar'],['exam','Examinar'],['tap','Toracocentese']],tab),after=null;
  if(tab==='talk'){
-  const cats=[...new Set(QUESTIONS.map(q=>q.cat))];
-  h+=`<div class="talk"><canvas id="por"></canvas><div class="bubble"><span class="nm">${c.pname}</span><span id="say"></span></div></div>`;
-  h+=cats.map(cat=>`<div class="qcat"><h4>${cat}</h4><div class="chips">${QUESTIONS.filter(q=>q.cat===cat).map(q=>`<button class="chip ${G.asked.includes(q.id)?'done':''}" data-m="ask" data-v="${q.id}">${q.t}</button>`).join('')}</div></div>`).join('');
+  const cats=[...new Set(QUESTIONS.map(q=>q.cat))],qc=G.qcat||cats[0];
+  const conta=cat=>{const l=QUESTIONS.filter(q=>q.cat===cat);return l.filter(q=>G.asked.includes(q.id)).length+'/'+l.length;};
+  h+=`<div class="talktop"><div class="talk"><canvas id="por"></canvas><div class="bubble"><span class="nm">${c.pname}</span><span id="say"></span></div></div>
+  <div class="qtabs">${cats.map(cat=>`<button class="${qc===cat?'on':''}" data-m="qcat" data-v="${cat}">${cat} <small>${conta(cat)}</small></button>`).join('')}<button class="${qc==='hist'?'on':''}" data-m="qcat" data-v="hist">Conversa <small>${G.talkLog.length}</small></button></div></div>`;
+  h+=qc==='hist'?(G.talkLog.length?`<div class="flog">${G.talkLog.map(e=>`<div><b>${e.q}</b>${e.a}</div>`).join('')}</div>`:'<p class="muted">Nada conversado ainda.</p>')
+   :`<div class="chips qlist">${QUESTIONS.filter(q=>q.cat===qc).map(q=>`<button class="chip ${G.asked.includes(q.id)?'done':''}" data-m="ask" data-v="${q.id}">${q.t}</button>`).join('')}</div>`;
   after=()=>{drawPortrait($('#por'),c.look,'sick');
+   const qt=$('.qtabs'),qo=$('.qtabs .on');if(qt&&qo)qt.scrollLeft=qo.offsetLeft-qt.offsetLeft-(qt.clientWidth-qo.offsetWidth)/2;
    const txt=G.lastAns?c.answers[G.lastAns]:'(olha para você, esperando a primeira pergunta)';
    const el=$('#say');if(typer)clearInterval(typer);
    if(m.typeNow&&G.lastAns){let i=0;typer=setInterval(()=>{i+=2;el.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(typer);},18);m.typeNow=false;}
@@ -408,6 +412,7 @@ modal.addEventListener('click',e=>{
  const a=el.dataset.m,m=G.modal,c=G.c;
  if(a==='close'){closeM();return;}
  if(a==='tab'){m.tab=el.dataset.v;G.tap.msg=null;renderM(true);return;}
+ if(a==='qcat'){G.qcat=el.dataset.v;renderM();return;}
  if(a==='ask'){const id=el.dataset.v;if(!G.asked.includes(id)){G.asked.push(id);G.talkLog.push({q:QUESTIONS.find(q=>q.id===id).t,a:c.answers[id]});}advance(2);G.lastAns=id;m.typeNow=true;renderM();return;}
  if(a==='tool'){G.tool=el.dataset.v;renderM();return;}
  if(a==='fig'){G.fig=el.dataset.v;renderM();return;}
