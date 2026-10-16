@@ -4882,7 +4882,7 @@ CASES.push({
 });
 
 // ---- js/sons.js ----
-/* Sons de ausculta sintetizados no navegador (Web Audio), sem gravações.
+/* Sons de ausculta e de percussão sintetizados no navegador (Web Audio), sem gravações.
    O som sai do texto do achado: o que o caso descreve é o que se ouve.
    somDoAchado(texto, zona, caso) → descrição do som (ou null); tocarSom(som) toca uns segundos. */
 const SOM={ctx:null,ruido:null,saida:null};
@@ -5003,11 +5003,12 @@ function tocarSom(s){
  const lim=a.createDynamicsCompressor();lim.threshold.value=-8;lim.knee.value=6;lim.ratio.value=12;lim.attack.value=.003;lim.release.value=.1;
  if(!SOM.curva){SOM.curva=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;SOM.curva[i]=.9*Math.tanh(1.5*x)/Math.tanh(1.5);}}
  const teto=a.createWaveShaper();teto.curve=SOM.curva;lim.connect(teto).connect(a.destination);
- const out=a.createGain();out.gain.value=s.tipo==='cor'?.9:s.tipo==='pulm'?6:5;out.connect(lim);SOM.saida=out;
+ const out=a.createGain();out.gain.value=s.tipo==='cor'||s.tipo==='perc'?.9:s.tipo==='pulm'?6:5;out.connect(lim);SOM.saida=out;
  const t0=a.currentTime+.05,total=s.tipo==='pulm'?6.5:6;
  if(s.tipo==='cor')tocarCoracao(a,out,s,t0,total);
  if(s.tipo==='pulm')tocarPulmao(a,out,s,t0,total);
  if(s.tipo==='abd')tocarAbdome(a,out,s,t0,total);
+ if(s.tipo==='perc')tocarPercussao(a,out,s,t0);
  return true;
 }
 
@@ -5058,6 +5059,45 @@ function somDoAchado(texto,zona,c){
   return {tipo:'abd',rha};
  }
  return null;
+}
+
+/* ---------- percussão ---------- */
+// cada tipo de som: frequência do "corpo", duração da ressonância, volume e quanto de ruído (menos ruído = mais musical)
+const PERC={
+ claro:{f:120,d:.28,amp:.7,nz:.3},
+ hipersonoro:{f:92,d:.45,amp:.9,nz:.3},
+ timp:{f:215,d:.32,amp:.7,nz:.12,harm:1},
+ hipertimp:{f:235,d:.5,amp:.95,nz:.12,harm:1},
+ submacico:{f:160,d:.09,amp:.45,nz:.35},
+ macico:{f:210,d:.04,amp:.32,nz:.4}
+};
+function batidaPercussao(a,out,t,tipo){
+ const p=PERC[tipo];
+ estalo(a,out,t,2600,.006,.25); // o dedo batendo
+ const o=a.createOscillator(),g=a.createGain();
+ o.frequency.setValueAtTime(p.f*1.08,t);o.frequency.exponentialRampToValueAtTime(p.f,t+.03);
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(p.amp,t+.004);g.gain.exponentialRampToValueAtTime(0.0001,t+p.d);
+ o.connect(g).connect(out);o.start(t);o.stop(t+p.d+.02);
+ if(p.harm){const o2=a.createOscillator(),g2=a.createGain();o2.frequency.value=p.f*2.02;
+  g2.gain.setValueAtTime(0.0001,t);g2.gain.exponentialRampToValueAtTime(p.amp*.35,t+.004);g2.gain.exponentialRampToValueAtTime(0.0001,t+p.d*.7);
+  o2.connect(g2).connect(out);o2.start(t);o2.stop(t+p.d+.02);}
+ ruido(a,out,t,p.d*.8,{f:p.f*2,q:2},[[0,1],[1,0]],p.nz*p.amp);
+}
+function tocarPercussao(a,out,s,t0){
+ s.seq.forEach((tipo,i)=>batidaPercussao(a,out,t0+.15+i*.55,tipo));
+}
+const tipoPercussao=t=>/hipertimpân/.test(t)?'hipertimp':/hipersonor/.test(t)?'hipersonoro':/timpân|timpanismo/.test(t)?'timp':
+ /submaciç/.test(t)?'submacico':/maciç|macicez/.test(t)?'macico':/claro pulmonar/.test(t)?'claro':null;
+// percussão de uma região, ou de uma manobra de percussão (que pode tocar uma sequência)
+function somPercussao(texto,zona){
+ const t=(texto||'').toLowerCase();
+ if(zona==='manobra:skoda')return {tipo:'perc',seq:/macicez na periferia/.test(t)?['timp','timp','macico','macico']:['timp','timp','timp','timp']};
+ if(zona==='manobra:macicezmovel')return {tipo:'perc',seq:/muda de lugar/.test(t)?['macico','macico','timp','timp']:['macico','macico','macico','macico']};
+ if(zona==='manobra:hepatimetria'){const atrof=/5 cm/.test(t);return {tipo:'perc',seq:atrof?['claro','claro','claro','macico','timp']:['claro','claro','macico','macico','macico','timp']};}
+ if(/^manobra:/.test(zona)&&!['manobra:traube','manobra:jobert'].includes(zona))return null;
+ if(LOMBAR.includes(zona)||FOCOS.includes(zona)||PULSOS.includes(zona))return null;
+ const tipo=tipoPercussao(t);
+ return tipo?{tipo:'perc',seq:[tipo,tipo,tipo]}:null;
 }
 
 // ---- js/ia.js ----
@@ -5501,7 +5541,7 @@ function mPatient(m){
  }
  if(tab==='exam'){
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
-  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta, toque em ▶ Ouvir (melhor com fone).</p>
+  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta e na percussão, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
   <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
   <div class="examgrid">
@@ -5650,7 +5690,7 @@ function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
  <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
- <div class="res"><b>Sons</b>Toda ausculta tem o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
+ <div class="res"><b>Sons</b>Toda ausculta e toda percussão têm o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
@@ -5672,10 +5712,10 @@ modal.addEventListener('click',e=>{
    if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
     else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
    if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):null});advance(1);renderM();return;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):tool==='percutir'?somPercussao(v,z):null});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
   if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
-  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somDoAchado(v,key,c)});advance(1);renderM();return;}
+  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somPercussao(v,key)||somDoAchado(v,key,c)});advance(1);renderM();return;}
  if(a==='som'){const e=G.examLog[+el.dataset.i];if(e&&e.som&&!tocarSom(e.som))toast('Este navegador não toca sons.');return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}

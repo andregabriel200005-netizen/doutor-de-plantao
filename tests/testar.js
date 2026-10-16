@@ -191,6 +191,37 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   });
   ok(sons.prob.length === 0, sons.prob.length ? 'sons com problema: ' + sons.prob.slice(0, 8).join(' | ') : `sons de ausculta gerados para todos os casos (${sons.tocados} tocados no teste)`);
 
+  // sons de percussão: tórax e abdome sempre tocam, e cada achado vira o som certo
+  const perc = await page.evaluate(() => {
+    const prob = [];
+    CASES.forEach((c, i) => {
+      newGame(i);
+      [...TORAX, ...REGIOES].forEach(z => {
+        const s = somPercussao(findExam('percutir', z), z);
+        if (!s) prob.push(`${c.id}: percussão sem som em ${z}`); else { try { tocarSom(s); } catch (e) { prob.push(`${c.id} ${z}: ${e.message}`); } }
+      });
+    });
+    const som = (id, tool, z) => { newGame(CASES.findIndex(c => c.id === id)); return somPercussao(findExam(tool, z), tool === 'manobra' ? 'manobra:' + z : z); };
+    const casos = {
+      'derrame: maciço': som('tb', 'percutir', 'baseE').seq[0] === 'macico',
+      'normal: claro pulmonar': som('r-susp', 'percutir', 'baseD').seq[0] === 'claro',
+      'pneumotórax: hipertimpânico': som('r-ptx', 'percutir', 'baseE').seq[0] === 'hipertimp',
+      'asma: hipersonoro': som('r-asma', 'percutir', 'baseD').seq[0] === 'hipersonoro',
+      'pneumonia: submaciço': som('r-pneumo', 'percutir', 'baseD').seq[0] === 'submacico',
+      'abdome normal: timpânico': som('d-apend', 'percutir', 'meso').seq[0] === 'timp',
+      'fígado: maciço': som('d-apend', 'percutir', 'hcd').seq[0] === 'macico',
+      'Jobert: hipertimpânico': som('d-perf', 'manobra', 'jobert').seq[0] === 'hipertimp',
+      'Traube maciço na esquistossomose': som('d-esq', 'manobra', 'traube').seq[0] === 'macico',
+      'Skoda: timpânico e depois maciço': som('d-cirr', 'manobra', 'skoda').seq.join() === 'timp,timp,macico,macico',
+      'macicez móvel: maciço vira timpânico': som('d-cirr', 'manobra', 'macicezmovel').seq.join() === 'macico,macico,timp,timp',
+      'coração: percussão não toca': som('c-eao', 'percutir', 'focoAo') === null
+    };
+    G = null;
+    Object.entries(casos).forEach(([k, v]) => { if (!v) prob.push('som errado: ' + k); });
+    return prob;
+  });
+  ok(perc.length === 0, perc.length ? 'percussão com problema: ' + perc.slice(0, 8).join(' | ') : 'sons de percussão gerados para tórax e abdome de todos os casos');
+
   // casos da IA: fora do Claude, só um aviso
   ok((await page.textContent('#iaBox')).includes('só funciona'), 'fora do Claude, a área da IA avisa que não está disponível');
 

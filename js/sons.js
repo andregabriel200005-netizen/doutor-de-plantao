@@ -1,4 +1,4 @@
-/* Sons de ausculta sintetizados no navegador (Web Audio), sem gravações.
+/* Sons de ausculta e de percussão sintetizados no navegador (Web Audio), sem gravações.
    O som sai do texto do achado: o que o caso descreve é o que se ouve.
    somDoAchado(texto, zona, caso) → descrição do som (ou null); tocarSom(som) toca uns segundos. */
 const SOM={ctx:null,ruido:null,saida:null};
@@ -119,11 +119,12 @@ function tocarSom(s){
  const lim=a.createDynamicsCompressor();lim.threshold.value=-8;lim.knee.value=6;lim.ratio.value=12;lim.attack.value=.003;lim.release.value=.1;
  if(!SOM.curva){SOM.curva=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;SOM.curva[i]=.9*Math.tanh(1.5*x)/Math.tanh(1.5);}}
  const teto=a.createWaveShaper();teto.curve=SOM.curva;lim.connect(teto).connect(a.destination);
- const out=a.createGain();out.gain.value=s.tipo==='cor'?.9:s.tipo==='pulm'?6:5;out.connect(lim);SOM.saida=out;
+ const out=a.createGain();out.gain.value=s.tipo==='cor'||s.tipo==='perc'?.9:s.tipo==='pulm'?6:5;out.connect(lim);SOM.saida=out;
  const t0=a.currentTime+.05,total=s.tipo==='pulm'?6.5:6;
  if(s.tipo==='cor')tocarCoracao(a,out,s,t0,total);
  if(s.tipo==='pulm')tocarPulmao(a,out,s,t0,total);
  if(s.tipo==='abd')tocarAbdome(a,out,s,t0,total);
+ if(s.tipo==='perc')tocarPercussao(a,out,s,t0);
  return true;
 }
 
@@ -174,4 +175,43 @@ function somDoAchado(texto,zona,c){
   return {tipo:'abd',rha};
  }
  return null;
+}
+
+/* ---------- percussão ---------- */
+// cada tipo de som: frequência do "corpo", duração da ressonância, volume e quanto de ruído (menos ruído = mais musical)
+const PERC={
+ claro:{f:120,d:.28,amp:.7,nz:.3},
+ hipersonoro:{f:92,d:.45,amp:.9,nz:.3},
+ timp:{f:215,d:.32,amp:.7,nz:.12,harm:1},
+ hipertimp:{f:235,d:.5,amp:.95,nz:.12,harm:1},
+ submacico:{f:160,d:.09,amp:.45,nz:.35},
+ macico:{f:210,d:.04,amp:.32,nz:.4}
+};
+function batidaPercussao(a,out,t,tipo){
+ const p=PERC[tipo];
+ estalo(a,out,t,2600,.006,.25); // o dedo batendo
+ const o=a.createOscillator(),g=a.createGain();
+ o.frequency.setValueAtTime(p.f*1.08,t);o.frequency.exponentialRampToValueAtTime(p.f,t+.03);
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(p.amp,t+.004);g.gain.exponentialRampToValueAtTime(0.0001,t+p.d);
+ o.connect(g).connect(out);o.start(t);o.stop(t+p.d+.02);
+ if(p.harm){const o2=a.createOscillator(),g2=a.createGain();o2.frequency.value=p.f*2.02;
+  g2.gain.setValueAtTime(0.0001,t);g2.gain.exponentialRampToValueAtTime(p.amp*.35,t+.004);g2.gain.exponentialRampToValueAtTime(0.0001,t+p.d*.7);
+  o2.connect(g2).connect(out);o2.start(t);o2.stop(t+p.d+.02);}
+ ruido(a,out,t,p.d*.8,{f:p.f*2,q:2},[[0,1],[1,0]],p.nz*p.amp);
+}
+function tocarPercussao(a,out,s,t0){
+ s.seq.forEach((tipo,i)=>batidaPercussao(a,out,t0+.15+i*.55,tipo));
+}
+const tipoPercussao=t=>/hipertimpân/.test(t)?'hipertimp':/hipersonor/.test(t)?'hipersonoro':/timpân|timpanismo/.test(t)?'timp':
+ /submaciç/.test(t)?'submacico':/maciç|macicez/.test(t)?'macico':/claro pulmonar/.test(t)?'claro':null;
+// percussão de uma região, ou de uma manobra de percussão (que pode tocar uma sequência)
+function somPercussao(texto,zona){
+ const t=(texto||'').toLowerCase();
+ if(zona==='manobra:skoda')return {tipo:'perc',seq:/macicez na periferia/.test(t)?['timp','timp','macico','macico']:['timp','timp','timp','timp']};
+ if(zona==='manobra:macicezmovel')return {tipo:'perc',seq:/muda de lugar/.test(t)?['macico','macico','timp','timp']:['macico','macico','macico','macico']};
+ if(zona==='manobra:hepatimetria'){const atrof=/5 cm/.test(t);return {tipo:'perc',seq:atrof?['claro','claro','claro','macico','timp']:['claro','claro','macico','macico','macico','timp']};}
+ if(/^manobra:/.test(zona)&&!['manobra:traube','manobra:jobert'].includes(zona))return null;
+ if(LOMBAR.includes(zona)||FOCOS.includes(zona)||PULSOS.includes(zona))return null;
+ const tipo=tipoPercussao(t);
+ return tipo?{tipo:'perc',seq:[tipo,tipo,tipo]}:null;
 }

@@ -242,7 +242,7 @@ function mPatient(m){
  }
  if(tab==='exam'){
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
-  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta, toque em ▶ Ouvir (melhor com fone).</p>
+  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta e na percussão, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
   <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
   <div class="examgrid">
@@ -391,7 +391,7 @@ function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
  <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
- <div class="res"><b>Sons</b>Toda ausculta tem o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
+ <div class="res"><b>Sons</b>Toda ausculta e toda percussão têm o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
@@ -413,10 +413,10 @@ modal.addEventListener('click',e=>{
    if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
     else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
    if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):null});advance(1);renderM();return;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):tool==='percutir'?somPercussao(v,z):null});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
   if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
-  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somDoAchado(v,key,c)});advance(1);renderM();return;}
+  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somPercussao(v,key)||somDoAchado(v,key,c)});advance(1);renderM();return;}
  if(a==='som'){const e=G.examLog[+el.dataset.i];if(e&&e.som&&!tocarSom(e.som))toast('Este navegador não toca sons.');return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
