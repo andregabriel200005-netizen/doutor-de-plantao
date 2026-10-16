@@ -51,7 +51,7 @@ IDEIAS.md               ideias do André, organizadas
 
 1. `npm test` (gera `dist/` e joga todos os casos no navegador). Tudo precisa passar.
 2. Olhe os prints em `tests/prints/` e confira se a mudança aparece certa, inclusive no celular.
-3. Se o André pedir para publicar, publique `dist/plantao-pleural.html` com `capabilities: {sample: {images: true}}` (é o que liga a IA). O artifact atual é https://claude.ai/artifact/2wzjHWrrK7Yk2PJgARnsEH (atualize esse, não crie outro). No GitHub Pages, o `index.html` da raiz já é o jogo.
+3. Se o André pedir para publicar, publique `dist/plantao-pleural.html` com `capabilities: {sample: {images: true}}` (é o que liga a IA). O artifact atual é https://claude.ai/artifact/2wzjHWrrK7Yk2PJgARnsEH (atualize esse, não crie outro). No GitHub Pages, o `index.html` da raiz já é o jogo: https://andregabriel200005-netizen.github.io/doutor-de-plantao/ (repositório renomeado de plantao-pleural para doutor-de-plantao em 16/10/2026; o GitHub redireciona o endereço antigo do git, mas não o do Pages).
 4. Faça commit com mensagem em português dizendo o que mudou para o jogador.
 
 ## Visual

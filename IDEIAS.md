@@ -45,7 +45,7 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Nível do médico (interno → residente → plantonista) com a soma dos recordes.
 - Refazer o caso dias depois quando a nota for baixa (repetição espaçada).
 - Botão "Mandar sugestão" no fim do caso, para os colegas testarem.
-- Publicar a versão nova no GitHub Pages (main ainda está na versão antiga).
+
 
 ## Feito
 
