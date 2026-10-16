@@ -4,7 +4,7 @@ Cada arquivo em `js/casos/` faz `CASES.push({...})` com os campos abaixo. Use um
 
 Há dois tipos de caso:
 - **Com derrame** (`caso-0*.js`): têm `light`, toracocentese e análise do líquido. Nota pelos pesos `MAX`.
-- **Semiologia** (`resp-*.js`): sem `light`; a nota vale mais pelo exame físico e pela síndrome (`MAX_SEMIO`). Os campos do líquido (`fluid`, `keyFluid`, `light`, `correctClass`, `fluidColor`, `fluidLook`) ficam de fora, e `tap` fica `{sides:[],spaces:[]}` (punção seca, que desconta).
+- **Semiologia** (`resp-*.js`): sem `light`; a nota vale mais pelo exame físico, pelo diagnóstico e pela conduta (`MAX_SEMIO`). Os campos do líquido (`fluid`, `keyFluid`, `light`, `correctClass`, `fluidColor`, `fluidLook`) ficam de fora, e `tap` fica `{sides:[],spaces:[]}` (punção seca, que desconta).
 
 | Campo | O que é |
 |---|---|
@@ -29,7 +29,7 @@ Há dois tipos de caso:
 | `keyFluid` | Análises do líquido que valem ponto |
 | `light` | Números para conferir Light: `protL`, `protS`, `ldhL`, `ldhS`, `albL`, `albS` |
 | `diuretico` | `true` se o paciente usa diurético (aí os gradientes valem) |
-| `correctSind`, `sindWhy` | Síndrome principal (id de `SINDROMES`, ou lista de ids aceitos, a primeira é a principal) e o porquê. Todo caso tem |
+| `correctSind`, `sindWhy` | Síndrome do exame (id de `SINDROMES`, ou lista de ids). Não vale ponto e o aluno não marca: aparece só na correção, junto do diagnóstico, explicando o que o exame mostrava. Todo caso tem |
 | `correctClass`, `clsNote` | Só com derrame: transudato ou exsudato, e explicação extra se houver pegadinha |
 | `correctDx`, `dxWhy` | Diagnóstico (id de `DX`) e o porquê |
 | `conduta` | Opções do final: `{id, t, ok, why}`. Misture certas e erradas plausíveis |

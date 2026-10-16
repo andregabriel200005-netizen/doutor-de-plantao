@@ -5362,12 +5362,12 @@ async function iaGerar(){
 // ---- js/jogo.js ----
 // Pesos da nota (cada conjunto soma 100). Casos com líquido pleural (têm "light") usam MAX;
 // casos de semiologia, focados em exame físico e síndrome, usam MAX_SEMIO.
-const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,sind:4,dx:12,cond:16};
-const MAX_SEMIO={q:16,ex:24,lab:10,sind:16,dx:16,cond:18};
+const MAX={q:12,ex:12,lab:12,proc:12,fl:12,cls:8,dx:16,cond:16};
+const MAX_SEMIO={q:16,ex:24,lab:10,dx:24,cond:26};
 const ehPleural=c=>!!c.light;
 const pesos=c=>ehPleural(c)?MAX:MAX_SEMIO;
 // correctSind pode ser uma síndrome ou uma lista de síndromes aceitas (a primeira é a principal)
-const sindLista=c=>[].concat(c.correctSind),sindOk=(c,id)=>sindLista(c).includes(id);
+const sindLista=c=>[].concat(c.correctSind);
 
 /* ================= UTIL ================= */
 const $=s=>document.querySelector(s);
@@ -5742,11 +5742,10 @@ function mXray(){
 function mClose(){
  const f=G.final,c=G.c,liq=G.tapped;
  const h=`<p class="muted" style="font-size:.9rem">Quando assinar, o caso acaba. Ainda dá para voltar e investigar mais.</p>
- <h3 class="sec">Síndrome principal</h3><div class="opts">${SINDROMES.map(d=>`<label><input type="radio" name="sind" data-m="fsind" value="${d.id}" ${f.sind===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  ${liq?`<h3 class="sec">O líquido pleural é</h3><div class="opts">${['transudato','exsudato'].map(v=>`<label><input type="radio" name="cls" data-m="fcls" value="${v}" ${f.cls===v?'checked':''}>${v[0].toUpperCase()+v.slice(1)}</label>`).join('')}</div>`:''}
  <h3 class="sec">Diagnóstico</h3><div class="opts">${DX.map(d=>`<label><input type="radio" name="dx" data-m="fdx" value="${d.id}" ${f.dx===d.id?'checked':''}>${d.t}</label>`).join('')}</div>
  <h3 class="sec">Conduta (marque todas as corretas)</h3><div class="opts">${c.conduta.map(x=>`<label><input type="checkbox" data-m="fcond" value="${x.id}" ${f.cond.includes(x.id)?'checked':''}>${x.t}</label>`).join('')}</div>
- <div class="row"><button class="btn" data-m="sign" ${(f.cls||!liq)&&f.sind&&f.dx&&f.cond.length?'':'disabled'}>Assinar e encerrar o caso</button></div>`;
+ <div class="row"><button class="btn" data-m="sign" ${(f.cls||!liq)&&f.dx&&f.cond.length?'':'disabled'}>Assinar e encerrar o caso</button></div>`;
  return ['Prontuário',h];
 }
 
@@ -5772,7 +5771,7 @@ function mHelp(){
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
  <div class="res"><b>Prontuário (mesa)</b>Dizer a síndrome, classificar o líquido (se colheu), dar o diagnóstico e a conduta. Isso encerra o caso.</div>
- <div class="res"><b>Pontuação</b>Anamnese, exame físico, exames, síndrome, diagnóstico e conduta (e, nos casos com derrame, toracocentese e análise do líquido). Exames desnecessários e punções erradas descontam.</div></div>`];
+ <div class="res"><b>Pontuação</b>Anamnese, exame físico, exames, diagnóstico e conduta (e, nos casos com derrame, toracocentese e análise do líquido). Exames desnecessários e punções erradas descontam.</div></div>`];
 }
 
 modal.addEventListener('click',e=>{
@@ -5812,7 +5811,6 @@ modal.addEventListener('click',e=>{
   advance(2);ids.forEach(id=>G.orders[id]=G.clock+EXAMS.find(x=>x.id===id).d);toast(ids.length+' exame(s) solicitado(s)');renderM();return;}
  if(a==='fcls'){G.final.cls=el.value;renderM();return;}
  if(a==='fdx'){G.final.dx=el.value;renderM();return;}
- if(a==='fsind'){G.final.sind=el.value;renderM();return;}
  if(a==='fcond'){const v=el.value,i=G.final.cond.indexOf(v);if(el.checked&&i<0)G.final.cond.push(v);if(!el.checked&&i>=0)G.final.cond.splice(i,1);renderM();return;}
  if(a==='sign'){closeM();finish();return;}
  if(a==='calc'){runCalc();return;}
@@ -5887,7 +5885,6 @@ function score(){
   q:Math.round(P.q*qH.length/c.keyQ.length),
   ex:Math.round(P.ex*eH.length/c.keyExam.length),
   lab:Math.max(0,Math.round(P.lab*(c.keyEx.length?xH.length/c.keyEx.length:1))-2*extra.length), // sem exame-chave: nota cheia se não pedir nada à toa
-  sind:sindOk(c,f.sind)?P.sind:0,
   dx:f.dx===c.correctDx?P.dx:0,
   cond:Math.max(0,Math.round(P.cond*okH/okT)-4*wr)
  };
@@ -5921,12 +5918,11 @@ function finish(){
   <h2 style="font-size:1.6rem;margin-top:4px">${verdict}</h2>
   <div class="bars">${bars.map(b=>`<div class="bar"><span>${b[0]}</span><div class="tr"><i style="width:${Math.round(100*b[1]/b[2])}%"></i></div><span class="nm">${b[1]}/${b[2]}</span></div>`).join('')}</div>
 
-  <h3 class="sec">Síndrome: ${sindLista(c).map(nomeSind).join(' ou ')}</h3>
-  <p style="font-size:.92rem">${sindOk(c,f.sind)?'Você acertou. ':'Você marcou: '+nomeSind(f.sind)+'. '}${c.sindWhy||''}</p>
   ${pl?`<h3 class="sec">Classificação: ${f.cls===c.correctClass?'acertou':f.cls?'errou':'não classificou'} (${c.correctClass})</h3>
   <p class="muted" style="font-size:.92rem">${lightText()}</p>${c.clsNote?`<p style="font-size:.92rem;margin-top:6px">${c.clsNote}</p>`:''}`:''}
   <h3 class="sec">Diagnóstico: ${DX.find(x=>x.id===c.correctDx).t}</h3>
   <p style="font-size:.92rem">${f.dx===c.correctDx?'Você acertou. ':'Você marcou: '+DX.find(x=>x.id===f.dx).t+'. '}${c.dxWhy}</p>
+  ${c.sindWhy?`<p style="font-size:.92rem;margin-top:6px"><b>O que o exame mostrava (${sindLista(c).map(nomeSind).join(' ou ')}):</b> ${c.sindWhy}</p>`:''}
 
   ${missList(s.miss.q,'Perguntas que fariam diferença')}
   ${missList(s.miss.ex,'Exame físico que faltou')}

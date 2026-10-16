@@ -129,7 +129,6 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
   await page.click('[data-m="close"]');
   await page.evaluate(() => { G.tapped = true; openM('close'); });
-  await page.check('input[name=sind][value=derrame]');
   await page.check('input[name=cls][value=exsudato]');
   await page.check('input[name=dx][value=empiema]');
   await page.check('[data-m="fcond"][value="c1"]');
