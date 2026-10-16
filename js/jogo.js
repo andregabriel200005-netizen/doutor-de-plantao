@@ -242,7 +242,7 @@ function mPatient(m){
  }
  if(tab==='exam'){
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
-  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto.</p>
+  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
   <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
   <div class="examgrid">
@@ -283,7 +283,7 @@ function mPatient(m){
    </svg></div></div>
   ${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
   <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}
-  <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
+  <div class="flog">${G.examLog.map((e,i)=>logItem(e,i)).reverse().join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
   if(G.tapped){
@@ -316,6 +316,7 @@ function mPatient(m){
  }
  return [c.pname+' · leito 3',h,after];
 }
+const logItem=(e,i)=>`<div><b>${e.k}</b>${e.v}${e.som?`<button class="ouvir" data-m="som" data-i="${i}">▶ Ouvir</button>`:''}</div>`;
 function syringe(){const col=G.c.fluidColor;return `<svg viewBox="0 0 240 50" style="width:100%;max-width:300px;margin-top:10px"><rect x="20" y="14" width="160" height="22" rx="4" fill="#e9f1f4" stroke="#9fb2bc"/><rect x="24" y="17" width="120" height="16" fill="${col}"/><rect x="180" y="21" width="44" height="8" fill="#9fb2bc"/><rect x="4" y="10" width="18" height="30" rx="3" fill="#6a7c86"/></svg>`;}
 function fluidForm(){
  const left=FLUID_TESTS.filter(f=>G.fluid[f.id]===undefined);
@@ -377,7 +378,7 @@ function mNotes(m){
  const tab=m.tab||'talk';
  let h=tabs([['talk','Conversa'],['exam','Exame'],['res','Resultados'],['calc','Calculadora']],tab);
  if(tab==='talk')h+=G.talkLog.length?`<div class="flog">${G.talkLog.map(e=>`<div><b>${e.q}</b>${e.a}</div>`).join('')}</div>`:'<p class="muted">Nada conversado ainda.</p>';
- if(tab==='exam')h+=(G.vitals?`<div class="res" style="margin-bottom:8px"><b>Sinais vitais</b><span class="v">${G.c.vitals}</span></div>`:'')+(G.examLog.length?`<div class="flog">${G.examLog.map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')}</div>`:'<p class="muted">Nenhum achado de exame físico.</p>');
+ if(tab==='exam')h+=(G.vitals?`<div class="res" style="margin-bottom:8px"><b>Sinais vitais</b><span class="v">${G.c.vitals}</span></div>`:'')+(G.examLog.length?`<div class="flog">${G.examLog.map((e,i)=>logItem(e,i)).join('')}</div>`:'<p class="muted">Nenhum achado de exame físico.</p>');
  if(tab==='res'){
   const ex=Object.keys(G.orders).filter(ready),fl=Object.keys(G.fluid).filter(fready);
   h+=(ex.length||fl.length)?`<div class="list">${ex.map(id=>`<div class="res"><b>${exName(id)}</b><span class="v">${examResult(id)}</span></div>`).join('')}${fl.map(id=>`<div class="res"><b>Líquido pleural · ${flName(id)}</b><span class="v">${fluidResult(id)}</span></div>`).join('')}</div>`:'<p class="muted">Nenhum resultado chegou ainda.</p>';
@@ -390,6 +391,7 @@ function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
  <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
+ <div class="res"><b>Sons</b>Toda ausculta tem o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
@@ -411,10 +413,11 @@ modal.addEventListener('click',e=>{
    if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
     else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
    if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v});advance(1);renderM();return;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):null});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
   if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
-  G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
+  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somDoAchado(v,key,c)});advance(1);renderM();return;}
+ if(a==='som'){const e=G.examLog[+el.dataset.i];if(e&&e.som&&!tocarSom(e.som))toast('Este navegador não toca sons.');return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
  if(a==='tvol'){G.tap.vol=el.value;renderM();return;}

@@ -30,6 +30,7 @@ index.html              página do jogo (abre direto no navegador)
 css/style.css           visual
 js/dados.js             listas comuns: perguntas, exames, análises do líquido, diagnósticos, personagens (LOOKS)
 js/casos/*.js           um arquivo por paciente; cada um faz CASES.push({...}). caso-0* = derrame pleural, resp-* = semiologia respiratória, cardio-* = semiologia cardiovascular, dig-* = semiologia do digestório (usam `respostas({...})`, que completa as perguntas com respostas neutras)
+js/sons.js              sons de ausculta gerados no navegador; o som sai do texto do achado (somDoAchado)
 js/ia.js                casos criados por IA a partir do material colado pelo aluno (só no artifact do Claude)
 js/jogo.js              motor: desenho da sala e personagens, telas, toracocentese, pontuação
 scripts/build.js        junta tudo em dist/plantao-pleural.html (arquivo único para publicar)

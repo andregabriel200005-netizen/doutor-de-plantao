@@ -155,3 +155,6 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 .mtit{margin:14px 0 6px;font:500 .7rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .zlbl text{font:600 7px var(--f-mono);fill:#3b2a1c;pointer-events:none}
 .zlbl text.out{fill:#cfe0e6}
+.ouvir{display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:var(--panel);border:1px solid var(--accent);color:var(--accent);border-radius:99px;padding:4px 12px;font:600 .8rem var(--f-body);min-height:32px}
+.ouvir:hover{background:var(--accent);color:var(--accent-ink)}
+.flog div .ouvir{display:flex;width:max-content}

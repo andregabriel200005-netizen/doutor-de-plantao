@@ -157,6 +157,40 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   });
   ok(!ordem.errado.ponto && ordem.errado.aviso && ordem.certo, 'abdome: auscultar antes de palpar vale ponto; o contrário avisa e não pontua');
 
+  // sons de ausculta: toda ausculta de todo caso gera som, e os achados principais viram o som certo
+  const sons = await page.evaluate(() => {
+    const prob = [];
+    const zonas = [...TORAX, ...FOCOS, ...PULSOS, ...REGIOES, 'coracao', 'abdome'];
+    let tocados = 0;
+    CASES.forEach((c, i) => {
+      newGame(i);
+      zonas.forEach(z => {
+        const som = somDoAchado(findExam('auscultar', z), z, c);
+        if (!som) prob.push(`${c.id}: ausculta sem som em ${z}`);
+        else if (tocados < 60) { try { tocarSom(som); tocados++; } catch (e) { prob.push(`${c.id} ${z}: ${e.message}`); } }
+      });
+      MANOBRAS.forEach(m => { try { const s = somDoAchado(findExam('manobra', m.id), 'manobra:' + m.id, c); if (s) tocarSom(s); } catch (e) { prob.push(`${c.id} ${m.id}: ${e.message}`); } });
+    });
+    const som = (id, tool, z) => { newGame(CASES.findIndex(c => c.id === id)); return somDoAchado(findExam(tool, z), tool === 'manobra' ? 'manobra:' + z : z, G.c); };
+    const casos = {
+      'pneumonia: sopro tubárico e finos': (s => s.tubario && s.finos)(som('r-pneumo', 'auscultar', 'baseD')),
+      'asma: sibilos e expiração prolongada': (s => s.sib && s.expProl)(som('r-asma', 'auscultar', 'baseE')),
+      'derrame: murmúrio abolido': som('tb', 'auscultar', 'baseE').mv === 0,
+      'estenose mitral: ruflar com reforço': (s => s.sopros.some(p => p.t === 'ruflar' && p.pres))(som('c-em', 'manobra', 'pachon')),
+      'estenose aórtica: ejetivo e clique': (s => s.clique && s.sopros.some(p => p.t === 'ejetivo'))(som('c-eao', 'auscultar', 'focoAo')),
+      'insuficiência mitral: holossistólico e B3': (s => s.b3 && s.sopros.some(p => p.t === 'holo'))(som('c-im', 'auscultar', 'focoM')),
+      'insuficiência aórtica: diastólico aspirativo': som('c-iao', 'auscultar', 'focoAo').sopros.some(p => p.t === 'diastAsp'),
+      'pericardite: atrito': !!som('c-peric', 'auscultar', 'focoT').atrito,
+      'perfuração: silêncio abdominal': som('d-perf', 'auscultar', 'meso').rha === 'ausente',
+      'obstrução: ruídos metálicos': som('d-obst', 'auscultar', 'meso').rha === 'metalico',
+      'normal: coração sem sopro': som('r-susp', 'auscultar', 'focoM').sopros.length === 0
+    };
+    G = null;
+    Object.entries(casos).forEach(([k, v]) => { if (!v) prob.push('som errado: ' + k); });
+    return { prob, tocados };
+  });
+  ok(sons.prob.length === 0, sons.prob.length ? 'sons com problema: ' + sons.prob.slice(0, 8).join(' | ') : `sons de ausculta gerados para todos os casos (${sons.tocados} tocados no teste)`);
+
   // casos da IA: fora do Claude, só um aviso
   ok((await page.textContent('#iaBox')).includes('só funciona'), 'fora do Claude, a área da IA avisa que não está disponível');
 

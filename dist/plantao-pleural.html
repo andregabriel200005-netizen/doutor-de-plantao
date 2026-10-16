@@ -161,6 +161,9 @@ h3.sec{font-size:1.05rem;margin:16px 0 8px}
 .mtit{margin:14px 0 6px;font:500 .7rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .zlbl text{font:600 7px var(--f-mono);fill:#3b2a1c;pointer-events:none}
 .zlbl text.out{fill:#cfe0e6}
+.ouvir{display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:var(--panel);border:1px solid var(--accent);color:var(--accent);border-radius:99px;padding:4px 12px;font:600 .8rem var(--f-body);min-height:32px}
+.ouvir:hover{background:var(--accent);color:var(--accent-ink)}
+.flog div .ouvir{display:flex;width:max-content}
 </style>
 
 <div class="wrap">
@@ -4878,6 +4881,185 @@ CASES.push({
  ]
 });
 
+// ---- js/sons.js ----
+/* Sons de ausculta sintetizados no navegador (Web Audio), sem gravações.
+   O som sai do texto do achado: o que o caso descreve é o que se ouve.
+   somDoAchado(texto, zona, caso) → descrição do som (ou null); tocarSom(som) toca uns segundos. */
+const SOM={ctx:null,ruido:null,saida:null};
+
+function somCtx(){
+ if(!SOM.ctx){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+  SOM.ctx=new AC();
+  const n=SOM.ctx.sampleRate*2,b=SOM.ctx.createBuffer(1,n,SOM.ctx.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  SOM.ruido=b;
+ }
+ if(SOM.ctx.state==='suspended')SOM.ctx.resume();
+ return SOM.ctx;
+}
+
+/* ---------- peças do som ---------- */
+// batida grave (bulhas): seno que cai de frequência + um pouco de ruído grave
+function batida(a,out,t,f,dur,amp){
+ if(amp<=0)return;
+ const o=a.createOscillator(),g=a.createGain();
+ o.frequency.setValueAtTime(f*1.4,t);o.frequency.exponentialRampToValueAtTime(f,t+dur*.6);
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(.55*amp,t+.008);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+ o.connect(g).connect(out);o.start(t);o.stop(t+dur+.02);
+ ruido(a,out,t,dur*.7,{tipo:'lowpass',f:160,q:.7},[[0,0],[.1,1],[1,0]],.35*amp);
+}
+// ruído filtrado com envelope (sopros, murmúrio, atritos). env = [[fração do tempo, nível 0..1], ...]
+function ruido(a,out,t,dur,filtro,env,amp){
+ if(amp<=0||dur<=0)return;
+ const s=a.createBufferSource();s.buffer=SOM.ruido;s.loop=true;
+ const fl=a.createBiquadFilter();fl.type=filtro.tipo||'bandpass';fl.frequency.value=filtro.f;fl.Q.value=filtro.q||1;
+ const g=a.createGain();g.gain.setValueAtTime(0,t);
+ env.forEach(([x,v])=>g.gain.linearRampToValueAtTime(v*amp,t+x*dur));
+ let n=s.connect(fl);
+ if(filtro.f2){const f2=a.createBiquadFilter();f2.type='bandpass';f2.frequency.value=filtro.f2;f2.Q.value=filtro.q2||8;n=n.connect(f2);}
+ n.connect(g).connect(out);
+ s.start(t,Math.random()*1.5);s.stop(t+dur+.02);
+}
+// estalo curto (clique, estalido, crepitantes)
+function estalo(a,out,t,f,dur,amp){ruido(a,out,t,dur,{tipo:'bandpass',f,q:1.2},[[0,0],[.15,1],[1,0]],amp);}
+// tom (sibilos, roncos, tilintar)
+function tom(a,out,t,dur,f,amp,forma){
+ const o=a.createOscillator(),g=a.createGain();o.type=forma||'sine';o.frequency.value=f;
+ o.frequency.linearRampToValueAtTime(f*0.94,t+dur);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(amp,t+dur*.2);g.gain.linearRampToValueAtTime(amp*.8,t+dur*.8);g.gain.linearRampToValueAtTime(0,t+dur);
+ let n=o;if(forma==='sawtooth'){const fl=a.createBiquadFilter();fl.type='lowpass';fl.frequency.value=380;n=o.connect(fl);}
+ n.connect(g).connect(out);o.start(t);o.stop(t+dur+.02);
+}
+// borbulho intestinal: ruído com frequência subindo e tremor
+function borbulho(a,out,t,dur,amp,agudo){
+ const s=a.createBufferSource();s.buffer=SOM.ruido;s.loop=true;
+ const fl=a.createBiquadFilter();fl.type='bandpass';fl.Q.value=6;
+ const f0=agudo?500:220;fl.frequency.setValueAtTime(f0,t);fl.frequency.linearRampToValueAtTime(f0*2.4,t+dur);
+ const g=a.createGain();g.gain.setValueAtTime(0,t);
+ const lfo=a.createOscillator(),lg=a.createGain();lfo.frequency.value=14;lg.gain.value=amp*.5;lfo.connect(lg).connect(g.gain);
+ g.gain.linearRampToValueAtTime(amp*.5,t+dur*.2);g.gain.linearRampToValueAtTime(0,t+dur);
+ s.connect(fl).connect(g).connect(out);s.start(t,Math.random());s.stop(t+dur+.02);lfo.start(t);lfo.stop(t+dur+.02);
+}
+
+/* ---------- coração ---------- */
+function tocarCoracao(a,out,s,t0,total){
+ const fc=Math.min(150,Math.max(45,s.fc||80)),T=60/fc,sis=Math.min(.34,.36*T+.04);
+ for(let c=t0+.15;c<t0+total-T*.2;c+=T){
+  const dia=T-sis;
+  if(s.pulso){batida(a,out,c+.08,s.tiro?140:45,s.tiro?.05:.09,s.tiro?.9:.35);continue;}
+  if(s.b4)batida(a,out,c-.09,32,.08,.5);
+  batida(a,out,c,52,.1,s.b1);
+  if(s.clique)estalo(a,out,c+.065,2600,.018,.35);
+  batida(a,out,c+sis,72,.075,s.b2);
+  if(s.estalido)estalo(a,out,c+sis+.08,2200,.02,.4);
+  if(s.b3)batida(a,out,c+sis+.15,34,.09,.65);
+  (s.sopros||[]).forEach(p=>{
+   const k=.06*p.i;
+   if(p.t==='ejetivo')ruido(a,out,c+.075,sis-.1,{f:320,q:.9},[[0,0],[.5,1],[1,0]],k);
+   if(p.t==='meso')ruido(a,out,c+.1,sis*.45,{f:280,q:1.4},[[0,0],[.5,1],[1,0]],k*.8);
+   if(p.t==='holo')ruido(a,out,c+.025,sis-.02,{f:620,q:1.1},[[0,.8],[.1,1],[.9,1],[1,0]],k);
+   if(p.t==='diastAsp')ruido(a,out,c+sis+.015,dia*.55,{tipo:'highpass',f:700,q:.6},[[0,1],[1,0]],k*.9);
+   if(p.t==='ruflar'){ruido(a,out,c+sis+.12,dia*.45,{f:90,q:2.5},[[0,.9],[1,.2]],k*1.6);
+    if(p.pres)ruido(a,out,c+T-.16,.15,{f:100,q:2.5},[[0,.2],[1,1]],k*1.8);}
+  });
+  if(s.atrito)[[c+sis*.45,.08],[c+sis+.1,.07],[c+T-.12,.07]].forEach(([x,d])=>ruido(a,out,x,d,{f:1400,q:.6},[[0,0],[.2,1],[.6,.5],[1,0]],.07));
+ }
+}
+
+/* ---------- pulmão ---------- */
+function tocarPulmao(a,out,s,t0,total){
+ const ins=1.1,exp=s.expProl?2.4:1.4,ciclo=ins+exp+.3;
+ for(let c=t0+.1;c+ins<t0+total;c+=ciclo){
+  const fim=c+ins;
+  if(s.mv>0&&!s.tubario)ruido(a,out,c,ins,{f:260,q:.6},[[0,0],[.8,1],[1,0]],.13*s.mv);
+  if(s.mv>0&&!s.tubario)ruido(a,out,fim,exp*.35,{f:240,q:.6},[[0,.6],[1,0]],.05*s.mv);
+  if(s.tubario||s.anforico){const fl=s.anforico?{f:500,q:.8,f2:380,q2:10}:{f:950,q:.7};
+   const v=s.anforico?.22:.05;ruido(a,out,c,ins,fl,[[0,0],[.3,.8],[.9,.9],[1,0]],v);ruido(a,out,fim+.05,exp*.8,fl,[[0,0],[.2,1],[1,0]],v*1.2);}
+  if(s.sib)[460,610,770].forEach((f,i)=>tom(a,out,fim+.05+i*.04,exp*.85,f,.022));
+  if(s.ronco){tom(a,out,fim+.05,exp*.8,118,.05,'sawtooth');tom(a,out,c+.2,ins*.6,105,.025,'sawtooth');}
+  if(s.finos)for(let i=0;i<9;i++)estalo(a,out,c+ins*(.55+i*.045),1900,.009,.1);
+  if(s.grossos){for(let i=0;i<6;i++)estalo(a,out,c+ins*(.1+i*.11),420,.03,.12);for(let i=0;i<4;i++)estalo(a,out,fim+.1+i*.18,380,.03,.1);}
+  if(s.atrito)[c+.3,c+.6,c+.85,fim+.25,fim+.55].forEach(x=>ruido(a,out,x,.12,{f:700,q:.8},[[0,0],[.2,1],[.5,.4],[.7,.9],[1,0]],.09));
+ }
+ if(s.mv===0&&!s.tubario)ruido(a,out,t0,total,{f:200,q:.5},[[0,.2],[1,.2]],.01);
+}
+
+/* ---------- abdome ---------- */
+function tocarAbdome(a,out,s,t0,total){
+ const r=s.rha;
+ ruido(a,out,t0,total,{f:200,q:.5},[[0,.2],[1,.2]],.01);
+ const n={normal:2,diminuido:1,aumentado:7,metalico:6,borbor:3,ausente:0}[r]||0;
+ for(let i=0;i<n;i++){const t=t0+.3+(total-1)*(i+Math.random()*.6)/Math.max(1,n);
+  borbulho(a,out,t,r==='borbor'?1.2:.5+Math.random()*.4,r==='diminuido'?.05:.14,r==='metalico');
+  if(r==='metalico')tom(a,out,t+.2,.25,1700+Math.random()*500,.03);}
+}
+
+/* ---------- tocar ---------- */
+function tocarSom(s){
+ const a=somCtx();if(!a||!s)return false;
+ if(SOM.saida){const g=SOM.saida;g.gain.setTargetAtTime(0,a.currentTime,.03);setTimeout(()=>g.disconnect(),300);}
+ // limitador: nenhum som passa do volume seguro do fone
+ const lim=a.createDynamicsCompressor();lim.threshold.value=-8;lim.knee.value=6;lim.ratio.value=12;lim.attack.value=.003;lim.release.value=.1;
+ if(!SOM.curva){SOM.curva=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;SOM.curva[i]=.9*Math.tanh(1.5*x)/Math.tanh(1.5);}}
+ const teto=a.createWaveShaper();teto.curve=SOM.curva;lim.connect(teto).connect(a.destination);
+ const out=a.createGain();out.gain.value=s.tipo==='cor'?.9:s.tipo==='pulm'?6:5;out.connect(lim);SOM.saida=out;
+ const t0=a.currentTime+.05,total=s.tipo==='pulm'?6.5:6;
+ if(s.tipo==='cor')tocarCoracao(a,out,s,t0,total);
+ if(s.tipo==='pulm')tocarPulmao(a,out,s,t0,total);
+ if(s.tipo==='abd')tocarAbdome(a,out,s,t0,total);
+ return true;
+}
+
+/* ---------- do texto ao som ---------- */
+function somCoracao(t,fc){
+ const s={tipo:'cor',fc,b1:1,b2:.85,sopros:[]};
+ if(/b1 forte|b1 hiperfon/.test(t))s.b1=1.6;
+ if(/b1 abafada|b1 hipofon/.test(t))s.b1=.4;
+ if(/b2 quase inaudível|b2 apagada/.test(t))s.b2=.15;
+ if(/b2 forte|b2 mais forte|b2 hiperfon/.test(t))s.b2=1.4;
+ if(/clique/.test(t))s.clique=1;
+ if(/estalido/.test(t))s.estalido=1;
+ if(/\bb3\b|tum-ta-tu|terceiro som|galope|grave logo depois de b2/.test(t))s.b3=1;
+ if(/som grave logo antes de b1/.test(t))s.b4=1;
+ if(/áspero|couro novo|neve/.test(t))s.atrito=1;
+ const m=t.match(/(\d)\+\/6/),i=m?+m[1]:/discret|suave|fraco|transmitido/.test(t)?2:3;
+ if(/sopro/.test(t)&&!/sem sopro/.test(t)||/ruflar/.test(t)){
+  if(/ruflar/.test(t))s.sopros.push({t:'ruflar',i:/bem audível/.test(t)?4:i,pres:/reforç|antes de b1|pré-sistólico/.test(t)});
+  if(/sopro diastólico|diastólico aspirativo/.test(t))s.sopros.push({t:'diastAsp',i});
+  if(/holossistólico|platô/.test(t))s.sopros.push({t:'holo',i});
+  else if(/sopro sistólico/.test(t)){
+   const curto=/meio da sístole|curto/.test(t)&&!/crescendo/.test(t);
+   s.sopros.push({t:curto?'meso':'ejetivo',i:/sopro sistólico suave/.test(t)&&/diastólico/.test(t)?2:i});
+  }
+ }
+ return s;
+}
+function somDoAchado(texto,zona,c){
+ const t=(texto||'').toLowerCase(),fc=+(((c&&c.vitals)||'').match(/FC (\d+)/)||[])[1]||80;
+ if(/^manobra:/.test(zona)){ // só quando a manobra descreve o que se ouve
+  const s=somCoracao(t,fc);
+  return s.sopros.length||s.b3||s.atrito?s:null;
+ }
+ if(FOCOS.includes(zona)||zona==='coracao')return somCoracao(t,fc);
+ if(PULSOS.includes(zona)){
+  if(/tiro de pistola/.test(t))return {tipo:'cor',fc,pulso:1,tiro:1};
+  if(/sopro/.test(t)&&!/sem sopro/.test(t))return {tipo:'cor',fc,b1:.2,b2:.2,sopros:[{t:'ejetivo',i:2}]};
+  return {tipo:'cor',fc,pulso:1};
+ }
+ if(/^(apice|medio|base)[DE]$/.test(zona))return {tipo:'pulm',
+  mv:/abolid/.test(t)?0:/diminuíd/.test(t)?.45:1,
+  sib:/sibil/.test(t),ronco:/ronco/.test(t),finos:/estertores finos|crepitantes/.test(t),grossos:/grossos|bolhos/.test(t),
+  tubario:/sopro tubárico|respiração brônquica|timbre oco/.test(t),anforico:/timbre oco|gargalo|anfóric/.test(t),
+  atrito:/atrito|couro novo|áspero/.test(t),expProl:/expiração prolongada/.test(t)};
+ if(REGIOES.includes(zona)||zona==='abdome'){
+  const rha=/nenhum ruído|silêncio|ausentes/.test(t)?'ausente':/metálic|em salvas/.test(t)?'metalico':/já tinha sido palpado/.test(t)?'aumentado':
+   /aumentad/.test(t)?(/borborigmo/.test(t)?'borbor':'aumentado'):/diminuíd/.test(t)?'diminuido':'normal';
+  return {tipo:'abd',rha};
+ }
+ return null;
+}
+
 // ---- js/ia.js ----
 /* Casos criados por IA a partir do material do aluno.
    Funciona só na versão publicada no Claude: usa o Claude da própria pessoa (claude.use("sample")).
@@ -5319,7 +5501,7 @@ function mPatient(m){
  }
  if(tab==='exam'){
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
-  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto.</p>
+  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
   <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
   <div class="examgrid">
@@ -5360,7 +5542,7 @@ function mPatient(m){
    </svg></div></div>
   ${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
   <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}
-  <div class="flog">${G.examLog.slice().reverse().map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
+  <div class="flog">${G.examLog.map((e,i)=>logItem(e,i)).reverse().join('')||'<p class="muted">Nenhum achado ainda.</p>'}</div>`;
  }
  if(tab==='tap'){
   if(G.tapped){
@@ -5393,6 +5575,7 @@ function mPatient(m){
  }
  return [c.pname+' · leito 3',h,after];
 }
+const logItem=(e,i)=>`<div><b>${e.k}</b>${e.v}${e.som?`<button class="ouvir" data-m="som" data-i="${i}">▶ Ouvir</button>`:''}</div>`;
 function syringe(){const col=G.c.fluidColor;return `<svg viewBox="0 0 240 50" style="width:100%;max-width:300px;margin-top:10px"><rect x="20" y="14" width="160" height="22" rx="4" fill="#e9f1f4" stroke="#9fb2bc"/><rect x="24" y="17" width="120" height="16" fill="${col}"/><rect x="180" y="21" width="44" height="8" fill="#9fb2bc"/><rect x="4" y="10" width="18" height="30" rx="3" fill="#6a7c86"/></svg>`;}
 function fluidForm(){
  const left=FLUID_TESTS.filter(f=>G.fluid[f.id]===undefined);
@@ -5454,7 +5637,7 @@ function mNotes(m){
  const tab=m.tab||'talk';
  let h=tabs([['talk','Conversa'],['exam','Exame'],['res','Resultados'],['calc','Calculadora']],tab);
  if(tab==='talk')h+=G.talkLog.length?`<div class="flog">${G.talkLog.map(e=>`<div><b>${e.q}</b>${e.a}</div>`).join('')}</div>`:'<p class="muted">Nada conversado ainda.</p>';
- if(tab==='exam')h+=(G.vitals?`<div class="res" style="margin-bottom:8px"><b>Sinais vitais</b><span class="v">${G.c.vitals}</span></div>`:'')+(G.examLog.length?`<div class="flog">${G.examLog.map(e=>`<div><b>${e.k}</b>${e.v}</div>`).join('')}</div>`:'<p class="muted">Nenhum achado de exame físico.</p>');
+ if(tab==='exam')h+=(G.vitals?`<div class="res" style="margin-bottom:8px"><b>Sinais vitais</b><span class="v">${G.c.vitals}</span></div>`:'')+(G.examLog.length?`<div class="flog">${G.examLog.map((e,i)=>logItem(e,i)).join('')}</div>`:'<p class="muted">Nenhum achado de exame físico.</p>');
  if(tab==='res'){
   const ex=Object.keys(G.orders).filter(ready),fl=Object.keys(G.fluid).filter(fready);
   h+=(ex.length||fl.length)?`<div class="list">${ex.map(id=>`<div class="res"><b>${exName(id)}</b><span class="v">${examResult(id)}</span></div>`).join('')}${fl.map(id=>`<div class="res"><b>Líquido pleural · ${flName(id)}</b><span class="v">${fluidResult(id)}</span></div>`).join('')}</div>`:'<p class="muted">Nenhum resultado chegou ainda.</p>';
@@ -5467,6 +5650,7 @@ function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
  <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
+ <div class="res"><b>Sons</b>Toda ausculta tem o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>
  <div class="res"><b>Negatoscópio</b>A radiografia aparece sem laudo.</div>
@@ -5488,10 +5672,11 @@ modal.addEventListener('click',e=>{
    if(tool==='auscultar'){if(!G.abdTocado){if(!G.examined.includes('ordem:abdome'))G.examined.push('ordem:abdome');}
     else v+=' (O abdome já tinha sido palpado ou percutido: a manipulação mexe no peristaltismo e altera os ruídos.)';}
    if(tool==='palpar'||tool==='percutir')G.abdTocado=true;}
-  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v});advance(1);renderM();return;}
+  G.examLog.push({k:(z==='geral'?'Inspeção geral':TOOLS.find(t=>t.id===tool).t+' · '+ZNAME[z]),v,som:tool==='auscultar'?somDoAchado(v,z,c):null});advance(1);renderM();return;}
  if(a==='manobra'){const id=el.dataset.v,key='manobra:'+id;if(!G.examined.includes(key))G.examined.push(key);
   if(MANOBRAS.find(x=>x.id===id).g==='abd')G.abdTocado=true;
-  G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v:findExam('manobra',id)});advance(1);renderM();return;}
+  const v=findExam('manobra',id);G.examLog.push({k:'Manobra · '+MANOBRAS.find(x=>x.id===id).t,v,som:somDoAchado(v,key,c)});advance(1);renderM();return;}
+ if(a==='som'){const e=G.examLog[+el.dataset.i];if(e&&e.som&&!tocarSom(e.som))toast('Este navegador não toca sons.');return;}
  if(a==='space'){G.tap.space={s:el.dataset.s,i:+el.dataset.i};G.tap.msg=null;renderM();return;}
  if(a==='tpos'){G.tap.pos=el.value;renderM();return;}
  if(a==='tvol'){G.tap.vol=el.value;renderM();return;}

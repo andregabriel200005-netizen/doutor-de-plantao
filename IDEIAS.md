@@ -10,6 +10,11 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 - Vender o jogo (out/2026). Antes: testar com colegas de graça, trocar o conteúdo do Estratégia MED por fontes que possam ser usadas comercialmente (diretrizes públicas, livros citados, revisão de um professor) e falar com um advogado/contador. Depois: login, pagamento (plataforma pronta tipo Hotmart/Kiwify) e servidor próprio da IA com limite de casos por assinante.
 
+## Próximos passos dos sons
+
+- Ajustar cada som com o ouvido do André (mais grave, mais alto, mais rápido).
+- Trocar por gravações reais com licença livre, se ele achar que vale.
+
 ## Próximos assuntos
 
 - Os três PDFs enviados já viraram casos. Mande o próximo assunto.
@@ -31,6 +36,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 - Modo prova: sem a tela de explicação no final, só a nota.
 
 ## Feito
+
+- v7: sons de ausculta gerados pelo jogo (coração, pulmão e abdome), com botão ▶ Ouvir em toda ausculta.
 
 - v6: Semiologia do digestório: 17 casos (apendicite, colecistite, coledocolitíase, esquistossomose com HDA, cirrose com ascite e Child, mixedema, pancreatite aguda e crônica, úlcera perfurada, Courvoisier, hepatite viral, hemólise, obstrução por bridas, pielonefrite, intolerância à lactose, neoplasia de esôfago, fecaloma), abdome em 9 regiões, 17 manobras abdominais, regra da ordem do exame, paracentese com GASA, pneumoperitônio na radiografia.
 
