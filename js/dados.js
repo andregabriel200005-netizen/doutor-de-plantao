@@ -51,11 +51,11 @@ const EXAMS=[
  {id:'usg',t:'Ultrassonografia de tórax',d:30},{id:'tc',t:'Tomografia de tórax',d:60},
  {id:'angio',t:'Angiotomografia de tórax',d:60},{id:'eco',t:'Ecocardiograma',d:90},
  {id:'escarro',t:'Escarro: BAAR e teste molecular',d:90},
- {id:'gaso',t:'Gasometria arterial',d:20},{id:'ecg',t:'Eletrocardiograma',d:15},
+ {id:'gaso',t:'Gasometria arterial',d:20,leito:1},{id:'ecg',t:'Eletrocardiograma',d:15,leito:1},
  {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60},
  {id:'fagt',t:'Fosfatase alcalina e GGT',d:30},{id:'amil',t:'Amilase e lipase séricas',d:30},{id:'coag',t:'Coagulograma (TP)',d:30},
  {id:'usgabd',t:'Ultrassonografia de abdome',d:40},{id:'eda',t:'Endoscopia digestiva alta',d:90},
- {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40},
+ {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40,leito:1},
  {id:'espiro',t:'Espirometria com prova broncodilatadora',d:60}
 ];
 const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',fagt:'Fosfatase alcalina 88 U/L · GGT 32 U/L',amil:'Amilase 64 U/L · Lipase 38 U/L',coag:'TP 12 s (controle 12 s)',

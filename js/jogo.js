@@ -353,13 +353,15 @@ function mPc(m){
  if(tab==='order'&&m.sub==='tap'){
   h+=`<button class="chip" data-m="tapback">← Voltar aos exames</button><h4 class="mtit">Toracocentese</h4>`+tapHtml(c);
  }else if(tab==='order'){
-  const left=EXAMS.filter(e=>G.orders[e.id]===undefined);
+  const left=EXAMS.filter(e=>G.orders[e.id]===undefined),item=e=>`<label class="check"><input type="checkbox" data-ex="${e.id}">${e.t}<span class="tm">${e.d} min</span></label>`;
+  const fora=left.filter(e=>!e.leito),leito=left.filter(e=>e.leito);
   h+=`<p class="muted" style="font-size:.9rem">Exames pedidos sem necessidade custam pontos. O tempo indica quando o resultado chega.</p>
-  <div class="list" style="margin-top:8px">${left.map(e=>`<label class="check"><input type="checkbox" data-ex="${e.id}">${e.t}<span class="tm">${e.d} min</span></label>`).join('')||'<p class="muted">Tudo já foi pedido.</p>'}</div>
-  <div class="row"><button class="btn" data-m="order">Solicitar</button></div>
-  <h4 class="mtit">Procedimento no leito</h4>
-  ${G.tapped?`<div class="okmsg">Toracocentese feita. Líquido colhido: ${c.fluidLook}</div>${fluidForm()}`
-   :`<button class="check tapbtn" data-m="tapopen">Toracocentese<span class="tm">20 min ›</span></button>`}`;
+  <h4 class="mtit">Laboratório e imagem</h4>
+  <div class="list">${fora.map(item).join('')||'<p class="muted">Tudo já foi pedido.</p>'}</div>
+  <h4 class="mtit">No leito</h4>
+  <div class="list">${G.tapped?`<button class="check tapbtn" data-m="tapopen">Toracocentese feita · líquido colhido<span class="tm">análises ›</span></button>`
+   :`<button class="check tapbtn" data-m="tapopen">Toracocentese<span class="tm">20 min ›</span></button>`}${leito.map(item).join('')}</div>
+  <div class="row"><button class="btn" data-m="order">Solicitar</button></div>`;
  }
  if(tab==='res'){
   const ids=Object.keys(G.orders),fl=Object.keys(G.fluid);
