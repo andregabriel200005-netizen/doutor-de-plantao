@@ -185,7 +185,7 @@ function drawRX(cnv,rx){
 let G=null;
 function newGame(ci){
  G={ci,c:CASES[ci],clock:0,asked:[],examined:[],vitals:false,orders:{},fluid:{},seen:{},tapped:false,tapEv:[],tapAttempts:0,
-  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,qcat:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
+  tool:'percutir',abdTocado:false,examLog:[],talkLog:[],lastAns:null,qcat:null,fig:null,pos:{x:250,y:170},dir:'down',moving:false,target:null,pending:null,
   modal:null,tap:{space:null,pos:null,vol:null,msg:null},final:{cls:null,sind:null,dx:null,cond:[]},near:null,keys:{}};
 }
 const ready=id=>G.orders[id]!==undefined&&G.orders[id]<=G.clock;
@@ -224,12 +224,13 @@ function renderM(top){
  $('#mTitle').textContent=title;mBody.innerHTML=html;
  if(after)after();
  mBody.scrollTop=top?0:st;
+ document.querySelectorAll('.qtabs,.figtabs').forEach(t=>{const o=t.querySelector('.on');if(o)t.scrollLeft=o.offsetLeft-t.offsetLeft-(t.clientWidth-o.offsetWidth)/2;});
 }
 const tabs=(list,cur)=>`<div class="tabs">${list.map(([k,t])=>`<button class="${k===cur?'on':''}" data-m="tab" data-v="${k}">${t}</button>`).join('')}</div>`;
 
 function mPatient(m){
  const c=G.c,tab=m.tab||'talk';
- let h=tabs([['talk','Conversar'],['exam','Examinar'],['tap','Toracocentese']],tab),after=null;
+ let h=tabs([['talk','Conversar'],['exam','Examinar']],tab==='tap'?'exam':tab),after=null;
  if(tab==='talk'){
   const cats=[...new Set(QUESTIONS.map(q=>q.cat))],qc=G.qcat||cats[0];
   const conta=cat=>{const l=QUESTIONS.filter(q=>q.cat===cat);return l.filter(q=>G.asked.includes(q.id)).length+'/'+l.length;};
@@ -238,19 +239,21 @@ function mPatient(m){
   h+=qc==='hist'?(G.talkLog.length?`<div class="flog">${G.talkLog.map(e=>`<div><b>${e.q}</b>${e.a}</div>`).join('')}</div>`:'<p class="muted">Nada conversado ainda.</p>')
    :`<div class="chips qlist">${QUESTIONS.filter(q=>q.cat===qc).map(q=>`<button class="chip ${G.asked.includes(q.id)?'done':''}" data-m="ask" data-v="${q.id}">${q.t}</button>`).join('')}</div>`;
   after=()=>{drawPortrait($('#por'),c.look,'sick');
-   const qt=$('.qtabs'),qo=$('.qtabs .on');if(qt&&qo)qt.scrollLeft=qo.offsetLeft-qt.offsetLeft-(qt.clientWidth-qo.offsetWidth)/2;
    const txt=G.lastAns?c.answers[G.lastAns]:'(olha para você, esperando a primeira pergunta)';
    const el=$('#say');if(typer)clearInterval(typer);
    if(m.typeNow&&G.lastAns){let i=0;typer=setInterval(()=>{i+=2;el.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(typer);},18);m.typeNow=false;}
    else el.textContent=txt;};
  }
- if(tab==='exam'){
+ if(tab==='exam'||tab==='tap'){
+  if(tab==='tap'){G.fig='tap';m.tab='exam';}
   const fig=G.fig||'costas';
   const z=(id,x,y,w,hh)=>`<rect class="zone ${G.examined.includes(G.tool+':'+id)?'hit':''}" data-m="ex" data-v="${id}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"><title>${ZNAME[id]}</title></rect>`;
-  h+=`<p class="muted" style="font-size:.9rem">Escolha a manobra e toque na região. Cada manobra leva 1 minuto. Na ausculta e na percussão, toque em ▶ Ouvir (melhor com fone).</p>
+  h+=`<div class="figtabs">${FIGS.map(([k,t])=>`<button class="${fig===k?'on':''}" data-m="fig" data-v="${k}">${t}${k==='log'?` <small>${G.examLog.length}</small>`:''}</button>`).join('')}</div>`;
+  if(fig==='tap')h+=tapHtml(c);
+  else if(fig==='log')h+=(G.vitals?`<div class="res" style="margin:12px 0 8px"><b>Sinais vitais</b><span class="v">${c.vitals}</span></div>`:'')+(G.examLog.length?`<div class="flog" style="margin-top:12px">${G.examLog.map((e,i)=>logItem(e,i)).reverse().join('')}</div>`:'<p class="muted">Nenhum achado ainda.</p>');
+  else h+=`${fig==='man'?'':`<p class="muted" style="font-size:.9rem;margin-top:10px">Escolha a manobra e toque na região. Cada uma leva 1 minuto. Na ausculta e na percussão, toque em ▶ Ouvir (melhor com fone).</p>
   <div class="chips" style="margin-top:8px">${TOOLS.map(t=>`<button class="chip ${G.tool===t.id?'on':''}" data-m="tool" data-v="${t.id}">${t.t}</button>`).join('')}
-  <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>
-  <div class="figtabs">${FIGS.map(([k,t])=>`<button class="${fig===k?'on':''}" data-m="fig" data-v="${k}">${t}</button>`).join('')}</div>
+  <button class="chip" data-m="ex" data-v="geral">Inspeção geral do paciente</button></div>`}
   <div class="examgrid">
    <div class="fig ${fig==="costas"?"fig-on":""}" data-fig="costas"><h4>Costas</h4><svg viewBox="0 0 200 220">
     <circle cx="100" cy="24" r="18" fill="#c99a76"/><path d="M40 50 Q100 38 160 50 L166 200 Q100 212 34 200 Z" fill="#d8ad88"/>
@@ -289,10 +292,12 @@ function mPatient(m){
    </svg></div></div>
   <div class="manobras ${fig==='man'?'fig-on':''}" data-fig="man">${[['cor','Manobras: coração e pressão'],['abd','Manobras: abdome']].map(([g,t])=>`<h4 class="mtit">${t}</h4>
   <div class="chips">${MANOBRAS.filter(x=>x.g===g).map(x=>`<button class="chip ${G.examined.includes('manobra:'+x.id)?'done':''}" data-m="manobra" data-v="${x.id}">${x.t}</button>`).join('')}</div>`).join('')}</div>
-  <div class="ultimo" aria-live="polite">${G.examLog.length?logItem(G.examLog[G.examLog.length-1],G.examLog.length-1):'<p class="muted">Toque numa região: o achado aparece aqui.</p>'}</div>
-  ${G.examLog.length>1?`<h4 class="mtit">Achados anteriores</h4><div class="flog">${G.examLog.slice(0,-1).map((e,i)=>logItem(e,i)).reverse().join('')}</div>`:''}`;
+  <div class="ultimo" aria-live="polite">${G.examLog.length?logItem(G.examLog[G.examLog.length-1],G.examLog.length-1):'<p class="muted">Toque numa região: o achado aparece aqui.</p>'}</div>`;
  }
- if(tab==='tap'){
+ return [c.pname+' · leito 3',h,after];
+}
+function tapHtml(c){
+ let h='';
   if(G.tapped){
    h+=`<div class="okmsg">Líquido colhido: ${c.fluidLook}</div>${syringe()}${fluidForm()}`;
   }else{
@@ -320,10 +325,9 @@ function mPatient(m){
     </div></div>`;
   }
   if(G.tap.msg)h+=G.tap.msg;
- }
- return [c.pname+' · leito 3',h,after];
+  return h;
 }
-const FIGS=[['costas','Costas'],['frente','Frente'],['cor','Coração'],['abd','Abdome'],['man','Manobras']];
+const FIGS=[['costas','Costas'],['frente','Frente'],['cor','Coração'],['abd','Abdome'],['man','Manobras'],['tap','Toracocentese'],['log','Achados']];
 const logItem=(e,i)=>`<div><b>${e.k}</b>${e.v}${e.som?`<button class="ouvir" data-m="som" data-i="${i}">▶ Ouvir</button>`:''}</div>`;
 function syringe(){const col=G.c.fluidColor;return `<svg viewBox="0 0 240 50" style="width:100%;max-width:300px;margin-top:10px"><rect x="20" y="14" width="160" height="22" rx="4" fill="#e9f1f4" stroke="#9fb2bc"/><rect x="24" y="17" width="120" height="16" fill="${col}"/><rect x="180" y="21" width="44" height="8" fill="#9fb2bc"/><rect x="4" y="10" width="18" height="30" rx="3" fill="#6a7c86"/></svg>`;}
 function fluidForm(){
@@ -398,7 +402,7 @@ function mNotes(m){
 function mHelp(){
  return ['Como jogar',`<div class="list">
  <div class="res"><b>Objetivo</b>Descobrir o que o paciente tem e decidir a conduta. Ninguém vai te dizer o que é importante.</div>
- <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese.</div>
+ <div class="res"><b>Paciente (leito 3)</b>Converse e examine: tórax por região, boca, mãos, pescoço, coração, abdome e pernas. Se achar que tem líquido na pleura, faça a toracocentese (aba Toracocentese, dentro de Examinar).</div>
  <div class="res"><b>Sons</b>Toda ausculta e toda percussão têm o botão ▶ Ouvir. Os sons são gerados pelo jogo a partir do achado: servem para treinar ritmo e tipo de ruído, não imitam um paciente real. Use fone de ouvido.</div>
  <div class="res"><b>Enfermeira Bia</b>Sinais vitais e esperar o tempo passar.</div>
  <div class="res"><b>Computador</b>Pedir exames e ver resultados. Os resultados vêm crus, sem destaque do que está alterado.</div>

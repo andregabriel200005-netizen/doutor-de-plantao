@@ -120,7 +120,7 @@ const ok = (cond, msg) => { console.log((cond ? '  ✔ ' : '  ✘ ') + msg); if 
   await page.click('[data-m="ex"][data-v="baseD"]');
   ok((await page.textContent('.ultimo')).includes('maciço'), 'percussão da base direita mostra macicez');
   await page.screenshot({ path: path.join(PRINTS, '02-exame.png') });
-  await page.click('[data-m="tab"][data-v="tap"]');
+  await page.click('[data-m="fig"][data-v="tap"]');
   await page.screenshot({ path: path.join(PRINTS, '03-toracocentese.png') });
   await page.click('[data-m="close"]');
   await page.evaluate(() => { G.tapped = true; openM('close'); });
