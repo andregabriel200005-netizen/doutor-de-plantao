@@ -65,6 +65,8 @@ CASES.push({
   {ids:['inspecionar:baseE'],l:'Inspecionar a base esquerda (retração)'},
   {ids:['inspecionar:pescoco','palpar:pescoco','palpar:coracao'],l:'Ver para onde foi o mediastino (traqueia, ictus)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 11,2 g/dL · Leucócitos 8.100/mm³ · Plaquetas 380.000/mm³',
   gaso:'pH 7,42 · PaO₂ 64 mmHg · PaCO₂ 38 mmHg · HCO₃ 24 mEq/L · SatO₂ 92%',
   usg:'Sem líquido pleural. Base esquerda com pulmão sem ar.',
@@ -72,7 +74,7 @@ CASES.push({
   tc:'Lesão dentro do brônquio do lobo inferior esquerdo, obstruindo a luz. Lobo inferior esquerdo colapsado. Mediastino desviado para a esquerda.'
  },
  keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['escarro'],l:'Escarro para TB (tosse > 3 semanas, emagrecimento)'}],
- neutral:['hemo','gaso','tc','renal','hep','glic','usg'],
+ neutral:['hemo','gaso','tc','renal','hep','glic','usg','espiro'],
  rx:{atel:'E',shift:'E'},
  tap:{sides:[],spaces:[]},
  correctSind:'atel',

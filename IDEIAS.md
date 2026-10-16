@@ -37,6 +37,8 @@ Lugar para jogar tudo o que vier à cabeça. O Claude organiza, mas quem decide 
 
 ## Feito
 
+- Espirometria com prova broncodilatadora em todos os casos (vale ponto na asma e na DPOC). Critérios da literatura: trocar pelos do material quando o André mandar a aula de função pulmonar.
+
 - v7: sons de ausculta e de percussão gerados pelo jogo (coração, pulmão e abdome), com botão ▶ Ouvir em toda ausculta e percussão, inclusive Skoda, macicez móvel, hepatimetria, Traube e Jobert.
 
 - v6: Semiologia do digestório: 17 casos (apendicite, colecistite, coledocolitíase, esquistossomose com HDA, cirrose com ascite e Child, mixedema, pancreatite aguda e crônica, úlcera perfurada, Courvoisier, hepatite viral, hemólise, obstrução por bridas, pielonefrite, intolerância à lactose, neoplasia de esôfago, fecaloma), abdome em 9 regiões, 17 manobras abdominais, regra da ordem do exame, paracentese com GASA, pneumoperitônio na radiografia.

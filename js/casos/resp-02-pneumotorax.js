@@ -65,6 +65,8 @@ CASES.push({
   {ids:['percutir:apiceD','percutir:medioD','percutir:baseD','auscultar:apiceD','auscultar:medioD','auscultar:baseD'],l:'Comparar com o lado direito'},
   {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Ver a posição da traqueia'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Não realizada: pneumotórax contraindica a espirometria.',
   gaso:'pH 7,44 · PaO₂ 72 mmHg · PaCO₂ 36 mmHg · HCO₃ 24 mEq/L · SatO₂ 94%',
   usg:'Sem líquido pleural. Deslizamento pleural ausente à esquerda.',
   laurell:'Sem lâmina de líquido livre.',

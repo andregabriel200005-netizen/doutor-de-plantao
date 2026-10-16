@@ -64,13 +64,15 @@ CASES.push({
   {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['percutir:baseD','percutir:baseE'],l:'Percutir as bases'},
   {ids:['palpar:baseD','palpar:baseE','inspecionar:baseD','inspecionar:baseE'],l:'Avaliar a expansibilidade das bases'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após tratar a infecção. CVF 2,70 L (82% do previsto) · VEF1 1,78 L (70%) · VEF1/CVF 0,66 · Após broncodilatador: VEF1 1,84 L (+3%, +60 mL) · VEF1/CVF 0,67',
   hemo:'Hb 12,6 g/dL · Leucócitos 13.600/mm³ (78% neutrófilos) · Plaquetas 310.000/mm³',
   pcr:'PCR 96 mg/L (ref. < 5)',
   gaso:'pH 7,43 · PaO₂ 70 mmHg · PaCO₂ 37 mmHg · HCO₃ 24 mEq/L · SatO₂ 93%',
   tc:'Brônquios dilatados nas duas bases, com paredes espessadas: em corte longitudinal parecem trilhos de trem; em corte transversal, anéis maiores que o vaso ao lado.'
  },
  keyEx:[{ids:['rx','tc'],l:'Imagem do tórax'},{ids:['tc'],l:'Tomografia (mostra os brônquios dilatados)'}],
- neutral:['hemo','pcr','escarro','gaso','renal','hemoc'],
+ neutral:['hemo','pcr','escarro','gaso','renal','hemoc','espiro'],
  rx:{bronq:1},
  tap:{sides:[],spaces:[]},
  correctSind:'bronqx',

@@ -64,12 +64,14 @@ CASES.push({
   {ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax'},{ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax'},
   {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},{ids:['inspecionar:boca'],l:'Olhar a língua (tipo de cianose)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 2,60 L (74% do previsto) · VEF1 1,20 L (45%) · VEF1/CVF 0,46 · Após broncodilatador: VEF1 1,28 L (+7%, +80 mL) · VEF1/CVF 0,49',
   gaso:'pH 7,35 · PaO₂ 55 mmHg · PaCO₂ 52 mmHg · HCO₃ 29 mEq/L · SatO₂ 88%',
   hemo:'Hb 16,4 g/dL · Leucócitos 11.200/mm³ · Plaquetas 250.000/mm³',
   pcr:'PCR 32 mg/L (ref. < 5)',
   tc:'Pulmões hiperinsuflados, com áreas de destruição do parênquima nos ápices. Paredes brônquicas espessadas.'
  },
- keyEx:[{ids:['gaso'],l:'Gasometria'},{ids:['rx'],l:'Radiografia de tórax'}],
+ keyEx:[{ids:['gaso'],l:'Gasometria'},{ids:['rx'],l:'Radiografia de tórax'},{ids:['espiro'],l:'Espirometria com prova broncodilatadora'}],
  neutral:['hemo','pcr','renal','ecg','glic','escarro'],
  rx:{hiper:1},
  tap:{sides:[],spaces:[]},
@@ -90,6 +92,7 @@ CASES.push({
   {t:'Tórax em barril',p:'Diâmetro anteroposterior aumentado e costelas horizontalizadas: aprisionamento de ar (DPOC, enfisema).'},
   {t:'Bronquite crônica',p:'Tosse produtiva por pelo menos 3 meses ao ano, por 2 anos seguidos, em adulto tabagista.'},
   {t:'Dois tipos de insuficiência',p:'Hipoxêmica (tipo 1): PaO₂ < 60 mmHg com PaCO₂ normal ou baixa. Ventilatória (tipo 2): PaO₂ baixa com PaCO₂ alta, por falha da bomba ou obstrução.'},
+  {t:'Espirometria na DPOC',p:'Obstrução que não reverte: VEF1/CVF continua abaixo de 0,70 depois do broncodilatador (0,49), com resposta pequena (+7%, +80 mL).'+' (critério da literatura, confira com seu material).'},
   {t:'Cianose central',p:'Língua e lábios roxos: insaturação arterial, como nas pneumopatias.'},
   {t:'Escala mMRC',p:'Grau 3: para depois de cerca de 100 metros no plano. Grau 4: cansa ao se vestir ou tomar banho.'}
  ]

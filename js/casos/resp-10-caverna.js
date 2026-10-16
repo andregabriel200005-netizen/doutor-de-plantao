@@ -61,6 +61,8 @@ CASES.push({
   {ids:['palpar:apiceD'],l:'Palpar o ápice direito (frêmito aumentado)'},{ids:['percutir:apiceD'],l:'Percutir o ápice direito (timpanismo)'},
   {ids:['auscultar:apiceD'],l:'Auscultar o ápice direito'},{ids:['palpar:apiceE','percutir:apiceE','auscultar:apiceE'],l:'Comparar com o ápice esquerdo'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Não realizada: tuberculose com BAAR positivo (risco de transmissão no laboratório).',
   escarro:'BAAR positivo (++) · Teste molecular para TB: detectado',
   hemo:'Hb 11,9 g/dL · Leucócitos 9.200/mm³ · Plaquetas 340.000/mm³',
   pcr:'PCR 58 mg/L (ref. < 5)',

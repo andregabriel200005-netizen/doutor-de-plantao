@@ -65,6 +65,8 @@ CASES.push({
   {ids:['manobra:pachon'],l:'Decúbito lateral esquerdo (Pachon)'},{ids:['palpar:coracao'],l:'Palpar o ictus (sem desvio)'},
   {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases (congestão)'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   eco:'Valva mitral espessada, com abertura bem reduzida. Átrio esquerdo aumentado. VE de tamanho normal, FE 64%.',
   ecg:'Ritmo sinusal, FC 112 bpm.',
   gaso:'pH 7,45 · PaO₂ 64 mmHg · PaCO₂ 31 mmHg · HCO₃ 22 mEq/L · SatO₂ 92%',

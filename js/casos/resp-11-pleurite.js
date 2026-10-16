@@ -61,6 +61,8 @@ CASES.push({
   {ids:['auscultar:baseE'],l:'Auscultar a base esquerda (atrito)'},{ids:['palpar:baseE'],l:'Palpar a base esquerda'},{ids:['percutir:baseE'],l:'Percutir a base esquerda'},
   {ids:['auscultar:coracao'],l:'Auscultar o coração (afastar atrito pericárdico)'},{ids:['auscultar:baseD','percutir:baseD','palpar:baseD'],l:'Comparar com o lado direito'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 13,1 g/dL · Leucócitos 9.800/mm³ (38% linfócitos) · Plaquetas 240.000/mm³',
   pcr:'PCR 28 mg/L (ref. < 5)',
   usg:'Pleura espessada na base esquerda, com lâmina mínima de líquido, pequena demais para puncionar.',

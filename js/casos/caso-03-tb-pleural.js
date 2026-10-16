@@ -146,6 +146,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,9 g/dL · Leucócitos 8.900/mm³ (30% linfócitos) · Plaquetas 320.000/mm³",
   "pcr": "PCR 45 mg/L (ref. < 5)",
   "escarro": "BAAR negativo (escarro induzido) · Teste molecular para TB: não detectado",

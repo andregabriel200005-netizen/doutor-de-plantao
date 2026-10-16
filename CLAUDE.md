@@ -13,7 +13,7 @@ André, estudante de medicina (UNINASSAU, Recife), sem formação em programaç�
 
 ## Regras do jogo (não quebrar)
 
-1. **Conteúdo médico vem do material do André.** Cada caso cita a fonte no topo do arquivo. Não invente critérios, valores de corte ou condutas que não estejam no material. Se faltar algo, pergunte ou marque como `// CONFERIR:` no caso e avise.
+1. **Conteúdo médico vem do material do André.** Cada caso cita a fonte no topo do arquivo. Não invente critérios, valores de corte ou condutas que não estejam no material. Se faltar algo, pergunte ou marque como `// CONFERIR:` no caso e avise. Exceção aprovada pelo André: espirometria usa critérios da literatura (VEF1/CVF < 0,70; resposta ao broncodilatador ≥ 12% e ≥ 200 mL), marcados como CONFERIR e avisados na correção.
 2. **Nada mastigado.** O jogo não diz o que é relevante:
    - perguntas e exames são os mesmos para todos os casos, sem destacar os importantes;
    - resultados vêm crus, sem cor ou alerta de alterado;

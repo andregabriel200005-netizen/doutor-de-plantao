@@ -42,6 +42,8 @@ CASES.push({
   {ids:['manobra:traube','manobra:schuster'],l:'Baço (Traube, Schuster)'},{ids:['manobra:lemos','manobra:hepatimetria','manobra:rechaco'],l:'Tamanho do fígado'},
   {ids:['inspecionar:meso','manobra:doisdedos'],l:'Circulação colateral'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hep:'Bilirrubina total 2,6 mg/dL (direta 1,5 · indireta 1,1) · TGO 96 U/L · TGP 48 U/L',
   sprot:'Proteínas totais 6,0 g/dL · Albumina 2,6 g/dL',
   coag:'TP 17 s (controle 12 s)',

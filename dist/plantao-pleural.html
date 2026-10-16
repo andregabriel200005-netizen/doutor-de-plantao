@@ -263,10 +263,12 @@ const EXAMS=[
  {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60},
  {id:'fagt',t:'Fosfatase alcalina e GGT',d:30},{id:'amil',t:'Amilase e lipase séricas',d:30},{id:'coag',t:'Coagulograma (TP)',d:30},
  {id:'usgabd',t:'Ultrassonografia de abdome',d:40},{id:'eda',t:'Endoscopia digestiva alta',d:90},
- {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40}
+ {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40},
+ {id:'espiro',t:'Espirometria com prova broncodilatadora',d:60}
 ];
 const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',fagt:'Fosfatase alcalina 88 U/L · GGT 32 U/L',amil:'Amilase 64 U/L · Lipase 38 U/L',coag:'TP 12 s (controle 12 s)',
- usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
+ usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',
+ espiro:'Feita após estabilizar. CVF 98% do previsto · VEF1 96% do previsto · VEF1/CVF 0,83 · Após broncodilatador: VEF1 +2% (+60 mL)',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
 const FLUID_TESTS=[
  {id:'ph',t:'pH'},{id:'gli',t:'Glicose'},{id:'dhl',t:'DHL'},{id:'prot',t:'Proteínas totais'},{id:'alb',t:'Albumina'},
  {id:'cel',t:'Celularidade total e diferencial'},{id:'cito',t:'Citologia oncótica'},{id:'ada',t:'ADA'},
@@ -583,6 +585,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,8 g/dL · Leucócitos 19.500/mm³ (12% bastões) · Plaquetas 410.000/mm³",
   "pcr": "PCR 220 mg/L (ref. < 5)",
   "glic": "Glicemia 112 mg/dL",
@@ -952,6 +955,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,1 g/dL · Leucócitos 7.900/mm³ · Plaquetas 230.000/mm³",
   "renal": "Ureia 58 mg/dL · Creatinina 1,3 mg/dL",
   "bnp": "NT-proBNP 6.400 pg/mL",
@@ -1303,6 +1307,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,9 g/dL · Leucócitos 8.900/mm³ (30% linfócitos) · Plaquetas 320.000/mm³",
   "pcr": "PCR 45 mg/L (ref. < 5)",
   "escarro": "BAAR negativo (escarro induzido) · Teste molecular para TB: não detectado",
@@ -1564,6 +1569,8 @@ CASES.push({
   {ids:['palpar:baseD'],l:'Palpar a base direita (frêmito aumentado)'},{ids:['percutir:baseD'],l:'Percutir a base direita'},
   {ids:['auscultar:baseD'],l:'Auscultar a base direita'},{ids:['palpar:baseE','percutir:baseE','auscultar:baseE'],l:'Comparar com o lado esquerdo'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 13,8 g/dL · Leucócitos 18.400/mm³ (86% neutrófilos) · Plaquetas 260.000/mm³',
   pcr:'PCR 210 mg/L (ref. < 5)',
   gaso:'pH 7,46 · PaO₂ 56 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 89%',
@@ -1664,6 +1671,8 @@ CASES.push({
   {ids:['percutir:apiceD','percutir:medioD','percutir:baseD','auscultar:apiceD','auscultar:medioD','auscultar:baseD'],l:'Comparar com o lado direito'},
   {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Ver a posição da traqueia'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Não realizada: pneumotórax contraindica a espirometria.',
   gaso:'pH 7,44 · PaO₂ 72 mmHg · PaCO₂ 36 mmHg · HCO₃ 24 mEq/L · SatO₂ 94%',
   usg:'Sem líquido pleural. Deslizamento pleural ausente à esquerda.',
   laurell:'Sem lâmina de líquido livre.',
@@ -1759,9 +1768,11 @@ CASES.push({
   {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},
   {ids:TORAX.map(z=>'inspecionar:'+z).concat(['inspecionar:pescoco']),l:'Procurar tiragem e uso de musculatura acessória'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar a crise. CVF 3,20 L (88% do previsto) · VEF1 2,02 L (62%) · VEF1/CVF 0,63 · Após broncodilatador: VEF1 2,58 L (+28%, +560 mL) · VEF1/CVF 0,76',
   gaso:'pH 7,47 · PaO₂ 68 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 93%'
  },
- keyEx:[{ids:['gaso'],l:'Gasometria (gravidade da crise)'}],
+ keyEx:[{ids:['gaso'],l:'Gasometria (gravidade da crise)'},{ids:['espiro'],l:'Espirometria com prova broncodilatadora'}],
  neutral:['rx','hemo'],
  rx:{hiper:1},
  tap:{sides:[],spaces:[]},
@@ -1782,6 +1793,7 @@ CASES.push({
   {t:'O trio da asma',p:'Murmúrio diminuído, expiração prolongada e sibilos expiratórios.'},
   {t:'Ar demais na percussão',p:'Hipersonoridade na asma, na DPOC/enfisema e no pneumotórax; timpanismo na caverna. O resto é maciço ou submaciço.'},
   {t:'Sibilos × roncos',p:'Sibilos: agudos, como apito, por broncoespasmo em brônquios pequenos. Roncos: graves, por secreção em brônquios grandes, e mudam com a tosse.'},
+  {t:'Espirometria na asma',p:'Obstrução (VEF1/CVF < 0,70) que melhora com o broncodilatador: VEF1 sobe pelo menos 12% e 200 mL. Aqui subiu 28% e 560 mL, e a relação voltou ao normal (0,76).'+' (critério da literatura, confira com seu material).'},
   {t:'Sinais de esforço',p:'Tiragem intercostal e esternocleidomastoideo contraindo mostram aumento do trabalho respiratório.'}
  ]
 });
@@ -1854,6 +1866,8 @@ CASES.push({
   {ids:['inspecionar:baseE'],l:'Inspecionar a base esquerda (retração)'},
   {ids:['inspecionar:pescoco','palpar:pescoco','palpar:coracao'],l:'Ver para onde foi o mediastino (traqueia, ictus)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 11,2 g/dL · Leucócitos 8.100/mm³ · Plaquetas 380.000/mm³',
   gaso:'pH 7,42 · PaO₂ 64 mmHg · PaCO₂ 38 mmHg · HCO₃ 24 mEq/L · SatO₂ 92%',
   usg:'Sem líquido pleural. Base esquerda com pulmão sem ar.',
@@ -1861,7 +1875,7 @@ CASES.push({
   tc:'Lesão dentro do brônquio do lobo inferior esquerdo, obstruindo a luz. Lobo inferior esquerdo colapsado. Mediastino desviado para a esquerda.'
  },
  keyEx:[{ids:['rx'],l:'Radiografia de tórax'},{ids:['escarro'],l:'Escarro para TB (tosse > 3 semanas, emagrecimento)'}],
- neutral:['hemo','gaso','tc','renal','hep','glic','usg'],
+ neutral:['hemo','gaso','tc','renal','hep','glic','usg','espiro'],
  rx:{atel:'E',shift:'E'},
  tap:{sides:[],spaces:[]},
  correctSind:'atel',
@@ -1957,6 +1971,8 @@ CASES.push({
   {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugulares e refluxo hepatojugular'},
   {ids:['inspecionar:pernas','palpar:pernas'],l:'Examinar o edema das pernas'},{ids:['palpar:coracao'],l:'Palpar o ictus'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   bnp:'NT-proBNP 4.800 pg/mL',
   eco:'VE dilatado. FE 30%.',
   gaso:'pH 7,45 · PaO₂ 55 mmHg · PaCO₂ 33 mmHg · HCO₃ 23 mEq/L · SatO₂ 88%',
@@ -2058,12 +2074,14 @@ CASES.push({
   {ids:TORAX.map(z=>'percutir:'+z),l:'Percutir o tórax'},{ids:TORAX.map(z=>'auscultar:'+z),l:'Auscultar o tórax'},
   {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},{ids:['inspecionar:boca'],l:'Olhar a língua (tipo de cianose)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 2,60 L (74% do previsto) · VEF1 1,20 L (45%) · VEF1/CVF 0,46 · Após broncodilatador: VEF1 1,28 L (+7%, +80 mL) · VEF1/CVF 0,49',
   gaso:'pH 7,35 · PaO₂ 55 mmHg · PaCO₂ 52 mmHg · HCO₃ 29 mEq/L · SatO₂ 88%',
   hemo:'Hb 16,4 g/dL · Leucócitos 11.200/mm³ · Plaquetas 250.000/mm³',
   pcr:'PCR 32 mg/L (ref. < 5)',
   tc:'Pulmões hiperinsuflados, com áreas de destruição do parênquima nos ápices. Paredes brônquicas espessadas.'
  },
- keyEx:[{ids:['gaso'],l:'Gasometria'},{ids:['rx'],l:'Radiografia de tórax'}],
+ keyEx:[{ids:['gaso'],l:'Gasometria'},{ids:['rx'],l:'Radiografia de tórax'},{ids:['espiro'],l:'Espirometria com prova broncodilatadora'}],
  neutral:['hemo','pcr','renal','ecg','glic','escarro'],
  rx:{hiper:1},
  tap:{sides:[],spaces:[]},
@@ -2084,6 +2102,7 @@ CASES.push({
   {t:'Tórax em barril',p:'Diâmetro anteroposterior aumentado e costelas horizontalizadas: aprisionamento de ar (DPOC, enfisema).'},
   {t:'Bronquite crônica',p:'Tosse produtiva por pelo menos 3 meses ao ano, por 2 anos seguidos, em adulto tabagista.'},
   {t:'Dois tipos de insuficiência',p:'Hipoxêmica (tipo 1): PaO₂ < 60 mmHg com PaCO₂ normal ou baixa. Ventilatória (tipo 2): PaO₂ baixa com PaCO₂ alta, por falha da bomba ou obstrução.'},
+  {t:'Espirometria na DPOC',p:'Obstrução que não reverte: VEF1/CVF continua abaixo de 0,70 depois do broncodilatador (0,49), com resposta pequena (+7%, +80 mL).'+' (critério da literatura, confira com seu material).'},
   {t:'Cianose central',p:'Língua e lábios roxos: insaturação arterial, como nas pneumopatias.'},
   {t:'Escala mMRC',p:'Grau 3: para depois de cerca de 100 metros no plano. Grau 4: cansa ao se vestir ou tomar banho.'}
  ]
@@ -2156,13 +2175,15 @@ CASES.push({
   {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases'},{ids:['percutir:baseD','percutir:baseE'],l:'Percutir as bases'},
   {ids:['palpar:baseD','palpar:baseE','inspecionar:baseD','inspecionar:baseE'],l:'Avaliar a expansibilidade das bases'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após tratar a infecção. CVF 2,70 L (82% do previsto) · VEF1 1,78 L (70%) · VEF1/CVF 0,66 · Após broncodilatador: VEF1 1,84 L (+3%, +60 mL) · VEF1/CVF 0,67',
   hemo:'Hb 12,6 g/dL · Leucócitos 13.600/mm³ (78% neutrófilos) · Plaquetas 310.000/mm³',
   pcr:'PCR 96 mg/L (ref. < 5)',
   gaso:'pH 7,43 · PaO₂ 70 mmHg · PaCO₂ 37 mmHg · HCO₃ 24 mEq/L · SatO₂ 93%',
   tc:'Brônquios dilatados nas duas bases, com paredes espessadas: em corte longitudinal parecem trilhos de trem; em corte transversal, anéis maiores que o vaso ao lado.'
  },
  keyEx:[{ids:['rx','tc'],l:'Imagem do tórax'},{ids:['tc'],l:'Tomografia (mostra os brônquios dilatados)'}],
- neutral:['hemo','pcr','escarro','gaso','renal','hemoc'],
+ neutral:['hemo','pcr','escarro','gaso','renal','hemoc','espiro'],
  rx:{bronq:1},
  tap:{sides:[],spaces:[]},
  correctSind:'bronqx',
@@ -2247,7 +2268,7 @@ CASES.push({
   gaso:'pH 7,41 · PaO₂ 96 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 99%'
  },
  keyEx:[{ids:['gaso'],l:'Gasometria (normal)'}],
- neutral:['hemo','rx','ecg'],
+ neutral:['hemo','rx','ecg','espiro'],
  rx:{},
  tap:{sides:[],spaces:[]},
  correctSind:'normal',
@@ -2426,6 +2447,8 @@ CASES.push({
   {ids:['palpar:apiceD'],l:'Palpar o ápice direito (frêmito aumentado)'},{ids:['percutir:apiceD'],l:'Percutir o ápice direito (timpanismo)'},
   {ids:['auscultar:apiceD'],l:'Auscultar o ápice direito'},{ids:['palpar:apiceE','percutir:apiceE','auscultar:apiceE'],l:'Comparar com o ápice esquerdo'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Não realizada: tuberculose com BAAR positivo (risco de transmissão no laboratório).',
   escarro:'BAAR positivo (++) · Teste molecular para TB: detectado',
   hemo:'Hb 11,9 g/dL · Leucócitos 9.200/mm³ · Plaquetas 340.000/mm³',
   pcr:'PCR 58 mg/L (ref. < 5)',
@@ -2522,6 +2545,8 @@ CASES.push({
   {ids:['auscultar:baseE'],l:'Auscultar a base esquerda (atrito)'},{ids:['palpar:baseE'],l:'Palpar a base esquerda'},{ids:['percutir:baseE'],l:'Percutir a base esquerda'},
   {ids:['auscultar:coracao'],l:'Auscultar o coração (afastar atrito pericárdico)'},{ids:['auscultar:baseD','percutir:baseD','palpar:baseD'],l:'Comparar com o lado direito'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 13,1 g/dL · Leucócitos 9.800/mm³ (38% linfócitos) · Plaquetas 240.000/mm³',
   pcr:'PCR 28 mg/L (ref. < 5)',
   usg:'Pleura espessada na base esquerda, com lâmina mínima de líquido, pequena demais para puncionar.',
@@ -3009,6 +3034,8 @@ CASES.push({
   {ids:['manobra:pachon'],l:'Decúbito lateral esquerdo (Pachon)'},{ids:['palpar:coracao'],l:'Palpar o ictus (sem desvio)'},
   {ids:['auscultar:baseD','auscultar:baseE'],l:'Auscultar as bases (congestão)'},{ids:['inspecionar:geral'],l:'Inspeção geral'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   eco:'Valva mitral espessada, com abertura bem reduzida. Átrio esquerdo aumentado. VE de tamanho normal, FE 64%.',
   ecg:'Ritmo sinusal, FC 112 bpm.',
   gaso:'pH 7,45 · PaO₂ 64 mmHg · PaCO₂ 31 mmHg · HCO₃ 22 mEq/L · SatO₂ 92%',
@@ -3211,6 +3238,8 @@ CASES.push({
   {ids:['palpar:abdome','percutir:abdome','palpar:hcd','manobra:lemos','manobra:macicezmovel','percutir:fld','percutir:fle'],l:'Fígado e ascite'},{ids:['palpar:pernas'],l:'Graduar o edema'},
   {ids:['palpar:maos','inspecionar:maos'],l:'Perfusão (mãos quentes ou frias)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   bnp:'NT-proBNP 6.200 pg/mL',
   eco:'VE dilatado, FE 28%. Parede inferior sem contração.',
   ecg:'Ritmo sinusal, FC 104 bpm. Ondas Q na parede inferior.',
@@ -4112,6 +4141,8 @@ CASES.push({
   {ids:['manobra:traube','manobra:schuster'],l:'Baço (Traube, Schuster)'},{ids:['manobra:lemos','manobra:hepatimetria','manobra:rechaco'],l:'Tamanho do fígado'},
   {ids:['inspecionar:meso','manobra:doisdedos'],l:'Circulação colateral'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hep:'Bilirrubina total 2,6 mg/dL (direta 1,5 · indireta 1,1) · TGO 96 U/L · TGP 48 U/L',
   sprot:'Proteínas totais 6,0 g/dL · Albumina 2,6 g/dL',
   coag:'TP 17 s (controle 12 s)',
@@ -4186,6 +4217,8 @@ CASES.push({
   {ids:['manobra:piparote','manobra:macicezmovel','manobra:skoda'],l:'Pesquisar ascite'},{ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugular e refluxo hepatojugular (afastar IC)'},
   {ids:['vitals'],l:'Pedir sinais vitais (bradicardia, temperatura baixa)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   tsh:'TSH 86 mUI/L · T4 livre 0,2 ng/dL',
   bnp:'NT-proBNP 140 pg/mL',
   // CONFERIR: o material não traz o GASA do mixedema; o líquido vem sem números.

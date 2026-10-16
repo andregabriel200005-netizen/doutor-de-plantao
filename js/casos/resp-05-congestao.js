@@ -69,6 +69,8 @@ CASES.push({
   {ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugulares e refluxo hepatojugular'},
   {ids:['inspecionar:pernas','palpar:pernas'],l:'Examinar o edema das pernas'},{ids:['palpar:coracao'],l:'Palpar o ictus'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   bnp:'NT-proBNP 4.800 pg/mL',
   eco:'VE dilatado. FE 30%.',
   gaso:'pH 7,45 · PaO₂ 55 mmHg · PaCO₂ 33 mmHg · HCO₃ 23 mEq/L · SatO₂ 88%',

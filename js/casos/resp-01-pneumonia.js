@@ -61,6 +61,8 @@ CASES.push({
   {ids:['palpar:baseD'],l:'Palpar a base direita (frêmito aumentado)'},{ids:['percutir:baseD'],l:'Percutir a base direita'},
   {ids:['auscultar:baseD'],l:'Auscultar a base direita'},{ids:['palpar:baseE','percutir:baseE','auscultar:baseE'],l:'Comparar com o lado esquerdo'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   hemo:'Hb 13,8 g/dL · Leucócitos 18.400/mm³ (86% neutrófilos) · Plaquetas 260.000/mm³',
   pcr:'PCR 210 mg/L (ref. < 5)',
   gaso:'pH 7,46 · PaO₂ 56 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 89%',

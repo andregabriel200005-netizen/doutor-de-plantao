@@ -74,6 +74,8 @@ CASES.push({
   {ids:['palpar:abdome','percutir:abdome','palpar:hcd','manobra:lemos','manobra:macicezmovel','percutir:fld','percutir:fle'],l:'Fígado e ascite'},{ids:['palpar:pernas'],l:'Graduar o edema'},
   {ids:['palpar:maos','inspecionar:maos'],l:'Perfusão (mãos quentes ou frias)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   bnp:'NT-proBNP 6.200 pg/mL',
   eco:'VE dilatado, FE 28%. Parede inferior sem contração.',
   ecg:'Ritmo sinusal, FC 104 bpm. Ondas Q na parede inferior.',

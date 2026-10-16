@@ -55,10 +55,12 @@ const EXAMS=[
  {id:'trop',t:'Troponina',d:60},{id:'tsh',t:'TSH e T4 livre',d:60},
  {id:'fagt',t:'Fosfatase alcalina e GGT',d:30},{id:'amil',t:'Amilase e lipase séricas',d:30},{id:'coag',t:'Coagulograma (TP)',d:30},
  {id:'usgabd',t:'Ultrassonografia de abdome',d:40},{id:'eda',t:'Endoscopia digestiva alta',d:90},
- {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40}
+ {id:'paracent',t:'Paracentese diagnóstica (líquido ascítico)',d:40},
+ {id:'espiro',t:'Espirometria com prova broncodilatadora',d:60}
 ];
 const DEF_RES={hemo:'Hb 13,4 g/dL · Leucócitos 7.600/mm³ · Plaquetas 245.000/mm³',pcr:'PCR 6 mg/L (ref. < 5)',renal:'Ureia 32 mg/dL · Creatinina 0,9 mg/dL',hep:'TGO 24 U/L · TGP 21 U/L · Bilirrubina total 0,7 mg/dL',glic:'Glicemia 96 mg/dL',bnp:'NT-proBNP 110 pg/mL',eas:'Proteínas: negativo · Sedimento sem alterações',hiv:'Não reagente',hemoc:'Sem crescimento até o momento (parcial)',ddim:'D-dímero 420 ng/mL (ref. < 500)',eco:'FE 63%. Câmaras e valvas sem alterações.',escarro:'BAAR negativo · Teste molecular para TB: não detectado',gaso:'pH 7,41 · PaO₂ 94 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 97%',ecg:'Ritmo sinusal, FC 82 bpm. Sem alterações de ST ou T.',trop:'Troponina abaixo do limite de detecção',tsh:'TSH 1,8 mUI/L · T4 livre 1,2 ng/dL',fagt:'Fosfatase alcalina 88 U/L · GGT 32 U/L',amil:'Amilase 64 U/L · Lipase 38 U/L',coag:'TP 12 s (controle 12 s)',
- usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
+ usgabd:'Fígado, vias biliares, pâncreas, baço e rins sem alterações. Sem líquido livre.',eda:'Esôfago, estômago e duodeno sem alterações.',paracent:'Não há líquido na cavidade para puncionar.',
+ espiro:'Feita após estabilizar. CVF 98% do previsto · VEF1 96% do previsto · VEF1/CVF 0,83 · Após broncodilatador: VEF1 +2% (+60 mL)',rx:'Imagem no negatoscópio. Sem laudo: a leitura é sua.',sprot:'Proteínas totais 7,1 g/dL · Albumina 4,1 g/dL',sdhl:'DHL 176 UI/L (ref. até 200)',laurell:'Sem lâmina de líquido livre.',usg:'Sem líquido pleural. Deslizamento pleural presente dos dois lados.',tc:'Parênquima, pleura e mediastino sem alterações.',angio:'Sem falhas de enchimento nas artérias pulmonares.'};
 const FLUID_TESTS=[
  {id:'ph',t:'pH'},{id:'gli',t:'Glicose'},{id:'dhl',t:'DHL'},{id:'prot',t:'Proteínas totais'},{id:'alb',t:'Albumina'},
  {id:'cel',t:'Celularidade total e diferencial'},{id:'cito',t:'Citologia oncótica'},{id:'ada',t:'ADA'},

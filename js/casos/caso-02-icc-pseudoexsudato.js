@@ -159,6 +159,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,1 g/dL · Leucócitos 7.900/mm³ · Plaquetas 230.000/mm³",
   "renal": "Ureia 58 mg/dL · Creatinina 1,3 mg/dL",
   "bnp": "NT-proBNP 6.400 pg/mL",

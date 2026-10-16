@@ -39,6 +39,8 @@ CASES.push({
   {ids:['manobra:piparote','manobra:macicezmovel','manobra:skoda'],l:'Pesquisar ascite'},{ids:['inspecionar:pescoco','palpar:pescoco'],l:'Jugular e refluxo hepatojugular (afastar IC)'},
   {ids:['vitals'],l:'Pedir sinais vitais (bradicardia, temperatura baixa)'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)',
   tsh:'TSH 86 mUI/L · T4 livre 0,2 ng/dL',
   bnp:'NT-proBNP 140 pg/mL',
   // CONFERIR: o material não traz o GASA do mixedema; o líquido vem sem números.

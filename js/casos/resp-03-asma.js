@@ -63,9 +63,11 @@ CASES.push({
   {ids:TORAX.map(z=>'palpar:'+z),l:'Palpar expansibilidade e frêmito'},
   {ids:TORAX.map(z=>'inspecionar:'+z).concat(['inspecionar:pescoco']),l:'Procurar tiragem e uso de musculatura acessória'}],
  res:{
+  // CONFERIR: espirometria com critérios da literatura (não está no material do André).
+  espiro:'Feita após estabilizar a crise. CVF 3,20 L (88% do previsto) · VEF1 2,02 L (62%) · VEF1/CVF 0,63 · Após broncodilatador: VEF1 2,58 L (+28%, +560 mL) · VEF1/CVF 0,76',
   gaso:'pH 7,47 · PaO₂ 68 mmHg · PaCO₂ 32 mmHg · HCO₃ 23 mEq/L · SatO₂ 93%'
  },
- keyEx:[{ids:['gaso'],l:'Gasometria (gravidade da crise)'}],
+ keyEx:[{ids:['gaso'],l:'Gasometria (gravidade da crise)'},{ids:['espiro'],l:'Espirometria com prova broncodilatadora'}],
  neutral:['rx','hemo'],
  rx:{hiper:1},
  tap:{sides:[],spaces:[]},
@@ -86,6 +88,7 @@ CASES.push({
   {t:'O trio da asma',p:'Murmúrio diminuído, expiração prolongada e sibilos expiratórios.'},
   {t:'Ar demais na percussão',p:'Hipersonoridade na asma, na DPOC/enfisema e no pneumotórax; timpanismo na caverna. O resto é maciço ou submaciço.'},
   {t:'Sibilos × roncos',p:'Sibilos: agudos, como apito, por broncoespasmo em brônquios pequenos. Roncos: graves, por secreção em brônquios grandes, e mudam com a tosse.'},
+  {t:'Espirometria na asma',p:'Obstrução (VEF1/CVF < 0,70) que melhora com o broncodilatador: VEF1 sobe pelo menos 12% e 200 mL. Aqui subiu 28% e 560 mL, e a relação voltou ao normal (0,76).'+' (critério da literatura, confira com seu material).'},
   {t:'Sinais de esforço',p:'Tiragem intercostal e esternocleidomastoideo contraindo mostram aumento do trabalho respiratório.'}
  ]
 });

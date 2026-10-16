@@ -58,7 +58,7 @@ CASES.push({
   gaso:'pH 7,41 · PaO₂ 96 mmHg · PaCO₂ 39 mmHg · HCO₃ 24 mEq/L · SatO₂ 99%'
  },
  keyEx:[{ids:['gaso'],l:'Gasometria (normal)'}],
- neutral:['hemo','rx','ecg'],
+ neutral:['hemo','rx','ecg','espiro'],
  rx:{},
  tap:{sides:[],spaces:[]},
  correctSind:'normal',

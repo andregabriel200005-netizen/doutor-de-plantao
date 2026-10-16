@@ -157,6 +157,7 @@ CASES.push({
   }
  ],
  "res": {
+  "espiro": "Feita após estabilizar. CVF 72% do previsto · VEF1 74% do previsto · VEF1/CVF 0,82 · Após broncodilatador: VEF1 +3% (+70 mL)",
   "hemo": "Hb 12,8 g/dL · Leucócitos 19.500/mm³ (12% bastões) · Plaquetas 410.000/mm³",
   "pcr": "PCR 220 mg/L (ref. < 5)",
   "glic": "Glicemia 112 mg/dL",
